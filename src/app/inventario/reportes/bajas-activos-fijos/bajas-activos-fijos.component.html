@@ -1,0 +1,76 @@
+<div class="simple-table">
+
+  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true"></elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Reportería'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div class="sticky">
+        <mat-card fxFlex.gt-md="300px">
+          <mat-card-title>Bajas de inventario de activos fijos</mat-card-title>
+          <mat-card-content fxLayout="column">            
+           <b><p>Seleccione el tipo de bien:</p></b>        
+            <mat-select [(ngModel)]="tipo_bien" (selectionChange)="update()">
+              <mat-option value="false" selected>
+                Bienes activos
+              </mat-option>
+              <mat-option value="true">
+                Bienes fungibles
+              </mat-option>
+            </mat-select>            
+            <b><p>No. Orden:</p></b>     
+            <mat-form-field class="example-full-width">
+              <mat-label>Correlativo inicial</mat-label>
+              <input type="number" matInput [(ngModel)]="correlativo">
+            </mat-form-field>   
+            <b><p>Seleccione las filas a exportar:</p></b>     
+            <mat-form-field class="example-full-width">
+              <mat-label>Registro inicial</mat-label>
+              <input matInput type="number" [(ngModel)]="first_row">
+            </mat-form-field>   
+            <mat-form-field class="example-full-width">
+            <mat-label>Registro final</mat-label>
+            <input matInput type="number" [(ngModel)]="last_row">
+          </mat-form-field>   
+            <br>
+            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
+            <br>
+            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
+            <br>
+            <button mat-raised-button color="warn" (click)="updateOrderNo()">Actualizar No. Orden</button>
+            
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex class="mat-elevation-z2">
+        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true" [class.table-condensed]="false" [class.table-bordered]="true">
+          <thead>
+          <tr>
+            <th></th>            
+            <th>Fecha factura</th>
+            <th>Número</th>
+            <th>Descripción</th>
+            <th>Valor de adquisición</th>
+            <th>No. Orden</th>
+            <th>Tarjeta No.</th> 
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of rows">            
+            <td>{{ getFila() }}</td>            
+            <td>{{ common.getDate(row.fecha_compra)}}</td>
+            <td>{{ row.numero }}</td>
+            <td>{{ row.descripcion }}</td>
+            <td> Q{{ row.precio.toLocaleString('en', common.options) }}</td>
+            <td>{{ getValor() }}</td>
+            <td>{{ row.tarjeta == null? '-': row.tarjeta }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

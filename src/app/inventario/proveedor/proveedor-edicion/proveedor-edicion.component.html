@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Proveedor</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+    <mat-dialog-content>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex>
+                <mat-placeholder>Nombre</mat-placeholder>
+                <input required type="text" formControlName="nombre" maxlength="100" matInput>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex>
+                <mat-placeholder>Direccion</mat-placeholder>
+                <textarea type="text" formControlName="direccion" maxlength="100" matInput></textarea>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex>
+                <mat-placeholder>Telefono</mat-placeholder>
+                <input type="text" formControlName="telefono" maxlength="50" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-placeholder>Nit</mat-placeholder>
+                <input type="text" formControlName="nit" maxlength="20" matInput>
+            </mat-form-field>
+        </div>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex>
+                <mat-placeholder>Email</mat-placeholder>
+                <input type="text" formControlName="email" maxlength="50" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+                <mat-placeholder>Asesor</mat-placeholder>
+                <input type="text" formControlName="asesor" maxlength="50" matInput>
+            </mat-form-field>
+        </div>
+
+        
+    </mat-dialog-content>
+    <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+        <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">Crear proveedor</button>
+        <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Modificar proveedor</button>
+    </mat-dialog-actions>
+</form>
+

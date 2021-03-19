@@ -1,0 +1,16 @@
+.example-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    margin-right: 5%;
+
+}
+
+.example-full-width > *{
+    width: 100%;
+}
+
+.example-additional-selection {
+    opacity: 0.75;
+    font-size: 0.75em;
+  }

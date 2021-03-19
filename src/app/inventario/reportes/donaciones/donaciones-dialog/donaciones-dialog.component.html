@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Formato de reporte</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="100px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>No. Acta</mat-placeholder>
+        <input required type="text" formControlName="acta" matInput>
+      </mat-form-field>
+    </div>   
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="100px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Previo a tabla</mat-placeholder>
+        <textarea type="text" formControlName="inicio" matInput></textarea>
+      </mat-form-field>      
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="100px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Posterior a tabla</mat-placeholder>
+        <textarea type="text" formControlName="fin" matInput></textarea>
+      </mat-form-field>      
+    </div>
+
+    
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button mat-button [disabled]="!form.valid">Crear reporte</button>    
+  </mat-dialog-actions>
+</form>
+
+
+
+
+
+

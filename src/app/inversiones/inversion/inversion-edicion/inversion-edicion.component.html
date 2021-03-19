@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Inversiones</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Registro</mat-placeholder>
+        <input required type="text" formControlName="nombre" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Monto</mat-placeholder>
+        <input required type="number" formControlName="descripcion" matInput>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha de inicio</mat-placeholder>
+        <input required type="date" formControlName="fecha_ini" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha de fin</mat-placeholder>
+        <input required type="date" formControlName="fecha_fin" matInput>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Días calendario</mat-placeholder>
+        <input required type="number" formControlName="calendario" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Plazo</mat-placeholder>
+        <input required type="number" formControlName="plazo" matInput>
+      </mat-form-field>
+    </div>
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Taza</mat-placeholder>
+        <input required type="number" formControlName="taza" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Poliza</mat-placeholder>
+        <input required type="text" formControlName="poliza" matInput>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">Crear inversion</button>
+    <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Actualizar inversión</button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,41 @@
+<div class="simple-table">
+
+  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true"></elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Usuarios'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div class="sticky">
+        <mat-card fxFlex.gt-md="300px">
+          <mat-card-title>Usuarios</mat-card-title>
+          <mat-card-content fxLayout="column">   
+            <p>Los usuarios se consumen de un servicio externo, los siguientes usuarios están registrados en el sistema, pero pueden actualizarse con los demás presionando el siguiente botón</p>                                 
+            <br>
+            <button mat-raised-button color="primary" (click)="updateUsuarios()">Actualizar Usuarios</button>            
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex class="mat-elevation-z2">
+        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true" [class.table-condensed]="false" [class.table-bordered]="true">
+          <thead>
+          <tr>                                
+            <th>Registro de personal</th>
+            <th>Nombre</th>                
+            <th>Puesto</th>            
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of rows">            
+            <td>{{ row.registro }}</td>                        
+            <td>{{ row.nombre }}</td>
+            <td>{{ row.puesto }}</td>            
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

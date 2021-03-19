@@ -1,0 +1,96 @@
+<div class="all-in-one-table">
+  <elastic-page-header [height]="'180px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true">
+  </elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Traslados'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <elastic-list name="Traslados" [columns]="columns" (filterChange)="onFilterChange($event)">
+      <div class="actions" fxFlexAlign="center">
+        <button class="create" (click)="create()" type="button" mat-mini-fab color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <mat-table #table [dataSource]="dataSource" id="table" matSort>
+
+        <!-- Joined Columns -->
+        <ng-container matColumnDef="fecha_inicio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de inicio </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_inicio)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_fin">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de fin </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_fin)}} </mat-cell>
+        </ng-container>        
+
+        <ng-container matColumnDef="usuario">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.usuario.nombre}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="seccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Sección </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.seccion.nombre}} </mat-cell>
+        </ng-container>
+        
+
+        <!-- Other Columns -->
+        <ng-container *ngFor="let column of columns">
+          <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ column.name }}</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row[column.property] }}</mat-cell>
+          </ng-container>
+        </ng-container>
+
+
+
+        <!-- actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+          <mat-cell class="actions-cell" *matCellDef="let row">
+            <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+
+            <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+              <button (click)="modify(row)" mat-menu-item>
+                <span>Modificar</span>
+              </button>
+              <button (click)="delete(row)" mat-menu-item>
+                <span>Borrar</span>
+              </button>
+              
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="visibleColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: visibleColumns;" (click)="modify(row)" class="clickable">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator class="paginator" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+
+
+
+
+    </elastic-list>
+
+    <div align="end">
+      <button mat-raised-button md-raised-button color="primary" (click)="closeComponent()">
+        Volver
+      </button>&nbsp;
+      
+      <button mat-raised-button md-raised-button color="primary" (click)="downloadPDF()" >
+        <span>Descargar PDF</span>
+      </button>&nbsp;
+      
+      <button mat-raised-button md-raised-button color="primary" (click)="downloadExcel()" >
+        <span>Descargar Excel</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<h2 mat-dialog-title>Artículos</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Código</mat-placeholder>
+        <input required type="text" formControlName="codigo" maxlength="25" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Precio</mat-placeholder>
+        <input required type="number" formControlName="precio" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha de compra</mat-placeholder>
+        <input required type="date" formControlName="fecha_compra" matInput>
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <mat-placeholder>Marca</mat-placeholder>
+        <input type="text" formControlName="marca" maxlength="25" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>No. Inventario</mat-placeholder>
+        <input required type="text" formControlName="inventario" maxlength="50" matInput>
+      </mat-form-field>      
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Descripción</mat-placeholder>
+        <textarea type="text" formControlName="descripcion" maxlength="500" matInput></textarea>
+      </mat-form-field>      
+    </div>
+
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-label>Categoria</mat-label>
+        <mat-select required formControlName="id_categoria">
+          <mat-option *ngFor="let categoria of categorias" [value]="categoria.id_categoria">
+            {{categoria.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field fxFlex>
+        <mat-label>Tipo de artículo</mat-label>
+        <mat-select required formControlName="id_tipo_articulo">
+          <mat-option *ngFor="let tipo of tiposArticulo" [value]="tipo.id_tipo_articulo">
+            {{tipo.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-label>Estado</mat-label>
+        <mat-select required formControlName="id_estado">
+          <mat-option *ngFor="let estado of estados" [value]="estado.id_estado">
+            {{estado.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    
+      <mat-form-field fxFlex>
+        <mat-label>Proveedor</mat-label>
+        <mat-select required formControlName="id_proveedor">
+          <mat-option *ngFor="let proveedor of proveedores" [value]="proveedor.id_proveedor">
+            {{proveedor.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>    
+    </div>
+
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-label>Departamento</mat-label>
+        <mat-select required formControlName="id_departamento">
+          <mat-option *ngFor="let departamento of departamentos" [value]="departamento.id_departamento">
+            {{departamento.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> 
+      <div style="padding-top: 5%;">
+      <mat-checkbox [checked]="true" color="primary" formControlName="fungible">¿Bien fungible?</mat-checkbox>
+      </div>
+    </div>
+
+    
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">Crear artículo</button>
+    <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Modificar artículo</button>
+  </mat-dialog-actions>
+</form>
+
+
+
+
+
+

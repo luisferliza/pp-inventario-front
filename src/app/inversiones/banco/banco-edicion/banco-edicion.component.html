@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Bancos</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+    <mat-dialog-content>
+
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+            <mat-form-field fxFlex>
+                <mat-placeholder>Nombre</mat-placeholder>
+                <input required type="text" formControlName="nombre" matInput>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <mat-placeholder>Contacto</mat-placeholder>
+              <input required type="text" formControlName="contacto" matInput>
+          </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+          <mat-form-field fxFlex>
+              <mat-placeholder>Dirección</mat-placeholder>
+              <input required type="text" formControlName="direccion" matInput>
+          </mat-form-field>
+          <mat-form-field fxFlex>
+            <mat-placeholder>Teléfono</mat-placeholder>
+            <input required type="text" formControlName="telefono" matInput>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+        <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+            <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">Crear Banco</button>
+            <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Actualizar Banco</button>
+        </mat-dialog-actions>
+</form>
