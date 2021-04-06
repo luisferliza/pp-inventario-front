@@ -25,7 +25,7 @@
         <mat-label>Artículo</mat-label>
         <mat-select required formControlName="id_articulo">
           <mat-option *ngFor="let articulo of articulos" [value]="articulo.id_articulo">
-            {{articulo.codigo}}
+            {{articulo.inventario}}
           </mat-option>
         </mat-select>
       </mat-form-field>

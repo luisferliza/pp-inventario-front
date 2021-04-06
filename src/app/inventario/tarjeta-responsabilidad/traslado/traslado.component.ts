@@ -164,7 +164,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
             headerRows: 0,
             widths: ['13%', '18%', '33%', '18%', '18%'],
             body: [
-              ...this.traslados.map(p => ([this.common.getDate(p.fecha_inicio), '', 'Plan de prestaciones/ ' + p.seccion.nombre, p.usuario.nombre, '']))
+              ...this.traslados.map(p => ([this.common.getDate(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombre, '']))
 
             ]
           },
@@ -197,7 +197,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
     this.traslados.forEach(p => {
       data.push({
         fecha_inicio: this.common.getDate(p.fecha_inicio),
-        seccion: 'Plan de prestaciones/ ' + p.seccion.nombre,
+        seccion: p.seccion.nombre,
         usuario: p.usuario.nombre
       })
     })

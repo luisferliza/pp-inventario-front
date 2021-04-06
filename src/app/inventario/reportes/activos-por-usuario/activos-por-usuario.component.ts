@@ -91,11 +91,11 @@ export class ActivosPorUsuarioComponent implements OnInit {
             alignment: "center",
             table: {
               headerRows: 1,
-              widths: ['12%', '13%', '28%', '13%', '8%', '13%', '13%'],
+              widths: ['19%', '29%', '19%', '14%', '19%'],
               body: [
-                [{ text: 'Código', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }, { text: 'Fecha Asignación', style: 'tableHeader' }, { text: 'Fecha Fin', style: 'tableHeader' }],
-                ...usefulData.map(p => ([p.codigo, p.inventario, {text:p.descripcion, alignment: 'justify'}, p.precio.toLocaleString('en', this.common.options), p.tarjeta, p.inicio, p.fin])),                
-                [{}, {},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, {}, {}, {}]
+                [ { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }, { text: 'Fecha Asignación', style: 'tableHeader' }],
+                ...usefulData.map(p => ([p.inventario, {text:p.descripcion, alignment: 'justify'}, p.precio.toLocaleString('en', this.common.options), p.tarjeta, p.inicio])),                
+                [{},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, {}, {}]
               ]
             },
             layout: 'headerLineOnly'
@@ -119,18 +119,16 @@ export class ActivosPorUsuarioComponent implements OnInit {
       ws = utils.json_to_sheet(this.getSpecificData(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
-      if (ws.A1) { // Valida si hay datos
-        ws.A1.v = 'Código';
-        ws.B1.v = 'No. Inventario';
-        ws.C1.v = 'Descripción';
-        ws.D1.v = 'Precio';
-        ws.E1.v = 'Tarjeta No.';
-        ws.F1.v = 'Fecha Asignación';
-        ws.G1.v = 'Fecha Fin';
+      if (ws.A1) { // Valida si hay datos        
+        ws.A1.v = 'No. Inventario';
+        ws.B1.v = 'Descripción';
+        ws.C1.v = 'Precio';
+        ws.D1.v = 'Tarjeta No.';
+        ws.E1.v = 'Fecha Asignación';        
       }
       const wb: WorkBook = utils.book_new();
-      utils.book_append_sheet(wb, ws, 'Inventario Activos Fijos');
-      writeFile(wb, 'Inventario Activos Fijos.xlsx');
+      utils.book_append_sheet(wb, ws, 'Activos por usuario');
+      writeFile(wb, 'Activos por usuario.xlsx');
     } else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
         duration: 2000
@@ -142,14 +140,12 @@ export class ActivosPorUsuarioComponent implements OnInit {
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {
-      data.push({
-        codigo: this.rows[cont].codigo,
+      data.push({        
         inventario: this.rows[cont].inventario,
         descripcion: this.rows[cont].descripcion,
         precio: this.rows[cont].precio,
         tarjeta: this.rows[cont].tarjeta,
-        inicio: this.common.getDate(this.rows[cont].inicio),
-        fin: this.common.getDate(this.rows[cont].fin)        
+        inicio: this.common.getDate(this.rows[cont].inicio)        
       })
       cont++;
     }

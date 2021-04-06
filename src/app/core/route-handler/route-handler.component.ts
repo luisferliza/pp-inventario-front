@@ -492,8 +492,15 @@ export class RouteHandlerComponent implements OnInit {
         position: 1
       }),
       new SidenavItem({
-        name: 'Subasta de bienes',
+        name: 'Compra Interna',
         route: '/inventario/reportes/subasta',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Compra Externa',
+        route: '/inventario/reportes/compraexterna',
         parent: reportesInventario,
         subItems: [ ],
         position: 1

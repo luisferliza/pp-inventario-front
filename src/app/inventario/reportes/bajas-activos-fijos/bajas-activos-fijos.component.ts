@@ -33,7 +33,7 @@ export class BajasActivosFijosComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.reportesService.obtenerVariable(this.pidu, 'BAJAS').subscribe(data =>{
+    this.reportesService.obtenerVariable(this.pidu, 'BAJAS').subscribe(data =>{      
       this.correlativo = data.valor;
       this.variable = data;
     })

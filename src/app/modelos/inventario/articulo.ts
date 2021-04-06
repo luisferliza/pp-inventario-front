@@ -5,8 +5,7 @@ import { Proveedor } from "./proveedor";
 import { TipoArticulo } from "./tipo-articulo";
 
 export class Articulo{
-    id_articulo: number;
-	codigo: string;
+    id_articulo: number;	
 	descripcion: string;
 	inventario: string;
 	fecha_compra: string;
@@ -17,6 +16,7 @@ export class Articulo{
 	tipo_articulo: TipoArticulo;
 	estado: Estado;	
 	proveedor: Proveedor;
+	residual: number;
 	departamento: Departamento;
 	
 }

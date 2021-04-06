@@ -5,8 +5,8 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Código</mat-placeholder>
-        <input required type="text" formControlName="codigo" maxlength="25" matInput>
+        <mat-placeholder>No. Inventario</mat-placeholder>
+        <input required type="text" formControlName="inventario" maxlength="25" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>Precio</mat-placeholder>
@@ -24,13 +24,6 @@
         <mat-placeholder>Marca</mat-placeholder>
         <input type="text" formControlName="marca" maxlength="25" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
-      <mat-form-field fxFlex>
-        <mat-placeholder>No. Inventario</mat-placeholder>
-        <input required type="text" formControlName="inventario" maxlength="50" matInput>
-      </mat-form-field>      
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
@@ -64,7 +57,7 @@
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
         <mat-label>Estado</mat-label>
-        <mat-select required formControlName="id_estado">
+        <mat-select required formControlName="id_estado" (selectionChange)="esBaja($event.value)">
           <mat-option *ngFor="let estado of estados" [value]="estado.id_estado">
             {{estado.nombre}}
           </mat-option>
@@ -94,6 +87,13 @@
       <div style="padding-top: 5%;">
       <mat-checkbox [checked]="true" color="primary" formControlName="fungible">¿Bien fungible?</mat-checkbox>
       </div>
+    </div>
+
+    <div *ngIf="!activo" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>Porcentaje Residual: </mat-placeholder>
+        <input required type="number" formControlName="residual" matInput>
+      </mat-form-field>  
     </div>
 
     

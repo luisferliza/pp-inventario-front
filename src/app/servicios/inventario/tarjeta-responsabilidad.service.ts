@@ -21,19 +21,19 @@ export class TarjetaResponsabilidadService {
     return this.http.get<TarjetaResponsabilidad[]>(`${this.url}/tarjetasresponsabilidad?pidu=${pidu}`);
   }
 
-  listarPorId(idTipoArticulo: number, pidu: String) {
-    return this.http.get<TarjetaResponsabilidad>(`${this.url}/tarjetasresponsabilidad/${idTipoArticulo}?pidu=${pidu}`);
+  listarPorId(idTarjeta: number, pidu: String) {
+    return this.http.get<TarjetaResponsabilidad>(`${this.url}/tarjetasresponsabilidad/${idTarjeta}?pidu=${pidu}`);
   }
 
-  registrar(idTipoArticulo: TarjetaResponsabilidad, pidu: String) {
-    return this.http.post(`${this.url}/tarjetasresponsabilidad?pidu=${pidu}`, idTipoArticulo);
+  registrar(tarjeta: TarjetaResponsabilidad, pidu: String){
+    return this.http.post<TarjetaResponsabilidad>(`${this.url}/tarjetasresponsabilidad?pidu=${pidu}`, tarjeta);
   }
 
-  modificar(idTipoArticulo: TarjetaResponsabilidad, pidu: String) {
-    return this.http.put(`${this.url}/tarjetasresponsabilidad?pidu=${pidu}`, idTipoArticulo);
+  modificar(tarjeta: TarjetaResponsabilidad, pidu: String) {
+    return this.http.put(`${this.url}/tarjetasresponsabilidad?pidu=${pidu}`, tarjeta);
   }
 
-  eliminar(idTipoArticulo: number, pidu: String) {
-    return this.http.delete(`${this.url}/tarjetasresponsabilidad/${idTipoArticulo}?pidu=${pidu}`);
+  eliminar(idTarjeta: number, pidu: String) {
+    return this.http.delete(`${this.url}/tarjetasresponsabilidad/${idTarjeta}?pidu=${pidu}`);
   }
 }

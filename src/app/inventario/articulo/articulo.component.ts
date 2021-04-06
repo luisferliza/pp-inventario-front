@@ -31,8 +31,7 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Estado', property: 'id_articulo', visible: false, isModelProperty: true },
-    { name: 'Código', property: 'codigo', visible: true, isModelProperty: true },
+    { name: 'ID_Estado', property: 'id_articulo', visible: false, isModelProperty: true },    
     { name: 'No. inventario', property: 'inventario', visible: true, isModelProperty: true },
     { name: 'Descripción', property: 'descripcion', visible: true, isModelProperty: true },      
     { name: 'Precio', property: 'precio', visible: true, isModelProperty: true },

@@ -65,6 +65,10 @@ const routes: Routes = [
         loadChildren: 'app/inventario/reportes/subasta-bienes/subasta-bienes.module#SubastaBienesModule'
       },
       {
+        path: 'inventario/reportes/compraexterna',
+        loadChildren: 'app/inventario/reportes/compra-externa/compra-externa.module#CompraExternaModule'
+      },
+      {
         path: 'inventario/reportes/donaciones',
         loadChildren: 'app/inventario/reportes/donaciones/donaciones.module#DonacionesModule'
       },

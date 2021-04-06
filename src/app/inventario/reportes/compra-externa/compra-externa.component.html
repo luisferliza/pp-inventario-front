@@ -9,7 +9,7 @@
     <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
       <div class="sticky">
         <mat-card fxFlex.gt-md="300px">
-          <mat-card-title>Compra Interna</mat-card-title>
+          <mat-card-title>Compra Externa</mat-card-title>
           <mat-card-content fxLayout="column">            
            <b><p>Seleccione el tipo de bien:</p></b>        
             <mat-select [(ngModel)]="tipo_bien" (selectionChange)="update()">
@@ -54,8 +54,7 @@
             <th>Descripción</th>
             <th>No. Inventario</th>
             <th>Valor Q.</th>            
-            <th>Valor residual</th>            
-            <th>Responsables</th>            
+            <th>Valor residual</th>                        
           </tr>
           </thead>
           <tbody>
@@ -64,8 +63,7 @@
             <td>{{ row.descripcion }}</td>
             <td>{{ row.inventario }}</td>
             <td> Q{{ row.precio.toLocaleString('en', this.common.options) }}</td>            
-            <td> Q{{ row.residual.toLocaleString('en', this.common.options) }}</td>            
-            <td> {{ row.responsable }}</td>            
+            <td> Q{{ row.residual.toLocaleString('en', this.common.options) }}</td>                                
           </tr>
           </tbody>
         </table>

@@ -25,9 +25,10 @@ export class ArticuloEdicionComponent implements OnInit {
  
   categorias: Categoria[];
   departamentos: Departamento[];
-  estados: Estado[];
+  estados: Estado[] = [];
   proveedores: Proveedor[];
   tiposArticulo: TipoArticulo[];  
+  activo: boolean = true;
 
   
   form: FormGroup;
@@ -54,13 +55,14 @@ export class ArticuloEdicionComponent implements OnInit {
 
     if (this.defaults) {
       this.mode = 'update';
+      this.activo = this.defaults.estado.nombre == 'Activo'? true : false;
     } else {
       this.defaults = {} as Articulo;
     }
-
-    this.form = this.fb.group({            
-      codigo: this.defaults.codigo || '',      
+    
+    this.form = this.fb.group({                      
       descripcion: this.defaults.descripcion || '',      
+      residual: this.defaults.residual || 0.05,     
       inventario: this.defaults.inventario || '',      
       fecha_compra: this.defaults.fecha_compra? this.defaults.fecha_compra.split('T')[0] : null,      
       precio: this.defaults.precio || 0,            
@@ -80,6 +82,25 @@ export class ArticuloEdicionComponent implements OnInit {
     } else if (this.mode === 'update') {      
       this.update();
     }
+  }
+
+  esBaja(value){
+    let estado = this.getStringFromValue(value);    
+    if(estado == 'Activo'){
+      this.activo=true;
+    }else{
+      this.activo=false;
+    }
+  }
+
+  getStringFromValue(value:number){
+    for (let index = 0; index < this.estados.length; index++) {
+      const element = this.estados[index];
+      if(element.id_estado == value){
+        return element.nombre;
+      }      
+    }
+    return null;
   }
 
   create() {    

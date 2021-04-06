@@ -5,10 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Articulo } from 'app/modelos/inventario/articulo';
 import { Departamento } from 'app/modelos/inventario/departamento';
 import { TarjetaResponsabilidad } from 'app/modelos/inventario/tarjeta-responsabilidad';
+import { Traslado } from 'app/modelos/inventario/traslado';
 import { Usuario } from 'app/modelos/inventario/usuario';
 import { ArticuloService } from 'app/servicios/inventario/articulo.service';
 import { DepartamentoService } from 'app/servicios/inventario/departamento.service';
 import { TarjetaResponsabilidadService } from 'app/servicios/inventario/tarjeta-responsabilidad.service';
+import { TrasladoService } from 'app/servicios/inventario/traslado.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
 
 @Component({
@@ -24,16 +26,16 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   articulos: Articulo[];
   departamentos: Departamento[];
   usuarios: Usuario[];
-  
+
   constructor(private dialogRef: MatDialogRef<TarjetaResponsabilidadEdicionComponent>,
     @Inject(MAT_DIALOG_DATA) private defaults: TarjetaResponsabilidad,
     private tarjetaResponsabilidadService: TarjetaResponsabilidadService,
+    private trasladoService: TrasladoService,
     private departamentoService: DepartamentoService,
     private articuloService: ArticuloService,
     private usuarioService: UsuarioService,
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private fb: FormBuilder
+  ) { }
 
 
   ngOnInit() {
@@ -47,18 +49,18 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
       this.defaults = {} as TarjetaResponsabilidad;
     }
 
-    this.form = this.fb.group({      
-      id_tarjeta_responsabilidad: this.defaults.id_tarjeta_responsabilidad || 0,            
-      registro: this.defaults.receptor? this.defaults.receptor.registro : null,                     
-      id_articulo: this.defaults.articulo? this.defaults.articulo.id_articulo : null,            
-      id_departamento: this.defaults.departamento? this.defaults.departamento.id_departamento : null                                  
+    this.form = this.fb.group({
+      id_tarjeta_responsabilidad: this.defaults.id_tarjeta_responsabilidad || 0,
+      registro: this.defaults.receptor ? this.defaults.receptor.registro : null,
+      id_articulo: this.defaults.articulo ? this.defaults.articulo.id_articulo : null,
+      id_departamento: this.defaults.departamento ? this.defaults.departamento.id_departamento : null
     });
   }
 
-  save() {    
+  save() {
     if (this.mode === 'create') {
       this.create();
-    } else if (this.mode === 'update') {      
+    } else if (this.mode === 'update') {
       this.update();
     }
   }
@@ -93,9 +95,27 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     tarjetaResponsabilidad.receptor = new Usuario();
     tarjetaResponsabilidad.receptor.registro = this.form.value.registro;
 
-    this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe(()=>{
-      this.dialogRef.close(tarjetaResponsabilidad);
-    })    
+    this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
+      /* Automaticamente se crea el traslado*/
+      this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((data) => {        
+        const traslado: Traslado = new Traslado();
+        traslado.fecha_fin = null;
+        traslado.fecha_inicio = data.articulo.fecha_compra;
+
+        traslado.usuario = new Usuario();
+        traslado.usuario.registro = data.receptor.registro;
+
+        traslado.tarjeta = new TarjetaResponsabilidad()
+        traslado.tarjeta.id_interno = data.id_interno;
+
+        traslado.seccion = new Departamento();
+        traslado.seccion.id_departamento = data.departamento.id_departamento;
+
+        this.trasladoService.registrar(traslado, this.pidu).subscribe(()=>{
+          this.dialogRef.close(tarjetaResponsabilidad);  
+        })        
+      })
+    })
   }
 
   update() {
@@ -111,9 +131,9 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     tarjetaResponsabilidad.receptor.registro = this.form.value.registro;
 
     tarjetaResponsabilidad.id_interno = this.defaults.id_interno;
-    this.tarjetaResponsabilidadService.modificar(tarjetaResponsabilidad, this.pidu).subscribe(()=>{
+    this.tarjetaResponsabilidadService.modificar(tarjetaResponsabilidad, this.pidu).subscribe(() => {
       this.dialogRef.close(tarjetaResponsabilidad);
-    })    
+    })
   }
 
   isCreateMode() {

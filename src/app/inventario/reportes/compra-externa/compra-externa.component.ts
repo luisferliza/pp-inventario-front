@@ -8,16 +8,15 @@ import { ReportesService } from 'app/servicios/inventario/reportes.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
-import { SubastaBienesDialogComponent } from './subasta-bienes-dialog/subasta-bienes-dialog.component';
+import { CompraExternaDialogComponent } from './compra-externa-dialog/compra-externa-dialog.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
-  selector: 'elastic-subasta-bienes',
-  templateUrl: './subasta-bienes.component.html',
-  styleUrls: ['./subasta-bienes.component.scss']
+  selector: 'elastic-compra-externa',
+  templateUrl: './compra-externa.component.html',
+  styleUrls: ['./compra-externa.component.scss']
 })
-export class SubastaBienesComponent implements OnInit {
-
+export class CompraExternaComponent implements OnInit {
 
   pidu = '10';
   valor = 1;
@@ -51,7 +50,7 @@ export class SubastaBienesComponent implements OnInit {
   }
 
   listar() {    
-    this.reportesService.subastaBienesSinAgrupar(this.pidu, this.tipo_bien, this.id_categoria).subscribe(data => {
+    this.reportesService.compraExterna(this.pidu, this.tipo_bien, this.id_categoria).subscribe(data => {
       this.valor = 1;
       this.rows = data;
       this.last_row = data.length;
@@ -73,7 +72,7 @@ export class SubastaBienesComponent implements OnInit {
 
   crearPDF() {
     if (this.rows.length > 0) {
-      this.dialog.open(SubastaBienesDialogComponent, { width: '600px' }).afterClosed().subscribe((data) => {
+      this.dialog.open(CompraExternaDialogComponent, { width: '600px' }).afterClosed().subscribe((data) => {
         if (data) {
           this.downloadPDF(data.inicio);
         }
@@ -123,13 +122,11 @@ export class SubastaBienesComponent implements OnInit {
           alignment: "center",
           table: {
             headerRows: 3,
-            widths: ['6%', '29%', '13%', '11%', '11%', '12%', '3%', '3%', '12%'], 
+            widths: ['14%', '32%', '19%', '16%', '19%'],
             body: [
-              [{ text: 'No. ', style: 'tableHeader', rowSpan: 3}, { text: 'Descripción', style: 'tableHeader', rowSpan: 3 }, { text: 'No. Inventario', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor Q', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor residual', style: 'tableHeader', rowSpan: 3 }, { text: 'Responsable', style: 'tableHeader', colSpan:4 },{},{},{}],
-            [{},{},{},{},{},{text: 'Nombre', rowSpan: 2}, {text: 'Interesado',  colSpan:2 }, {}, {text: 'Firma', rowSpan: 2}],
-            [{},{},{},{},{},{}, {text: 'Si'},{text: 'No'}, {}],            
-            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, p.precio.toLocaleString('en', this.common.options), p.residual.toLocaleString('en', this.common.options), p.responsable, '','',''])),              
-            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString('en', this.common.options), bold: true }, {},{},{},{}]
+              [{ text: 'No. ', style: 'tableHeader'}, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor Q', style: 'tableHeader' }, { text: 'Valor residual', style: 'tableHeader' }],            
+            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, p.precio.toLocaleString('en', this.common.options), p.residual.toLocaleString('en', this.common.options)])),              
+            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString('en', this.common.options), bold: true }]
             ]
           }         
         }
@@ -152,8 +149,8 @@ export class SubastaBienesComponent implements OnInit {
         ws.D1.v = 'Valor residual';
       }
       const wb: WorkBook = utils.book_new();
-      utils.book_append_sheet(wb, ws, 'Compra Interna');
-      writeFile(wb, 'Compra Interna.xlsx');
+      utils.book_append_sheet(wb, ws, 'Compra Externa');
+      writeFile(wb, 'Compra Externa.xlsx');
     }
     else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
@@ -172,8 +169,7 @@ export class SubastaBienesComponent implements OnInit {
         descripcion: this.rows[cont].descripcion,
         inventario: this.rows[cont].inventario,
         precio: this.rows[cont].precio,
-        residual: this.rows[cont].residual,
-        responsable: this.rows[cont].responsable
+        residual: this.rows[cont].residual
       })
       cont++;
     }
@@ -191,3 +187,4 @@ export class SubastaBienesComponent implements OnInit {
   }
 
 }
+

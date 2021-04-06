@@ -43,14 +43,14 @@ export class ReportesService {
 
   activosPorUsuario(pidu: String, fungible:string, usuario:number) {
     return this.http.get<ActivosPorUsuario[]>(`${this.url}/reportes/activosporusuario?pidu=${pidu}&fungible=${fungible}&id_usuario=${usuario}`);
-  }
-
-  subastaBienes(pidu: String, fungible:string, categoria:number) {
-    return this.http.get<SubastaBienes[]>(`${this.url}/reportes/subastabienes?pidu=${pidu}&fungible=${fungible}&id_categoria=${categoria}`);
-  }
+  }  
 
   subastaBienesSinAgrupar(pidu: String, fungible:string, categoria:number) {
-    return this.http.get<SubastaBienes[]>(`${this.url}/reportes/subastabienessinagrupar?pidu=${pidu}&fungible=${fungible}&id_categoria=${categoria}`);
+    return this.http.get<SubastaBienes[]>(`${this.url}/reportes/comprainterna?pidu=${pidu}&fungible=${fungible}&id_categoria=${categoria}`);
+  }
+
+  compraExterna(pidu: String, fungible:string, categoria:number) {
+    return this.http.get<SubastaBienes[]>(`${this.url}/reportes/compraexterna?pidu=${pidu}&fungible=${fungible}&id_categoria=${categoria}`);
   }
 
   obtenerVariable(pidu: String, variable:string) {
