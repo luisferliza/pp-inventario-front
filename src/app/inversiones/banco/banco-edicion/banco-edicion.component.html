@@ -10,19 +10,41 @@
             </mat-form-field>
             <mat-form-field fxFlex>
               <mat-placeholder>Contacto</mat-placeholder>
-              <input required type="text" formControlName="contacto" matInput>
+              <input type="text" formControlName="contacto" matInput>
           </mat-form-field>
         </div>
         <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
           <mat-form-field fxFlex>
               <mat-placeholder>Dirección</mat-placeholder>
-              <input required type="text" formControlName="direccion" matInput>
+              <input type="text" formControlName="direccion" matInput>
           </mat-form-field>
           <mat-form-field fxFlex>
             <mat-placeholder>Teléfono</mat-placeholder>
-            <input required type="text" formControlName="telefono" matInput>
+            <input type="text" formControlName="telefono" matInput>
         </mat-form-field>
       </div>
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+        <mat-form-field fxFlex>
+            <mat-placeholder>Nombre Gerente (Un nombre, un apellido)</mat-placeholder>
+            <input type="text" formControlName="nombre_gerente" matInput>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <mat-placeholder>Título Gerente</mat-placeholder>
+          <input type="text" formControlName="titulo_gerente" matInput>
+      </mat-form-field>
+      </div>
+
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+        <mat-form-field fxFlex>
+          <mat-label>Tipo de entidad</mat-label>
+          <mat-select required formControlName="tipo_entidad_id">
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo.id_tipo_entidad">
+              {{tipo.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>        
+      </div>
+    
     </mat-dialog-content>
 
         <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">

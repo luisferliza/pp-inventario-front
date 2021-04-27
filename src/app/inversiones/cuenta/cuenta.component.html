@@ -22,6 +22,18 @@
             <mat-cell *matCellDef="let row"> {{ row[column.property] }}</mat-cell>
           </ng-container>
         </ng-container>
+
+        <!-- Predefined Columns -->
+
+        <ng-container matColumnDef="activa">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.activa? "Activa" : "Inactiva" }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo_Cuenta">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de cuenta </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.tipo_cuenta.nombre }} </mat-cell>
+        </ng-container>
         
 
         <!-- actions Column -->

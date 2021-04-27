@@ -1,0 +1,98 @@
+<h2 mat-dialog-title>Asistente de generación de cartas</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Banco</mat-placeholder>
+        <input required type="text" formControlName="banco" matInput>
+      </mat-form-field>         
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha</mat-placeholder>
+        <input required type="date" formControlName="fecha" (change)="calcularInteres()" matInput>
+      </mat-form-field>   
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Nombre Gerente</mat-placeholder>
+        <input required type="text" formControlName="nombre" matInput>
+      </mat-form-field>  
+      <mat-form-field fxFlex>
+        <mat-placeholder>Apellido Gerente</mat-placeholder>
+        <input required type="text" formControlName="apellido" matInput>
+      </mat-form-field>    
+    </div>
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">        
+      <mat-form-field fxFlex>
+        <mat-placeholder>Grado académico</mat-placeholder>
+        <input required type="text" formControlName="grado" matInput>
+      </mat-form-field>   
+      <mat-form-field fxFlex>
+        <mat-placeholder>Puesto</mat-placeholder>
+        <input required type="text" formControlName="puesto" matInput>
+      </mat-form-field>   
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Acta JAPP</mat-placeholder>
+        <input required type="text" formControlName="acta_japp" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
+        <input required type="date" formControlName="fecha_acta" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>No. referencia</mat-placeholder>
+        <input required type="text" formControlName="referencia" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>No. Cuenta</mat-placeholder>
+        <input required type="text" formControlName="cuenta" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Valor de inversión</mat-placeholder>
+        <input required type="number" formControlName="monto" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Días de interés</mat-placeholder>
+        <input required type="number" formControlName="dias_interes" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Interés por cobrar:</mat-placeholder>
+        <input required type="text" formControlName="interes" matInput>
+      </mat-form-field>        
+      <mat-form-field fxFlex>
+        <mat-placeholder>Fecha desinversión</mat-placeholder>
+        <input required type="date" formControlName="vencimiento" matInput>
+      </mat-form-field>  
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">         
+      <mat-form-field fxFlex>
+        <mat-placeholder>Recoger cheque el:</mat-placeholder>
+        <input required type="date" formControlName="entrega" matInput>
+      </mat-form-field>        
+    </div>
+
+
+    
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button type="button" (click)="saveWord()" mat-button [disabled]="!form.valid">Crear carta Word</button>    
+    <button type="button" (click)="savePDF()" mat-button [disabled]="!form.valid" color="primary">Crear carta PDF</button>    
+    <button type="button" (click)="close()" mat-button color="warn">Cerrar</button>    
+  </mat-dialog-actions>
+</form>

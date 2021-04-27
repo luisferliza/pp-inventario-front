@@ -9,8 +9,8 @@ import { ListDatabase } from 'app/core/list/list-database';
 import { ListDataSource } from 'app/core/list/list-datasource';
 import { List } from 'app/core/list/list.interface';
 import { componentDestroyed } from 'app/core/utils/component-destroyed';
-import { Articulo } from 'app/modelos/inventario/articulo';
-import { ArticuloService } from 'app/servicios/inventario/articulo.service';
+import { Cuenta } from 'app/modelos/inversiones/cuenta';
+import { CuentaService } from 'app/servicios/inversiones/cuenta.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CuentaEdicionComponent } from './cuenta-edicion/cuenta-edicion.component';
@@ -22,36 +22,33 @@ import { CuentaEdicionComponent } from './cuenta-edicion/cuenta-edicion.componen
   animations: [...ROUTE_TRANSITION],
   host: { '[@routeTransition]': '' }
 })
-export class CuentaComponent implements List<Articulo>, OnInit, OnDestroy {
+export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
 
-  subject$: ReplaySubject<Articulo[]> = new ReplaySubject<Articulo[]>(1);
-  data$: Observable<Articulo[]>;
-  articulos: Articulo[];
+  subject$: ReplaySubject<Cuenta[]> = new ReplaySubject<Cuenta[]>(1);
+  data$: Observable<Cuenta[]>;
+  cuentas: Cuenta[];
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Cuenta', property: 'p1', visible: false, isModelProperty: true },
-    { name: 'Banco', property: 'p2', visible: true, isModelProperty: true },
-    { name: 'No. Cuenta', property: 'p3', visible: true, isModelProperty: true },    
-    { name: 'Saldo de apertura', property: 'p4', visible: true, isModelProperty: true },
-    { name: 'Saldo actual', property: 'p5', visible: true, isModelProperty: true },
-    { name: 'Fecha de creación', property: 'p6', visible: true, isModelProperty: true },
-    { name: 'Beneficiario', property: 'p7', visible: true, isModelProperty: true },
-    { name: 'Tipo de cuenta', property: 'p8', visible: true, isModelProperty: true },        
+    { name: 'ID_Cuenta', property: 'id_cuenta', visible: false, isModelProperty: true },
+    { name: 'Número', property: 'numero', visible: true, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
+    { name: 'Estado', property: 'activa', visible: true, isModelProperty: false },
+    { name: 'Tipo de Cuenta', property: 'tipo_Cuenta', visible: true, isModelProperty: false },    
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
   pageSize = 10;
   resultsLength: number;
-  dataSource: ListDataSource<Articulo> | null;
-  database: ListDatabase<Articulo>;
+  dataSource: ListDataSource<Cuenta> | null;
+  database: ListDatabase<Cuenta>;
   pidu = '10';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private articuloService: ArticuloService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private cuentaService: CuentaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -60,7 +57,7 @@ export class CuentaComponent implements List<Articulo>, OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.listar();
-    this.articuloService.message.subscribe(data => {
+    this.cuentaService.message.subscribe(data => {
       this.snackBar.open(data, 'AVISO', {
         duration: 2000
       });
@@ -68,21 +65,21 @@ export class CuentaComponent implements List<Articulo>, OnInit, OnDestroy {
   }
 
   listar() {
-    this.articuloService.listar(this.pidu).subscribe(data => {
-      this.articulos = data;
+    this.cuentaService.listar(this.pidu).subscribe(data => {
+      this.cuentas = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
-      this.database = new ListDatabase<Articulo>();
+      this.database = new ListDatabase<Cuenta>();
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((categorias: Articulo[]) => {
-        this.articulos = categorias;
-        this.database.dataChange.next(categorias);
-        this.resultsLength = categorias.length;
+      ).subscribe((cuentas: Cuenta[]) => {        
+        this.cuentas = cuentas;
+        this.database.dataChange.next(cuentas);
+        this.resultsLength = cuentas.length;
       });
 
-      this.dataSource = new ListDataSource<Articulo>(this.database, this.sort, this.paginator, this.columns);
+      this.dataSource = new ListDataSource<Cuenta>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
       
     });
@@ -97,10 +94,10 @@ export class CuentaComponent implements List<Articulo>, OnInit, OnDestroy {
   }
 
   crear() {        
-    this.dialog.open(CuentaEdicionComponent).afterClosed().subscribe((articulo: Articulo) => {
-      if (articulo) {
+    this.dialog.open(CuentaEdicionComponent).afterClosed().subscribe((cuenta: Cuenta) => {
+      if (cuenta) {
         this.listar();
-        this.articuloService.message.next('Registro creado correctamente.');
+        this.cuentaService.message.next('Registro creado correctamente.');
       }
     });    
   }
@@ -111,16 +108,16 @@ export class CuentaComponent implements List<Articulo>, OnInit, OnDestroy {
     }).afterClosed().subscribe(resp => {
       if (resp) {
         this.listar();
-        this.articuloService.message.next('Registro modificado correctamente.');
+        this.cuentaService.message.next('Registro modificado correctamente.');
       }
     });    
   }
 
-  eliminar(articulo: Articulo) {
-    let idArticulo = articulo.id_articulo;
-    this.articuloService.eliminar(idArticulo, this.pidu).subscribe(() => {
+  eliminar(cuenta: Cuenta) {
+    let idCuenta = cuenta.id_cuenta;
+    this.cuentaService.eliminar(idCuenta, this.pidu).subscribe(() => {
       this.listar();
-      this.articuloService.message.next('Registro eliminado correctamente.');
+      this.cuentaService.message.next('Registro eliminado correctamente.');
     });
   }
 

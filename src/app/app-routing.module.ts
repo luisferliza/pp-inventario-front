@@ -91,32 +91,25 @@ const routes: Routes = [
         loadChildren: 'app/inversiones/banco/banco.module#BancoModule'
       },
       {
-        path: 'inversiones/cheques',
-        loadChildren: 'app/inversiones/cheque/cheque.module#ChequeModule'
-      },
-      {
         path: 'inversiones/cuentas',
         loadChildren: 'app/inversiones/cuenta/cuenta.module#CuentaModule'
       },
       {
-        path: 'inversiones/encargados',
-        loadChildren: 'app/inversiones/encargado/encargado.module#EncargadoModule'
-      },
-      {
         path: 'inversiones/inversiones',
         loadChildren: 'app/inversiones/inversion/inversion.module#InversionModule'
+      },  
+      // Reportes
+      {
+        path: 'inversiones/reportes/interes-mensual',
+        loadChildren: 'app/inversiones/reportes/interes-mensual/interes-mensual.module#InteresMensualModule'
       },
       {
-        path: 'inversiones/plazos',
-        loadChildren: 'app/inversiones/plazo/plazo.module#PlazoModule'
+        path: 'inversiones/reportes/integracion-plazo-fijo',
+        loadChildren: 'app/inversiones/reportes/integracion-plazo/integracion-plazo.module#IntegracionPlazoModule'
       },
       {
-        path: 'inversiones/proyecciones',
-        loadChildren: 'app/inversiones/proyeccion/proyeccion.module#ProyeccionModule'
-      },
-      {
-        path: 'inversiones/tiposinversion',
-        loadChildren: 'app/inversiones/tipo-inversion/tipo-inversion.module#TipoInversionModule'
+        path: 'inversiones/reportes/control-vencimiento',
+        loadChildren: 'app/inversiones/reportes/control-vencimiento/control-vencimiento.module#ControlVencimientoModule'
       },
       
       //###########################################################################

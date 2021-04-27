@@ -94,8 +94,8 @@ export class ActivosPorUsuarioComponent implements OnInit {
               widths: ['19%', '29%', '19%', '14%', '19%'],
               body: [
                 [ { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }, { text: 'Fecha Asignación', style: 'tableHeader' }],
-                ...usefulData.map(p => ([p.inventario, {text:p.descripcion, alignment: 'justify'}, p.precio.toLocaleString('en', this.common.options), p.tarjeta, p.inicio])),                
-                [{},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, {}, {}]
+                ...usefulData.map(p => ([p.inventario, {text:p.descripcion, alignment: 'justify'}, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.tarjeta, p.inicio])),                
+                [{},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}, {}]
               ]
             },
             layout: 'headerLineOnly'

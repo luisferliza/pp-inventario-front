@@ -13,7 +13,7 @@
         </button>
       </div>
 
-      <mat-table #table [dataSource]="dataSource"  id="table" matSort>        
+      <mat-table #table [dataSource]="dataSource" id="table" matSort>
 
         <!-- Columns -->
         <ng-container *ngFor="let column of columns">
@@ -22,7 +22,53 @@
             <mat-cell *matCellDef="let row"> {{ row[column.property] }}</mat-cell>
           </ng-container>
         </ng-container>
-        
+
+        <!-- Date and Joined Columns-->
+        <ng-container matColumnDef="fecha_colocacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de colocación </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_colocacion)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fecha_acta">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de acta </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_acta)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="periodo_pago">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo de pago </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{getPeriodo(row.periodo_pago)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vencimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de vencimiento </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getDate(row.vencimiento)}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo_Inversion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de inversión </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.tipo_Inversion.nombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="banco">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Banco </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.banco.nombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="inversion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de inversión </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.inversion.nombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="provision">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de provisión </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.provision.nombre }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="interes">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de interés </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.interes.nombre }} </mat-cell>
+        </ng-container>
+
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
@@ -33,6 +79,9 @@
             </button>
 
             <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+              <button [matMenuTriggerFor]="cartas" mat-menu-item>
+                <span>Cartas</span>
+              </button>
               <button (click)="modificar(row)" mat-menu-item>
                 <span>Modificar</span>
               </button>
@@ -40,6 +89,15 @@
                 <span>Borrar</span>
               </button>
             </mat-menu>
+
+            <mat-menu #cartas="matMenu">
+              <button mat-menu-item (click)="generarCartaInversion(row)">Carta de inversión</button>
+              <button mat-menu-item (click)="generarCartaReInversion(row)">Carta de reinversión</button>
+              <button mat-menu-item (click)="generarCartaDesInversion(row)">Carta de desinversión</button>
+              <button mat-menu-item (click)="generarCartaDesInversionAnticipada(row)">Carta de desinversión anticipada</button>
+            </mat-menu>
+
+
           </mat-cell>
         </ng-container>
 
@@ -52,7 +110,6 @@
 
     </elastic-list>
 
-  </div>
+  </div>  
 
 </div>
-

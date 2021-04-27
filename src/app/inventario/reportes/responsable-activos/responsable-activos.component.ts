@@ -75,8 +75,8 @@ export class ResponsableActivosComponent implements OnInit {
               widths: ['13%', '12%', '13%', '30%', '17%', '15%'],
               body: [
                 [{ text: 'Número Inventario', style: 'tableHeader' }, { text: 'Alta el', style: 'tableHeader' }, { text: 'Valor factura', style: 'tableHeader' }, { text: 'Activo', style: 'tableHeader' }, { text: 'Responsable', style: 'tableHeader' }, { text: 'Ubicación', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.inventario, p.fecha_compra, p.precio, p.descripcion, p.responsable, p.ubicacion])),
-                [{}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toFixed(2), bold: true }, {}, {}, {}]
+                ...usefullData.map(p => ([p.inventario, p.fecha_compra, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.descripcion, p.responsable, p.ubicacion])),
+                [{}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}, {}, {}]
               ]
             },
             layout: 'headerLineOnly'

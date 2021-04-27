@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatSnackBarModule, MatSortModule, MatTableModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
 import { BreadcrumbsModule } from 'app/core/breadcrumbs/breadcrumbs.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CuentaComponent } from './cuenta.component';
 import { CuentaRoutingModule } from './cuenta.routing';
-import { CuentaEdicionModule } from './cuenta-edicion/cuenta-edicion.module';
+import { CuentaEdicionComponent } from './cuenta-edicion/cuenta-edicion.component';
 
 @NgModule({
-  declarations: [CuentaComponent],
+  declarations: [CuentaComponent, CuentaEdicionComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,13 +26,17 @@ import { CuentaEdicionModule } from './cuenta-edicion/cuenta-edicion.module';
     MatButtonModule,
     MatDialogModule,
     MatSnackBarModule,
-    CuentaRoutingModule,
+    CuentaRoutingModule,    
+    ReactiveFormsModule,    
+    MatRadioModule,
+    MatSelectModule,
 
     // Core
-    ListModule,
-    CuentaEdicionModule,
+    ListModule,    
     PageHeaderModule,
     BreadcrumbsModule
+  ], entryComponents:[
+    CuentaEdicionComponent
   ]
 })
 export class CuentaModule { }

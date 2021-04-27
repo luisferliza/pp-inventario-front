@@ -3,46 +3,170 @@
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
 
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
+      <mat-form-field fxFlex>
+        <mat-label>Banco</mat-label>
+        <mat-select required formControlName="banco_id" >
+          <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
+            {{banco.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>  
+      <mat-form-field fxFlex>
+        <mat-placeholder>No. de certificado</mat-placeholder>
+        <input required type="text" formControlName="no_inversion" matInput>
+      </mat-form-field>   
+    </div>
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Registro</mat-placeholder>
-        <input required type="text" formControlName="nombre" matInput>
-      </mat-form-field>
+        <mat-placeholder>Referencia PP</mat-placeholder>
+        <input required type="text" formControlName="referencia" matInput>
+      </mat-form-field>      
       <mat-form-field fxFlex>
-        <mat-placeholder>Monto</mat-placeholder>
-        <input required type="number" formControlName="descripcion" matInput>
+        <mat-placeholder>No. de Cuenta</mat-placeholder>
+        <input required type="text" formControlName="cuenta" matInput>
       </mat-form-field>
     </div>
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de inicio</mat-placeholder>
-        <input required type="date" formControlName="fecha_ini" matInput>
+        <mat-placeholder>Valor de inversión</mat-placeholder>
+        <input required type="number" formControlName="monto" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de fin</mat-placeholder>
-        <input required type="date" formControlName="fecha_fin" matInput>
+        <mat-placeholder>Tasa de interés</mat-placeholder>
+        <input required type="number" formControlName="tasa_interes" matInput>
       </mat-form-field>
     </div>
+
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Días calendario</mat-placeholder>
-        <input required type="number" formControlName="calendario" matInput>
+        <mat-placeholder>Fecha de colocación</mat-placeholder>
+        <input required type="date" formControlName="fecha_colocacion" (change)="changeDate()" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>Plazo</mat-placeholder>
-        <input required type="number" formControlName="plazo" matInput>
+        <mat-placeholder>Plazo (Días)</mat-placeholder>
+        <input required type="number" formControlName="plazo" (change)="changeDate()" matInput>
       </mat-form-field>
     </div>
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Taza</mat-placeholder>
-        <input required type="number" formControlName="taza" matInput>
+        <mat-placeholder>Fecha Vencimiento</mat-placeholder>
+        <input required type="date" formControlName="vencimiento" matInput>
+      </mat-form-field>     
+      <mat-form-field fxFlex>
+        <mat-label>Tipo de inversión</mat-label>
+        <mat-select required formControlName="tipo_Inversion_id">
+          <mat-option *ngFor="let tipo of tiposInversion" [value]="tipo.id_tipo_inversion">
+            {{tipo.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>  
+      
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Inversión</mat-placeholder>
+        <input required type="text" (change)="inversionChanged()" formControlName="cuenta_inversion_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_inversion_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="inversion()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Provisión</mat-placeholder>
+        <input required type="text" (change)="provisionChanged()" formControlName="cuenta_provision_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_provision_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="provision()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Interes producto</mat-placeholder>
+        <input required type="text" (change)="interesChanged()" formControlName="cuenta_interes_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_interes_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="interes()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Acta JAPP</mat-placeholder>
+        <input required type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>Poliza</mat-placeholder>
-        <input required type="text" formControlName="poliza" matInput>
+        <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
+        <input required type="date" formControlName="fecha_acta" matInput>
       </mat-form-field>
     </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-label>Forma de pago</mat-label>
+        <mat-select required formControlName="periodo_pago" (selectionChange)=ChangePayDate()>
+          <mat-option *ngFor="let periodo of periodos" [value]="periodo">
+            {{periodo}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Primera fecha pago</mat-placeholder>
+        <input required type="date" formControlName="fecha_pago" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>Días Anuales</mat-placeholder>
+        <input required type="number" formControlName="dias_anuales" matInput>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Observación</mat-placeholder>
+        <textarea type="text" formControlName="observacion" maxlength="500" matInput></textarea>
+      </mat-form-field>      
+    </div>
+
+
+
+    <!---->
+    <mat-menu #cuentas="matMenu">
+      <button mat-menu-item [matMenuTriggerFor]="cat1">Categoria 1</button>
+      <button mat-menu-item [matMenuTriggerFor]="cat2">Categoria 2</button>
+      <button mat-menu-item [matMenuTriggerFor]="cat3">Categoria 3</button>
+    </mat-menu>
+    
+    <mat-menu #cat1="matMenu">
+      <button type="button" mat-menu-item (click)="setCuenta('0001')">Cuenta 1</button>
+      <button type="button" mat-menu-item (click)="setCuenta('0002')">Cuenta 2</button>      
+    </mat-menu>
+    
+    <mat-menu #cat2="matMenu">
+      <button type="button" mat-menu-item (click)="setCuenta('0003')">Cuenta 3</button>      
+      <button type="button" mat-menu-item (click)="setCuenta('0004')">Cuenta 4</button>      
+    </mat-menu>
+    
+    <mat-menu #cat3="matMenu">
+      <button type="button" mat-menu-item (click)="setCuenta('0005')">Cuenta 5</button>      
+      <button type="button" mat-menu-item (click)="setCuenta('0006')">Cuenta 6</button>  
+    </mat-menu>
+    
+    <!---->
+     
   </mat-dialog-content>
 
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">

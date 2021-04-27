@@ -66,8 +66,8 @@ export class InventarioActivosFijosComponent implements OnInit {
               widths: ['13%', '15%', '44%', '15%', '13%'],
               body: [
                 [{ text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.fecha, p.numero, {text:p.descripcion, alignment: 'justify'}, p.precio.toLocaleString('en', this.common.options), p.tarjeta])),
-                [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true }, {}]
+                ...usefullData.map(p => ([p.fecha, p.numero, {text:p.descripcion, alignment: 'justify'}, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.tarjeta])),
+                [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}]
               ]
             },
             layout: 'headerLineOnly'

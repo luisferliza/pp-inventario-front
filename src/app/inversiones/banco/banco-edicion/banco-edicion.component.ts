@@ -2,7 +2,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Banco } from 'app/modelos/inversiones/banco';
-import { DepartamentoService } from 'app/servicios/inventario/departamento.service';
+import { TipoEntidad } from 'app/modelos/inversiones/tipo-entidad';
+import { BancoService } from 'app/servicios/inversiones/banco.service';
+import { TipoEntidadService } from 'app/servicios/inversiones/tipo-entidad.service';
 
 @Component({
   selector: 'elastic-banco-edicion',
@@ -14,15 +16,21 @@ export class BancoEdicionComponent implements OnInit {
   form: FormGroup;
   mode: 'create' | 'update' = 'create';
   pidu = '10';
+  tipos: TipoEntidad[];
+
+  
   
 
   constructor(private dialogRef: MatDialogRef<BancoEdicionComponent>,
     @Inject(MAT_DIALOG_DATA) private defaults: Banco,
-    private departamentoService: DepartamentoService,
+    private bancoService: BancoService,
+    private tipoEntidadService: TipoEntidadService,
     private fb: FormBuilder) { }
 
 
-  ngOnInit() {
+  ngOnInit() {    
+    this.updateTiposEntidad();
+
     if (this.defaults) {
       this.mode = 'update';
     } else {
@@ -30,10 +38,13 @@ export class BancoEdicionComponent implements OnInit {
     }
 
     this.form = this.fb.group({      
-      nombre:  '',
-      contacto:  '',      
-      direccion:  '',      
-      telefono:  ''      
+      nombre:  this.defaults.nombre || '',
+      contacto: this.defaults.contacto || '',      
+      direccion: this.defaults.direccion || '',      
+      telefono: this.defaults.telefono || '',
+      nombre_gerente: this.defaults.nombre_gerente || '',      
+      titulo_gerente: this.defaults.titulo_gerente || '',   
+      tipo_entidad_id: this.defaults.tipo_Entidad? this.defaults.tipo_Entidad.id_tipo_entidad : null,         
     });
   }
 
@@ -48,21 +59,28 @@ export class BancoEdicionComponent implements OnInit {
   }
 
   create() {
-    /*const departamento: Banco = this.form.value;
-    this.departamentoService.registrar(departamento, this.pidu).subscribe(()=>{
-      this.dialogRef.close(departamento);
+    const banco: Banco = this.form.value;
+
+    banco.tipo_Entidad = new TipoEntidad();
+    banco.tipo_Entidad.id_tipo_entidad = this.form.value.tipo_entidad_id;
+    
+    this.bancoService.registrar(banco, this.pidu).subscribe(()=>{
+      this.dialogRef.close(banco);
     })
-    */    
+    
   }
 
   update() {
-    /*
-    const departamento: Banco = this.form.value;
-    departamento.id_departamento = this.defaults.id_departamento;
-    this.departamentoService.modificar(departamento, this.pidu).subscribe(()=>{
-      this.dialogRef.close(departamento);
+    const banco: Banco = this.form.value;
+    banco.id_banco = this.defaults.id_banco;
+
+    banco.tipo_Entidad = new TipoEntidad();
+    banco.tipo_Entidad.id_tipo_entidad = this.form.value.tipo_entidad_id;
+
+    console.log(banco)    
+    this.bancoService.modificar(banco, this.pidu).subscribe(()=>{
+      this.dialogRef.close(banco);
     })
-    */    
   }
 
   isCreateMode() {
@@ -71,6 +89,12 @@ export class BancoEdicionComponent implements OnInit {
 
   isUpdateMode() {
     return this.mode === 'update';
+  }
+
+  updateTiposEntidad() {
+    this.tipoEntidadService.listar(this.pidu).subscribe(data => {      
+      this.tipos = data;
+    })
   }
 
 }

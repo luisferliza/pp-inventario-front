@@ -1,0 +1,69 @@
+<div class="simple-table">
+
+  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true">
+  </elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Reportería'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div class="sticky">
+        <mat-card fxFlex.gt-md="300px">
+          <mat-card-title>Interes mensual</mat-card-title>
+          <mat-card-content fxLayout="column">
+            <b>
+              <p>Seleccione el banco:</p>
+            </b>
+            <mat-select required [(ngModel)]="id_banco" (selectionChange)="update()">
+              <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
+                {{banco.nombre}}
+              </mat-option>
+            </mat-select>
+            <b>
+              <p>Seleccione la fecha:</p>
+            </b>
+            <mat-form-field>
+              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="date" (dateChange)="update()">
+              <mat-datepicker-toggle matSuffix [for]="formDatepickerRef"></mat-datepicker-toggle>              
+            </mat-form-field>
+            <mat-datepicker #formDatepickerRef  ></mat-datepicker>            
+            <br>
+            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
+            <br>
+            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex class="mat-elevation-z2">
+        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true"
+          [class.table-condensed]="false" [class.table-bordered]="true">
+          <thead>
+            <tr>              
+              <th>Tipo Docto.</th>
+              <th>No. Registro</th>
+              <th>Valor nominal</th>
+              <th>Fecha de emisión</th>
+              <th>Tasa</th>
+              <th>Dias corridos</th>              
+              <th>Intereses</th>                         
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of rows">
+              <td>{{ row.tipo_Inversion.nombre }}</td>
+              <td>{{ row.referencia}}</td>
+              <td>Q{{ row.monto.toLocaleString('en', this.common.options) }}</td>
+              <td>{{ common.getDate(row.fecha_colocacion) }}</td>
+              <td>{{ row.tasa_interes }}%</td>
+              <td>{{ getDiasInteres(row)}}</td>
+              <td>Q{{ getInteres(row).toLocaleString('en', this.common.options) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

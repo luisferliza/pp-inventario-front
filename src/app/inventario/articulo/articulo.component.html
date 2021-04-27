@@ -24,10 +24,15 @@
         </ng-container> 
         
         <!-- Joined Columns -->
+        <ng-container matColumnDef="precio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+          <mat-cell *matCellDef="let row"><p align="right">Q {{ row.precio.toLocaleString('en', this.common.options) }}</p> </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="fungible">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de bien </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.fungible? "Fungible" : "No Fungible"}} </mat-cell>
-        </ng-container>
+        </ng-container>        
 
         <ng-container matColumnDef="fecha_compra">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de compra </mat-header-cell>

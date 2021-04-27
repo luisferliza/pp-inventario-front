@@ -6,6 +6,7 @@ import { SetCurrentlyOpenByRouteAction } from '../sidenav/shared/sidenav.action'
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SelectLayoutAction, SetCardElevationAction } from '../layout/shared/layout.action';
+import { Inversion } from 'app/modelos/inversiones/inversion';
 
 @Component({
   selector: 'elastic-route-handler',
@@ -381,7 +382,7 @@ export class RouteHandlerComponent implements OnInit {
       position: 1
     });
 
-    const gestionDatos = new SidenavItem({
+    const gestionDatosInventario = new SidenavItem({
       name: 'Gestión de datos',
       route: null,
       parent: inventario,
@@ -389,11 +390,11 @@ export class RouteHandlerComponent implements OnInit {
       position: 1
     })
 
-    const gestionDatosSubItems = [
+    const gestionDatosInventarioSubItems = [
       new SidenavItem({
         name: 'Artículos',
         route: '/inventario/articulos',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1,
         routerLinkActiveOptions: {
@@ -403,42 +404,42 @@ export class RouteHandlerComponent implements OnInit {
       new SidenavItem({
         name: 'Categorías',
         route: '/inventario/categorias',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
       new SidenavItem({
         name: 'Departamentos',
         route: '/inventario/departamentos',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
       new SidenavItem({
         name: 'Estados',
         route: '/inventario/estados',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
       new SidenavItem({
         name: 'Proveedores',
         route: '/inventario/proveedores',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
       new SidenavItem({
         name: 'Tipos de artículos',
         route: '/inventario/tiposarticulo',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
       new SidenavItem({
         name: 'Usuarios',
         route: '/inventario/usuarios',
-        parent: gestionDatos,
+        parent: gestionDatosInventario,
         subItems: [ ],
         position: 1
       }),
@@ -453,7 +454,7 @@ export class RouteHandlerComponent implements OnInit {
     })
 
     //Reportes
-    const reportesSubItems = [      
+    const reportesInventarioSubItems = [      
       new SidenavItem({
         name: 'Tar. de responsabilidad',
         route: '/inventario/tarjetas',
@@ -528,9 +529,9 @@ export class RouteHandlerComponent implements OnInit {
       })
     ]
     
-    reportesInventario.subItems.push(...reportesSubItems);
-    gestionDatos.subItems.push(...gestionDatosSubItems);
-    inventario.subItems.push(gestionDatos);
+    reportesInventario.subItems.push(...reportesInventarioSubItems);
+    gestionDatosInventario.subItems.push(...gestionDatosInventarioSubItems);
+    inventario.subItems.push(gestionDatosInventario);
     inventario.subItems.push(reportesInventario);
     this.store.dispatch(new fromSidenav.AddSidenavItemAction(inventario));
 
@@ -547,11 +548,19 @@ export class RouteHandlerComponent implements OnInit {
       position: 1
     });
 
-    const inversionesSubItems = [
+    const gestionDatosInversiones = new SidenavItem({
+      name: 'Gestión de datos',
+      route: null,
+      parent: inversiones,
+      subItems: [ ],
+      position: 1
+    })
+
+    const gestionDatosInversionesSubItems = [
       new SidenavItem({
-        name: 'Bancos',
-        route: '/inversiones/bancos',
-        parent: inversiones,
+        name: 'Inversiones',
+        route: '/inversiones/inversiones',
+        parent: gestionDatosInversiones,
         subItems: [ ],
         position: 1,
         routerLinkActiveOptions: {
@@ -559,9 +568,9 @@ export class RouteHandlerComponent implements OnInit {
         }
       }),
       new SidenavItem({
-        name: 'Cheques',
-        route: '/inversiones/cheques',
-        parent: inversiones,
+        name: 'Bancos',
+        route: '/inversiones/bancos',
+        parent: gestionDatosInversiones,
         subItems: [ ],
         position: 1,
         routerLinkActiveOptions: {
@@ -571,57 +580,7 @@ export class RouteHandlerComponent implements OnInit {
       new SidenavItem({
         name: 'Cuentas',
         route: '/inversiones/cuentas',
-        parent: inversiones,
-        subItems: [ ],
-        position: 1,
-        routerLinkActiveOptions: {
-          exact: true
-        }
-      }),
-      new SidenavItem({
-        name: 'Encargados',
-        route: '/inversiones/encargados',
-        parent: inversiones,
-        subItems: [ ],
-        position: 1,
-        routerLinkActiveOptions: {
-          exact: true
-        }
-      }),
-      new SidenavItem({
-        name: 'Inversiones',
-        route: '/inversiones/inversiones',
-        parent: inversiones,
-        subItems: [ ],
-        position: 1,
-        routerLinkActiveOptions: {
-          exact: true
-        }
-      }),
-      new SidenavItem({
-        name: 'Plazos',
-        route: '/inversiones/plazos',
-        parent: inversiones,
-        subItems: [ ],
-        position: 1,
-        routerLinkActiveOptions: {
-          exact: true
-        }
-      }),
-      new SidenavItem({
-        name: 'Proyecciones',
-        route: '/inversiones/proyecciones',
-        parent: inversiones,
-        subItems: [ ],
-        position: 1,
-        routerLinkActiveOptions: {
-          exact: true
-        }
-      }),
-      new SidenavItem({
-        name: 'Tipos de inversión',
-        route: '/inversiones/tiposinversion',
-        parent: inversiones,
+        parent: gestionDatosInversiones,
         subItems: [ ],
         position: 1,
         routerLinkActiveOptions: {
@@ -630,7 +589,52 @@ export class RouteHandlerComponent implements OnInit {
       })
     ];
 
-    inversiones.subItems.push(...inversionesSubItems);
+    const reportesInversiones = new SidenavItem({
+      name: 'Reportes',
+      route: null,
+      parent: inversiones,
+      subItems: [ ],
+      position: 1
+    })
+
+    //Reportes
+    const reportesInversionesSubItems = [      
+      new SidenavItem({
+        name: 'Control de vencimiento',
+        route: '/inversiones/reportes/control-vencimiento',
+        parent: reportesInversiones,
+        subItems: [ ],
+        position: 1,
+        routerLinkActiveOptions: {
+          exact: true
+        }
+      }),
+      new SidenavItem({
+        name: 'Interes mensual',
+        route: '/inversiones/reportes/interes-mensual',
+        parent: reportesInversiones,
+        subItems: [ ],
+        position: 1,
+        routerLinkActiveOptions: {
+          exact: true
+        }
+      }),
+      new SidenavItem({
+        name: 'Integración de documento a Plazo Fijo',
+        route: '/inversiones/reportes/integracion-plazo-fijo',
+        parent: reportesInversiones,
+        subItems: [ ],
+        position: 1,
+        routerLinkActiveOptions: {
+          exact: true
+        }
+      })
+    ]
+
+    reportesInversiones.subItems.push(...reportesInversionesSubItems)
+    gestionDatosInversiones.subItems.push(...gestionDatosInversionesSubItems)
+    inversiones.subItems.push(gestionDatosInversiones);
+    inversiones.subItems.push(reportesInversiones);
     this.store.dispatch(new fromSidenav.AddSidenavItemAction(inversiones));
 
 

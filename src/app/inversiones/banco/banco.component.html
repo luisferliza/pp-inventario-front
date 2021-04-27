@@ -13,6 +13,8 @@
         </button>
       </div>
 
+      
+
       <mat-table #table [dataSource]="dataSource"  id="table" matSort>        
 
         <!-- Columns -->
@@ -23,6 +25,10 @@
           </ng-container>
         </ng-container>
         
+        <ng-container matColumnDef="tipo_Entidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de entidad </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row.tipo_Entidad.nombre}} </mat-cell>
+      </ng-container>
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
