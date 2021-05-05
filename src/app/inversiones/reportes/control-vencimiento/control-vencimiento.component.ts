@@ -24,20 +24,24 @@ export class ControlVencimientoComponent implements OnInit {
 
   constructor(private reportesService: ReportesInversionesService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar,
-    private calculos: Calculos) { }
+    private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.fecha_ini.setDate(0)
-    this.fecha_fin.setFullYear(this.fecha_ini.getFullYear() + 1)
+    this.fecha_ini.setDate(1)
+    this.fecha_fin.setDate(this.getMonthDays(this.fecha_fin.getMonth()))      
+    this.fecha_fin.setMinutes(this.fecha_fin.getMinutes() - this.fecha_fin.getTimezoneOffset());      
     this.listar();
+  }
 
+  getMonthDays(month): number{
+    let day = month % 2==0? ( month==1? 28:30) :31
+    console.log(day)
+    return day
   }
 
   listar() {
     this.reportesService.controlVencimiento(this.pidu, this.fecha_ini.toISOString().split('T')[0], this.fecha_fin.toISOString().split('T')[0]).subscribe(data => {
       this.rows = data;
-      console.log(data)
       document.getElementById('table').click();
     });
   }
@@ -52,25 +56,10 @@ export class ControlVencimientoComponent implements OnInit {
     return this.common.getDate(fecha_vencimiento.toISOString().split('T')[0]);
   }
 
-  getDiasInteres(inversion: Inversion) {
-    let fecha_vencimiento = new Date(inversion.vencimiento);
-    return this.calculos.calcularDiasInteres(inversion, fecha_vencimiento)
-  }
-
-  getInteres(inversion: Inversion) {
-    let fecha_vencimiento = new Date(inversion.vencimiento);
-    return this.calculos.calcularInteres(inversion, fecha_vencimiento)
-  }
-
-  getTotal(inversion: Inversion) {
-    let fecha_vencimiento = new Date(inversion.vencimiento);
-    return inversion.monto + this.calculos.calcularInteres(inversion, fecha_vencimiento)
-  }
 
 
-  downloadPDF() {    
-    if (this.rows.length > 0) {
-      let data = this.createDataArray();
+  downloadPDF() {
+    if (this.rows.length > 0) {      
       let docDefinition = {
         pageMargins: [50, 90, 50, 50],
         pageSize: 'LETTER',
@@ -122,12 +111,12 @@ export class ControlVencimientoComponent implements OnInit {
                 { text: 'Dias Int.', style: 'tableHeader' },
                 { text: 'Valor Int.', style: 'tableHeader' },
                 { text: 'Total', style: 'tableHeader' }],
-                ...data.rows,
+                ...this.createDataArray(),
                 [{}, {}, {}, {}, { text: 'Totales:', colSpan: 1, bold: true },
-                { text: 'Q ' + data.montoTotal.toLocaleString('en', this.common.options), bold: true , alignment: 'right'},
-                {},{},
-                { text: 'Q ' + data.interesTotal.toLocaleString('en', this.common.options), bold: true , alignment: 'right'},
-                { text: 'Q ' + data.sumaTotal.toLocaleString('en', this.common.options), bold: true , alignment: 'right'},
+                { text: 'Q ' + this.rows.reduce((sum, p) => sum + (p.monto), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' },
+                {}, {},
+                { text: 'Q ' + this.rows.reduce((sum, p) => sum + (p.interes), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' },
+                { text: 'Q ' + this.rows.reduce((sum, p) => sum + (p.monto+p.interes), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' },
                 ]
               ]
             },
@@ -144,10 +133,10 @@ export class ControlVencimientoComponent implements OnInit {
     }
   }
 
-  
+
   downloadExcel() {
-    if (this.rows.length > 0) {      
-      let ws: WorkSheet;            
+    if (this.rows.length > 0) {
+      let ws: WorkSheet;
       ws = utils.json_to_sheet(this.createXLSXArray(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
@@ -173,62 +162,34 @@ export class ControlVencimientoComponent implements OnInit {
     }
   }
 
-  createDataArray():any {
-    let rows = []
-    let montoTotal=0;
-    let interesTotal = 0;
-    let sumaTotal = 0;
-
-    for (let index = 0; index < this.rows.length; index++) {
-      const p = this.rows[index];
-      montoTotal += p.monto;
-      const intTmp = this.getInteres(p);
-      const totalTmp = intTmp + p.monto;
-      interesTotal += intTmp;
-      sumaTotal += totalTmp;
-      rows.push(
-        [p.banco.nombre,
-        p.referencia,
-        p.plazo,
-        this.common.getDate(p.vencimiento),
-        this.getFechaPago(p),
-        { text: 'Q' + p.monto.toLocaleString('en', this.common.options), alignment: 'right' },
-        p.tasa_interes + '%',
-        this.getDiasInteres(p),
-        { text: 'Q' + intTmp.toLocaleString('en', this.common.options), alignment: 'right' },
-        { text: 'Q' + totalTmp.toLocaleString('en', this.common.options), alignment: 'right' },
-        ]
-      )
-    }
-    return {
-      rows: rows,
-      montoTotal: montoTotal,
-      interesTotal: interesTotal,
-      sumaTotal: sumaTotal
-    }     
+  createDataArray(): any {
+    return this.rows.map(p => ([p.banco.nombre,
+                                p.referencia,
+                                p.plazo,
+                                this.common.getDate(p.vencimiento),
+                                this.getFechaPago(p),
+                                { text: 'Q' + p.monto.toLocaleString('en', this.common.options), alignment: 'right' },
+                                p.tasa_interes + '%',
+                                p.diasInteres,
+                                { text: 'Q' + p.interes.toLocaleString('en', this.common.options), alignment: 'right' },
+                                { text: 'Q' + (p.monto + p.interes).toLocaleString('en', this.common.options), alignment: 'right' },
+                                ])
+    )
   }
 
-  createXLSXArray():any {
-    let rows = []    
-    for (let index = 0; index < this.rows.length; index++) {
-      const p = this.rows[index];      
-      const intTmp = this.getInteres(p);
-      const totalTmp = intTmp + p.monto;      
-      rows.push(
-        [p.banco.nombre,
-        p.referencia,
-        p.plazo,
-        this.common.getDate(p.vencimiento),
-        this.getFechaPago(p),
-        p.monto,        
-        p.tasa_interes + '%',
-        this.getDiasInteres(p),
-        intTmp,
-        totalTmp
-        ]
-      )
-    }    
-    return rows;  
+  createXLSXArray(): any {
+    return this.rows.map(p=>([p.banco.nombre,
+                          p.referencia,
+                          p.plazo,
+                          this.common.getDate(p.vencimiento),
+                          this.getFechaPago(p),
+                          p.monto,
+                          p.tasa_interes + '%',
+                          p.diasInteres,
+                          p.interes,
+                          p.monto+p.interes
+      ]))
+      
   }
 
 

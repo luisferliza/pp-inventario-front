@@ -32,6 +32,7 @@ export class IntegracionPlazoComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.date.setMinutes(this.date.getMinutes() - this.date.getTimezoneOffset());
     this.getBancos();
 
   }
@@ -62,8 +63,7 @@ export class IntegracionPlazoComponent implements OnInit {
   }
 
 
-  downloadPDF(data) {
-    console.log(data);
+  downloadPDF(data) {    
     if (data.length > 0) {
       let docDefinition = {
         pageMargins: [50, 90, 50, 50],
@@ -157,10 +157,9 @@ export class IntegracionPlazoComponent implements OnInit {
   createTablesArray() {
     let tablas = [];
     let reference = this;
-    this.reportesService.integracioPlazoFijoCompleto(this.pidu, this.date.toISOString().split('T')[0]).subscribe(data => {
-      console.log(data);
+    this.reportesService.integracioPlazoFijoCompleto(this.pidu, this.date.toISOString().split('T')[0]).subscribe(data => {      
       for (let index = 0; index < data.length; index++) {
-        const element = data[index];
+        const element = data[index];        
         tablas.push(
           ... this.getTitleDescription(reference, element),          
           ... this.getTable(element),

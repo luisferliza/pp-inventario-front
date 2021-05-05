@@ -50,20 +50,20 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     { name: 'No. Inversión', property: 'no_inversion', visible: true, isModelProperty: true },
     { name: 'Acta JAPP', property: 'acta_japp', visible: true, isModelProperty: true },
     { name: 'Tasa', property: 'tasa_interes', visible: true, isModelProperty: true },
-    { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },
+    { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },    
     { name: 'No. de cuenta', property: 'cuenta', visible: true, isModelProperty: true },
-    { name: 'Días anuales', property: 'dias_anuales', visible: true, isModelProperty: true },
-    { name: 'Observación', property: 'observacion', visible: true, isModelProperty: true },
-
+    { name: 'Días anuales', property: 'dias_anuales', visible: true, isModelProperty: true },    
+    { name: 'Periodo de pago', property: 'periodo_pago', visible: true, isModelProperty: true },
     { name: 'Fecha de colocación', property: 'fecha_colocacion', visible: false, isModelProperty: false },
-    { name: 'Fecha de acta', property: 'fecha_acta', visible: false, isModelProperty: false },
-    { name: 'Periodo de pago', property: 'periodo_pago', visible: false, isModelProperty: false },
+    { name: 'Fecha de acta', property: 'fecha_acta', visible: false, isModelProperty: false },    
     { name: 'Fecha de vencimiento', property: 'vencimiento', visible: false, isModelProperty: false },
     { name: 'Tipo de inversión', property: 'tipo_Inversion', visible: false, isModelProperty: false },
     { name: 'Banco', property: 'banco', visible: false, isModelProperty: false },
     { name: 'Cuenta de inversión', property: 'inversion', visible: false, isModelProperty: false },
     { name: 'Cuenta de provisión', property: 'provision', visible: false, isModelProperty: false },
     { name: 'Cuenta de interés', property: 'interes', visible: false, isModelProperty: false },
+    { name: 'Cálculo especial', property: 'calculo_especial', visible: false, isModelProperty: false },
+    { name: 'Observación', property: 'observacion', visible: false, isModelProperty: true },
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
 
@@ -81,11 +81,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   constructor(private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private inversionService: InversionService,
-    public common: CommonFunction,
-    private bancoService: BancoService,
-    private tipoEntidadService: TipoEntidadService,
-    private tipoInversionService: TipoInversionService,
-    private cuentaService: CuentaService) { }
+    public common: CommonFunction) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);

@@ -23,6 +23,10 @@ export class CuentaService {
     return this.http.get<Cuenta>(`${this.url}/cuentas/${idCuenta}?pidu=${pidu}`);
   }
 
+  listarPorCategoria(pidu: String, id_tipo: number) {
+    return this.http.get<Cuenta[]>(`${this.url}/cuentas/categorias/${id_tipo}?pidu=${pidu}`);
+  }
+
   registrar(cuenta: Cuenta, pidu: String) {    
     return this.http.post(`${this.url}/cuentas?pidu=${pidu}`, cuenta);
   }

@@ -5,31 +5,28 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
-        <mat-label>Banco</mat-label>
-        <mat-select required formControlName="banco_id" >
-          <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
-            {{banco.nombre}}
+        <mat-label>Tipo de inversión</mat-label>
+        <mat-select required formControlName="tipo_Inversion_id">
+          <mat-option *ngFor="let tipo of tiposInversion" [value]="tipo.id_tipo_inversion">
+            {{tipo.nombre}}
           </mat-option>
         </mat-select>
-      </mat-form-field>  
+      </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>No. de certificado</mat-placeholder>
         <input required type="text" formControlName="no_inversion" matInput>
-      </mat-form-field>   
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      </mat-form-field>  
       <mat-form-field fxFlex>
         <mat-placeholder>Referencia PP</mat-placeholder>
         <input required type="text" formControlName="referencia" matInput>
-      </mat-form-field>      
+      </mat-form-field>  
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>No. de Cuenta</mat-placeholder>
         <input required type="text" formControlName="cuenta" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>Valor de inversión</mat-placeholder>
         <input required type="number" formControlName="monto" matInput>
@@ -50,25 +47,14 @@
         <mat-placeholder>Plazo (Días)</mat-placeholder>
         <input required type="number" formControlName="plazo" (change)="changeDate()" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>Fecha Vencimiento</mat-placeholder>
         <input required type="date" formControlName="vencimiento" matInput>
-      </mat-form-field>     
-      <mat-form-field fxFlex>
-        <mat-label>Tipo de inversión</mat-label>
-        <mat-select required formControlName="tipo_Inversion_id">
-          <mat-option *ngFor="let tipo of tiposInversion" [value]="tipo.id_tipo_inversion">
-            {{tipo.nombre}}
-          </mat-option>
-        </mat-select>
       </mat-form-field>  
-      
     </div>
 
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+    
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">              
       <mat-form-field fxFlex>
         <mat-placeholder>CC Inversión</mat-placeholder>
         <input required type="text" (change)="inversionChanged()" formControlName="cuenta_inversion_codigo" matInput>
@@ -103,6 +89,14 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
+        <mat-label>Banco</mat-label>
+        <mat-select required formControlName="banco_id" >
+          <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
+            {{banco.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>  
+      <mat-form-field fxFlex>
         <mat-placeholder>Acta JAPP</mat-placeholder>
         <input required type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
@@ -125,46 +119,47 @@
         <mat-placeholder>Primera fecha pago</mat-placeholder>
         <input required type="date" formControlName="fecha_pago" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
       <mat-form-field fxFlex>
         <mat-placeholder>Días Anuales</mat-placeholder>
         <input required type="number" formControlName="dias_anuales" matInput>
       </mat-form-field>
     </div>
 
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>Observación</mat-placeholder>
         <textarea type="text" formControlName="observacion" maxlength="500" matInput></textarea>
-      </mat-form-field>      
+      </mat-form-field>  
+      <div style="padding-top: 5%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="calculo_especial">¿Cálculo especial?</mat-checkbox>
+      </div>    
     </div>
-
-
 
     <!---->
     <mat-menu #cuentas="matMenu">
-      <button mat-menu-item [matMenuTriggerFor]="cat1">Categoria 1</button>
-      <button mat-menu-item [matMenuTriggerFor]="cat2">Categoria 2</button>
-      <button mat-menu-item [matMenuTriggerFor]="cat3">Categoria 3</button>
+      <button *ngIf="createCategory(0)" mat-menu-item [matMenuTriggerFor]="cat1">{{getCategoryName(0)}}</button>
+      <button *ngIf="createCategory(1)" mat-menu-item [matMenuTriggerFor]="cat2">{{getCategoryName(1)}}</button>
+      <button *ngIf="createCategory(2)" mat-menu-item [matMenuTriggerFor]="cat3">{{getCategoryName(2)}}</button>
+      <button *ngIf="createCategory(3)" mat-menu-item [matMenuTriggerFor]="cat4">{{getCategoryName(3)}}</button>
+      <button *ngIf="createCategory(4)" mat-menu-item [matMenuTriggerFor]="cat5">{{getCategoryName(4)}}</button>
+      <button *ngIf="createCategory(5)" mat-menu-item [matMenuTriggerFor]="cat6">{{getCategoryName(5)}}</button>
+      <button *ngIf="createCategory(6)" mat-menu-item [matMenuTriggerFor]="cat7">{{getCategoryName(6)}}</button>
+      <button *ngIf="createCategory(7)" mat-menu-item [matMenuTriggerFor]="cat8">{{getCategoryName(7)}}</button>
+      <button *ngIf="createCategory(8)" mat-menu-item [matMenuTriggerFor]="cat9">{{getCategoryName(8)}}</button>
+      <button *ngIf="createCategory(9)" mat-menu-item [matMenuTriggerFor]="cat10">{{getCategoryName(9)}}</button>      
     </mat-menu>
     
-    <mat-menu #cat1="matMenu">
-      <button type="button" mat-menu-item (click)="setCuenta('0001')">Cuenta 1</button>
-      <button type="button" mat-menu-item (click)="setCuenta('0002')">Cuenta 2</button>      
-    </mat-menu>
-    
-    <mat-menu #cat2="matMenu">
-      <button type="button" mat-menu-item (click)="setCuenta('0003')">Cuenta 3</button>      
-      <button type="button" mat-menu-item (click)="setCuenta('0004')">Cuenta 4</button>      
-    </mat-menu>
-    
-    <mat-menu #cat3="matMenu">
-      <button type="button" mat-menu-item (click)="setCuenta('0005')">Cuenta 5</button>      
-      <button type="button" mat-menu-item (click)="setCuenta('0006')">Cuenta 6</button>  
-    </mat-menu>
-    
+    <mat-menu #cat1="matMenu"><button *ngFor="let cuenta of getCuentas(0)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }}</button></mat-menu>
+    <mat-menu #cat2="matMenu"><button *ngFor="let cuenta of getCuentas(1)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }}</button></mat-menu>
+    <mat-menu #cat3="matMenu"><button *ngFor="let cuenta of getCuentas(2)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat4="matMenu"><button *ngFor="let cuenta of getCuentas(3)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat5="matMenu"><button *ngFor="let cuenta of getCuentas(4)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat6="matMenu"><button *ngFor="let cuenta of getCuentas(5)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat7="matMenu"><button *ngFor="let cuenta of getCuentas(6)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat8="matMenu"><button *ngFor="let cuenta of getCuentas(7)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat9="matMenu"><button *ngFor="let cuenta of getCuentas(8)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
+    <mat-menu #cat10="matMenu"><button *ngFor="let cuenta of getCuentas(9)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>       
     <!---->
      
   </mat-dialog-content>

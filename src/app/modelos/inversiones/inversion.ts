@@ -13,6 +13,7 @@ export class Inversion{
 	tasa_interes: number;
 	plazo: number;
 	cuenta: string;
+	calculo_especial: boolean;
 	fecha_acta: string;
 	fecha_pago: string;
 	dias_anuales: number;
@@ -22,6 +23,7 @@ export class Inversion{
 	banco: Banco;
 	cuenta_inversion: Cuenta;
 	cuenta_provision: Cuenta;
-	cuenta_interes: Cuenta;
-	calculo_especial:boolean;
+	cuenta_interes: Cuenta;	
+	diasInteres:number;
+	interes:number;
 }

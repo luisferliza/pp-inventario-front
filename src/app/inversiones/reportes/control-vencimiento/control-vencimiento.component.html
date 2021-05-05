@@ -64,9 +64,9 @@
               <td>{{ getFechaPago(row) }} </td>
               <td>Q{{ row.monto.toLocaleString('en', this.common.options) }}</td>
               <td>{{ row.tasa_interes }}%</td>
-              <td>{{ getDiasInteres(row)}}</td>
-              <td>Q{{ getInteres(row).toLocaleString('en', this.common.options) }}</td>
-              <td>Q{{ getTotal(row).toLocaleString('en', this.common.options) }}</td>              
+              <td>{{ row.diasInteres }}</td>
+              <td>Q{{ row.interes.toLocaleString('en', this.common.options) }}</td>
+              <td>Q{{ (row.interes+row.diasInteres).toLocaleString('en', this.common.options) }}</td>              
             </tr>
           </tbody>
         </table>

@@ -29,15 +29,16 @@
           <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_colocacion)}} </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="calculo_especial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de colocación </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ row.calculo_especial? "Si": "No" }} </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="fecha_acta">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de acta </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_acta)}} </mat-cell>
         </ng-container>
-
-        <ng-container matColumnDef="periodo_pago">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Periodo de pago </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{getPeriodo(row.periodo_pago)}} </mat-cell>
-        </ng-container>
+        
 
         <ng-container matColumnDef="vencimiento">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de vencimiento </mat-header-cell>
@@ -56,17 +57,17 @@
 
         <ng-container matColumnDef="inversion">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de inversión </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.inversion.nombre }} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{ row.cuenta_inversion.nombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="provision">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de provisión </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.provision.nombre }} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{ row.cuenta_provision.nombre }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="interes">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Cuenta de interés </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{ row.interes.nombre }} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{ row.cuenta_interes.nombre }} </mat-cell>
         </ng-container>
 
 

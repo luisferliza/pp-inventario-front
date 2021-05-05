@@ -29,9 +29,9 @@
             </mat-form-field>
             <mat-datepicker #formDatepickerRef  ></mat-datepicker>            
             <br>
-            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
+            <button mat-raised-button color="primary" (click)="createTablesArray()">Generar PDF</button>
             <br>
-            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
+            <button mat-raised-button color="accent" (click)="createXLSXArray()">Generar Excel</button>
 
           </mat-card-content>
         </mat-card>
@@ -58,8 +58,8 @@
               <td>Q{{ row.monto.toLocaleString('en', this.common.options) }}</td>
               <td>{{ common.getDate(row.fecha_colocacion) }}</td>
               <td>{{ row.tasa_interes }}%</td>
-              <td>{{ getDiasInteres(row)}}</td>
-              <td>Q{{ getInteres(row).toLocaleString('en', this.common.options) }}</td>
+              <td>{{ row.diasInteres }}</td>
+              <td>Q{{ row.interes.toLocaleString('en', this.common.options) }}</td>
             </tr>
           </tbody>
         </table>

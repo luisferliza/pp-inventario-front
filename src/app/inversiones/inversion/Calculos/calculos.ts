@@ -47,21 +47,22 @@ export class Calculos {
         return year % 400 === 0 || (year % 100 !== 0 && year % 4 === 0);
     }
 
-    interarFechas(meses:number, inversion: Inversion, fecha:Date){   
-        
+    interarFechas(meses:number, inversion: Inversion, fecha:Date){           
+        console.log('--------------------------------------------------------')
+        console.log('Fecha recibida: '+fecha.toISOString())
         let fecha_colocacion = new Date(inversion.fecha_colocacion);        
         let periodo_activo = new Date(inversion.fecha_pago);    
         let primera_fecha_pago = new Date(inversion.fecha_pago);          
         
         if(fecha<periodo_activo){
             periodo_activo = fecha_colocacion;
-        }else{
-            console.log('Fecha pago 2: ' + periodo_activo);
+        }else{            
             while(periodo_activo < fecha){ // Itera hasta encontrar el periodo de pago actual
                 periodo_activo.setMonth(periodo_activo.getMonth() + meses);                     
             }
             periodo_activo.setMonth(periodo_activo.getMonth() - meses);                     
         }        
+        console.log('Periodo despues del primer while '+periodo_activo.toISOString())
         // Verifica que no haya un desfase en la fecha
         let actualDate = 0;
         while (periodo_activo.getDate() < primera_fecha_pago.getDate()) { // Si no hay desfase, todo bien              
@@ -70,8 +71,8 @@ export class Calculos {
             if(periodo_activo.getDate() > actualDate){
                 break; // Se desplazó un mes atras
             }
-        }             
-        console.log(periodo_activo)
+        }                     
+        console.log('Periodo despues del segundo while '+periodo_activo.toISOString())
         let diferenciaEnTiempo = fecha.getTime() - periodo_activo.getTime();
         let diferenciaEnDias = diferenciaEnTiempo / (1000 * 3600 * 24);             
         return diferenciaEnDias+1;       

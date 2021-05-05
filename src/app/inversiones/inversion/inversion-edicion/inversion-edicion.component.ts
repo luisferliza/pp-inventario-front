@@ -32,10 +32,10 @@ export class InversionEdicionComponent implements OnInit {
   cuentas: Cuenta[];
   variable = 'Hola';
   periodos = [
-     'Mensual' ,
+    'Mensual',
     'Anual',
     'Semestral',
-    'Trimestral' ,
+    'Trimestral',
     'Cuatrimestral',
     'A término'
   ];
@@ -75,10 +75,12 @@ export class InversionEdicionComponent implements OnInit {
       tasa_interes: this.defaults.tasa_interes || 0,
       plazo: this.defaults.plazo || 365,
       cuenta: this.defaults.cuenta || '',
+      calculo_especial: this.defaults.calculo_especial || false,
       fecha_acta: this.defaults.fecha_acta ? this.defaults.fecha_acta : null,
       dias_anuales: this.defaults.dias_anuales || 365,
       vencimiento: this.defaults.vencimiento ? this.defaults.vencimiento : null,
       fecha_pago: this.defaults.fecha_pago ? this.defaults.fecha_pago : null,
+
 
       tipo_Inversion_id: this.defaults.tipo_Inversion ? this.defaults.tipo_Inversion.id_tipo_inversion : null,
       banco_id: this.defaults.banco ? this.defaults.banco.id_banco : null,
@@ -303,53 +305,80 @@ export class InversionEdicionComponent implements OnInit {
     this.ChangePayDate();
   }
 
-  changeEndDate(){
+  changeEndDate() {
     let yourDate = this.form.value.fecha_colocacion
     let period = this.form.value.plazo
     let futureDate = new Date(yourDate);
-    futureDate.setDate(futureDate.getDate() + period-1)    
+    futureDate.setDate(futureDate.getDate() + period - 1)
     this.form.controls['vencimiento'].setValue(futureDate.toISOString().split('T')[0]);
   }
 
-  ChangePayDate() {    
+  ChangePayDate() {
     let periodo = this.form.value.periodo_pago;
-    if(periodo === "Mensual"){
+    if (periodo === "Mensual") {
       let fecha_pago = new Date(this.form.value.fecha_colocacion);
       fecha_pago.setMonth(fecha_pago.getMonth() + 1);
-      fecha_pago.setDate(0);   
+      fecha_pago.setDate(0);
       this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
 
-    } else if(periodo === "Anual"){
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);      
-      fecha_pago.setFullYear(fecha_pago.getFullYear()+1, fecha_pago.getMonth(), fecha_pago.getDate());      
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if(periodo === "Semestral"){
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);      
-      fecha_pago.setMonth(fecha_pago.getMonth() + 6, fecha_pago.getDate());      
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if(periodo === "Trimestral"){
+    } else if (periodo === "Anual") {
       let fecha_pago = new Date(this.form.value.fecha_colocacion);
-      fecha_pago.setMonth(fecha_pago.getMonth() + 3, fecha_pago.getDate());      
+      fecha_pago.setFullYear(fecha_pago.getFullYear() + 1, fecha_pago.getMonth(), fecha_pago.getDate());
       this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
 
-    } else if(periodo === "Cuatrimestral"){
+    } else if (periodo === "Semestral") {
       let fecha_pago = new Date(this.form.value.fecha_colocacion);
-      fecha_pago.setMonth(fecha_pago.getMonth() + 4, fecha_pago.getDate());      
+      fecha_pago.setMonth(fecha_pago.getMonth() + 6, fecha_pago.getDate());
       this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
 
-    } else if(periodo === "A término"){
+    } else if (periodo === "Trimestral") {
+      let fecha_pago = new Date(this.form.value.fecha_colocacion);
+      fecha_pago.setMonth(fecha_pago.getMonth() + 3, fecha_pago.getDate());
+      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
+
+    } else if (periodo === "Cuatrimestral") {
+      let fecha_pago = new Date(this.form.value.fecha_colocacion);
+      fecha_pago.setMonth(fecha_pago.getMonth() + 4, fecha_pago.getDate());
+      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
+
+    } else if (periodo === "A término") {
       let fecha_pago = new Date(this.form.value.vencimiento);
-      fecha_pago.setDate(fecha_pago.getDate() + 1)   
+      fecha_pago.setDate(fecha_pago.getDate() + 1)
       this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-    }else{
+    } else {
       alert('PERIODO DE PAGO DESCONOCIDO')
     }
-    
+
   }
 
-  
+
+  getCategoryName(number) {
+    if (this.tiposCuenta!= undefined && number < this.tiposCuenta.length) {
+      return this.tiposCuenta[number].nombre;
+    }
+    return "No existe"
+  }
+
+  createCategory(number) {
+    return this.tiposCuenta != undefined && number < this.tiposCuenta.length;
+  }
+
+  getCuentas(index) {
+    let cuentas = []    
+    if (this.tiposCuenta && this.cuentas && index < this.tiposCuenta.length) {
+      let id_categoria = this.tiposCuenta[index].id_tipo_cuenta;
+      for (let t = 0; t < this.cuentas.length; t++) {
+        const element = this.cuentas[t];      
+          if(element.tipo_cuenta.id_tipo_cuenta === id_categoria){
+            cuentas.push(element);
+          }
+      }
+    }
+    return cuentas;    
+  }
+
+
+
 
 
 }
