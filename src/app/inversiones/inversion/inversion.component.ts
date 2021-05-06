@@ -137,7 +137,10 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
 
   modificar(inversion) {
     this.dialog.open(InversionEdicionComponent, {
-      data: inversion
+      data: {
+        data: inversion,
+        type: 'update'
+      }
     }).afterClosed().subscribe(resp => {
       if (resp) {
         this.listar();
@@ -186,6 +189,19 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     this.dialog.open(CartaDesinversionAnticipadaDialogComponent, {
       data: row
     })
+  }
+  reinvertir(row) {
+    this.dialog.open(InversionEdicionComponent, {
+      data: {
+              data: row,
+              type: 'reinvertir'
+            }
+    }).afterClosed().subscribe(resp => {
+      if (resp) {
+        this.listar();
+        this.inversionService.message.next('Reinversion gestionada correctamente');
+      }
+    });
   }
 
   

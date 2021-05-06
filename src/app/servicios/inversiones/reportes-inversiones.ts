@@ -33,4 +33,8 @@ export class ReportesInversionesService {
     return this.http.get<InteresPorBanco[]>(`${this.url}/reportes/interesmensualcompleto?pidu=${pidu}&fecha=${fecha}`);
   }
 
+  calculoInteres(pidu: String, fecha: string, inversion: Inversion) {
+    return this.http.put<Inversion>(`${this.url}/reportes/calculointeres?pidu=${pidu}&fecha=${fecha}`, inversion);
+  }
+
 }

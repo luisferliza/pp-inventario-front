@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { InventarioActivosFijos } from 'app/modelos/inventario/reportes/InventarioActivosFijos';
 import { Variable } from 'app/modelos/inventario/reportes/variable';
-import { ReportesService } from 'app/servicios/inventario/reportes.service';
+import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 // Import pdfmake-wrapper and the fonts to use
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -28,7 +28,7 @@ export class BajasActivosFijosComponent implements OnInit {
   tipo_bien = "false";
   //False es bienes activos, true es fungibles
 
-  constructor(private reportesService: ReportesService,
+  constructor(private reportesService: ReportesInventarioService,
     public common: CommonFunction,
     private snackBar: MatSnackBar) { }
 

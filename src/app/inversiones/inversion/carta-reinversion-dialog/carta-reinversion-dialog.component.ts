@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
 import { Calculos } from '../calculos/calculos';
 import { ReInversionCreator } from './carta-reinversion';
 
@@ -23,11 +24,12 @@ export class CartaReinversionDialogComponent implements OnInit {
     private reInvCreator: ReInversionCreator,
     private common: CommonFunction,
     private snackBar: MatSnackBar,
-    private calculos: Calculos) { }
+    private reporteService: ReportesInversionesService) { }
 
 
   ngOnInit() {    
-
+    let fechaReinversion = new Date(this.defaults.vencimiento);
+    fechaReinversion.setDate(fechaReinversion.getDate()+1);
     this.form = this.fb.group({
       periodo_pago: this.defaults.periodo_pago,
       referencia: this.defaults.referencia,      
@@ -35,8 +37,8 @@ export class CartaReinversionDialogComponent implements OnInit {
       plazo: this.defaults.plazo,      
       tasa_interes: this.defaults.tasa_interes,
       monto: this.defaults.monto,
-      fecha_acta: this.defaults.fecha_acta.split('T')[0],
-      acta_japp: this.defaults.acta_japp,
+      fecha_acta: '',
+      acta_japp: '',
       cheque: '',
       grado: this.defaults.banco.titulo_gerente,
       puesto: 'Gerente General',
@@ -46,7 +48,7 @@ export class CartaReinversionDialogComponent implements OnInit {
       banco: this.defaults.banco.nombre,      
       dias_interes: '',  
       interes: '',        
-      fecha_reinversion: new Date().toISOString().split('T')[0],  
+      fecha_reinversion: fechaReinversion.toISOString().split('T')[0],  
       vencimiento: this.defaults.vencimiento,    
       vencimiento_reinversion: this.defaults.vencimiento,    
       fecha_acta_txt: '',
@@ -77,8 +79,10 @@ export class CartaReinversionDialogComponent implements OnInit {
   }
 
   calcularInteres() {
-    this.form.controls['dias_interes'].setValue(this.calculos.calcularDiasInteres(this.defaults, new Date(this.form.value.vencimiento)));
-    this.form.controls['interes'].setValue(this.calculos.calcularInteres(this.defaults, new Date(this.form.value.vencimiento)));
+    this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults ).subscribe(data =>{
+      this.form.controls['dias_interes'].setValue(data.diasInteres);
+      this.form.controls['interes'].setValue(data.interes);
+    })        
   }
 
   generarFechas(){

@@ -28,8 +28,7 @@ export class ControlVencimientoComponent implements OnInit {
 
   ngOnInit(): void {
     this.fecha_ini.setDate(1)
-    this.fecha_fin.setDate(this.getMonthDays(this.fecha_fin.getMonth()))      
-    this.fecha_fin.setMinutes(this.fecha_fin.getMinutes() - this.fecha_fin.getTimezoneOffset());      
+    this.fecha_fin.setDate(this.getMonthDays(this.fecha_fin.getMonth()))          
     this.listar();
   }
 
@@ -85,7 +84,7 @@ export class ControlVencimientoComponent implements OnInit {
             bold: true,
           },
           {
-            text: `DEL ${new Date(this.fecha_ini).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })} al ${new Date(this.fecha_fin).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })} `,
+            text: `Del ${new Date(this.fecha_ini).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })} al ${new Date(this.fecha_fin).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })} `,
             style: 'subheader',
             alignment: "center",
             fontSize: 10,
@@ -99,7 +98,7 @@ export class ControlVencimientoComponent implements OnInit {
             alignment: "center",
             table: {
               headerRows: 1,
-              widths: ['16%', '10%', '8%', '10%', '10%', '10%', '8%', '8%', '10%', '10%'],
+              widths: ['16%', '10%', '6%', '10%', '10%', '12%', '8%', '6%', '10%', '12%'],
               body: [
                 [{ text: 'Institución', style: 'tableHeader' },
                 { text: 'Referencia', style: 'tableHeader' },
@@ -121,6 +120,21 @@ export class ControlVencimientoComponent implements OnInit {
               ]
             },
             layout: 'headerLineOnly'
+          },
+          {
+            text: `Guatemala, ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`,            
+            alignment: "left",
+            fontSize: 10,
+            bold: true,
+            margin: [0, 15, 0, 15],
+          },
+          {
+            text: `${this.common.contador}\r\nContador General Plan de Prestaciones`,
+            style: 'subheader',
+            alignment: "left",
+            fontSize: 10,
+            bold: true,
+            margin: [40, 40, 0, 15],
           }
         ]
       };

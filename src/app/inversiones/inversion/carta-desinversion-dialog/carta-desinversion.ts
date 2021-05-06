@@ -80,7 +80,7 @@ export class DesinversionCreator {
         {
           text: `\u200B\t\tPor lo anterior solicitamos sirvan emitir cheque a nombre de PLAN DE PRESTACIONES USAC, `+
             `por un valor de Q${(form.value.monto+form.value.interes).toLocaleString('en', common.options)} para `+
-            `recogerlos el día ${form.value.entrega_txt}`,
+            `recogerlos el día ${form.value.entrega_txt}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,

@@ -72,7 +72,7 @@ export class InversionCreator {
             `${form.value.fecha_acta}, Acta No. ${form.value.acta_japp}, acordó invertir en ese banco el valor de ` +
             `Q${form.value.monto.toLocaleString('en', common.options)}, a partir del día ${form.value.fecha_colocacion}, en ${form.value.tipo_Inversion} ` +
             `a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento}`,
+            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
@@ -80,14 +80,14 @@ export class InversionCreator {
         {
           text: `\u200B\t\tAsimismo, se requiere que el certificado incluya lo relativo a la desinversión anticipada, forma ` +
             `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
-            `sellos del banco`,
+            `sellos del banco.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
         },
         {
           text: `\u200B\t\tPara el efecto, se envía el cheque No. ${form.value.cheque} de la cuenta ${form.value.cuenta} por un valor de ` +
-            `Q${form.value.monto.toLocaleString('en', common.options)} `,
+            `Q${form.value.monto.toLocaleString('en', common.options)}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
@@ -156,12 +156,12 @@ export class InversionCreator {
     `banco el valor de Q${form.value.monto.toLocaleString('en', common.options)}, a partir del d&iacute;a ${form.value.fecha_colocacion}`+
     `, en ${form.value.tipo_Inversion} a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fja de inter&eacute;s anual del `+
     `${form.value.tasa_interes}%, con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} d&iacute;as `+
-    `que vencer&aacute; el d&iacute;a ${form.value.vencimiento}</p>
+    `que vencer&aacute; el d&iacute;a ${form.value.vencimiento}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certifcado incluya lo relativo a la `+
     `desinversi&oacute;n anticipada, forma de pago de intereses y la identifcaci&oacute;n de las personas que suscriben con `+
-    `sus respectivos cargos y sellos del banco</p>
+    `sus respectivos cargos y sellos del banco.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Para el efecto, se env&iacute;a el cheque No. ${form.value.cheque} `+
-    `de la cuenta ${form.value.cuenta} por un valor de Q${form.value.monto.toLocaleString('en', common.options)}</p>
+    `de la cuenta ${form.value.cuenta} por un valor de Q${form.value.monto.toLocaleString('en', common.options)}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Agradeciendo su atenci&oacute;n, le saludamos deferentemente.</p>
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>

@@ -4,7 +4,7 @@ import { CommonFunction } from 'app/inventario/shared/common';
 import { Categoria } from 'app/modelos/inventario/categoria';
 import { Donacion } from 'app/modelos/inventario/reportes/donaciones';
 import { CategoriaService } from 'app/servicios/inventario/categoria.service';
-import { ReportesService } from 'app/servicios/inventario/reportes.service';
+import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
@@ -28,7 +28,7 @@ export class DonacionesComponent implements OnInit {
   tipo_bien = "false";
   //False es bienes activos, true es fungibles
 
-  constructor(private reportesService: ReportesService,
+  constructor(private reportesService: ReportesInventarioService,
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar, 

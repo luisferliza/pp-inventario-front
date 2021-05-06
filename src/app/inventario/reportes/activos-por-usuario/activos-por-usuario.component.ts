@@ -4,7 +4,7 @@ import { CommonFunction } from 'app/inventario/shared/common';
 import { ActivosPorUsuario } from 'app/modelos/inventario/reportes/activosPorUsuario';
 import { InventarioActivosFijos } from 'app/modelos/inventario/reportes/InventarioActivosFijos';
 import { Usuario } from 'app/modelos/inventario/usuario';
-import { ReportesService } from 'app/servicios/inventario/reportes.service';
+import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -28,7 +28,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
   id_usuario: number;
   //False es bienes activos, true es fungibles
 
-  constructor(private reportesService: ReportesService,
+  constructor(private reportesService: ReportesInventarioService,
               private usuarioService: UsuarioService,
               public common: CommonFunction,
               private snackBar: MatSnackBar) { }

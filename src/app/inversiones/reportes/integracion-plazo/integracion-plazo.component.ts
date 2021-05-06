@@ -31,8 +31,7 @@ export class IntegracionPlazoComponent implements OnInit {
     public common: CommonFunction,
     private snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {
-    this.date.setMinutes(this.date.getMinutes() - this.date.getTimezoneOffset());
+  ngOnInit(): void {    
     this.getBancos();
 
   }
@@ -224,7 +223,7 @@ export class IntegracionPlazoComponent implements OnInit {
         alignment: "center",
         table: {
           headerRows: 1,
-          widths: ['10%', '10%', '10%', '10%', '10%', '10%', '10%', '10%', '10%', '10%'],
+          widths: ['10%', '10%', '10%', '10%', '8%', '8%', '10%', '10%', '10%', '14%'],
           body: [
             [{ text: 'Tipo Docto. ', style: 'tableHeader' },
             { text: 'No. registro', style: 'tableHeader' },
@@ -252,6 +251,21 @@ export class IntegracionPlazoComponent implements OnInit {
           ]                 
         },
         layout: 'headerLineOnly'
+      },
+      {
+        text: `Guatemala, ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`,            
+        alignment: "left",
+        fontSize: 10,
+        bold: true,
+        margin: [0, 15, 0, 15],
+      },
+      {
+        text: `${this.common.contador}\r\nContador General Plan de Prestaciones`,
+        style: 'subheader',
+        alignment: "left",
+        fontSize: 10,
+        bold: true,
+        margin: [40, 40, 0, 15],
       }
     ]
     // fin de metodo 

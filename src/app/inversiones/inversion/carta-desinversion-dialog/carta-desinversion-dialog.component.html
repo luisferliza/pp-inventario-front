@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Asistente de generación de cartas</h2>
+<h2 mat-dialog-title>Asistente de generación de cartas - Desinversión</h2>
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content>
@@ -12,19 +12,18 @@
         <mat-placeholder>Fecha</mat-placeholder>
         <input required type="date" formControlName="fecha" matInput>
       </mat-form-field>   
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
         <mat-placeholder>Nombre Gerente</mat-placeholder>
         <input required type="text" formControlName="nombre" matInput>
       </mat-form-field>  
+    </div>
+
+    
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">        
       <mat-form-field fxFlex>
         <mat-placeholder>Apellido Gerente</mat-placeholder>
         <input required type="text" formControlName="apellido" matInput>
       </mat-form-field>    
-    </div>
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">        
       <mat-form-field fxFlex>
         <mat-placeholder>Grado académico</mat-placeholder>
         <input required type="text" formControlName="grado" matInput>
@@ -44,20 +43,19 @@
         <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
         <input required type="date" formControlName="fecha_acta" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>No. referencia</mat-placeholder>
         <input required type="text" formControlName="referencia" matInput>
       </mat-form-field>
+    </div>
+
+    
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>No. Cuenta</mat-placeholder>
         <input required type="text" formControlName="cuenta" matInput>
       </mat-form-field>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>Valor de inversión</mat-placeholder>
         <input required type="number" formControlName="monto" matInput>
@@ -77,14 +75,12 @@
         <mat-placeholder>Fecha Vencimiento</mat-placeholder>
         <input required type="date" formControlName="vencimiento" (change)="calcularInteres()" matInput>
       </mat-form-field>  
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">         
       <mat-form-field fxFlex>
         <mat-placeholder>Recoger cheque el:</mat-placeholder>
         <input required type="date" formControlName="entrega" matInput>
       </mat-form-field>        
     </div>
+
 
 
     

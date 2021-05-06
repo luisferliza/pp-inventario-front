@@ -33,7 +33,7 @@ export class CartaInversionDialogComponent implements OnInit {
 
     this.form = this.fb.group({
       periodo_pago: this.defaults.periodo_pago,
-      cuenta: this.defaults.cuenta,      
+      cuenta: '',      
       tipo_Inversion: this.defaults.tipo_Inversion.nombre,
       vencimiento: new Date(this.defaults.vencimiento.split('T')[0]).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }),
       plazo: this.defaults.plazo,

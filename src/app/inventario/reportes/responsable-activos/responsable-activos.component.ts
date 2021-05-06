@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { ResponsableActivosFijos } from 'app/modelos/inventario/reportes/responsableActivos';
-import { ReportesService } from 'app/servicios/inventario/reportes.service';
+import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
@@ -23,7 +23,7 @@ export class ResponsableActivosComponent implements OnInit {
   tipo_bien = "false";
   //False es bienes activos, true es fungibles
 
-  constructor(private reportesService: ReportesService,
+  constructor(private reportesService: ReportesInventarioService,
     public common: CommonFunction,
     private snackBar: MatSnackBar) { }
 

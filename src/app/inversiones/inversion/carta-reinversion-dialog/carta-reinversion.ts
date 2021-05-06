@@ -81,7 +81,7 @@ export class ReInversionCreator {
                     text: `\u200B\t\tPor lo anterior, solicitamos se sirvan efectuar la reinversión con fecha ` +
                         `${form.value.fecha_reinversion_txt} por valor de Q${(form.value.monto + form.value.interes).toLocaleString('en', common.options)} ` +
                         `a nombre de PLAN DE PRESTACIONES, USAC,a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-                        `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}`,
+                        `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}.`,
                     alignment: "justify",
                     margin: [10, 20, 10, 0],
                     fontSize: 10,
@@ -90,7 +90,7 @@ export class ReInversionCreator {
                 {
                     text: `\u200B\t\tAsimismo, se requiere que el certificado incluya lo relativo a la desinversión anticipada, forma ` +
                         `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
-                        `sellos del banco`,
+                        `sellos del banco.`,
                     alignment: "justify",
                     margin: [10, 20, 10, 0],
                     fontSize: 10,
@@ -161,10 +161,10 @@ export class ReInversionCreator {
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Por lo anterior, solicitamos se sirvan efectuar la reinversión con fecha ` +
             `${form.value.fecha_reinversion_txt} por valor de Q${(form.value.monto + form.value.interes).toLocaleString('en', common.options)} ` +
             `a nombre de PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}</p>
+            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certificado incluya lo relativo a la desinversión anticipada, forma ` +
             `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
-            `sellos del banco</p>
+            `sellos del banco.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Agradeciendo su atenci&oacute;n, le saludamos deferentemente.</p>
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>

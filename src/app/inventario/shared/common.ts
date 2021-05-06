@@ -22,4 +22,7 @@ export class CommonFunction {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2 
   };
+
+  public contador = "Lic. Bagnner Santana Gramajo Barreno";
+  public administrador = "Licda. Ana María Recinos Rivera de Córdova"
 }

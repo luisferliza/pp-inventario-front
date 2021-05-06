@@ -21,7 +21,7 @@ export class InversionEdicionComponent implements OnInit {
 
 
   form: FormGroup;
-  mode: 'create' | 'update' = 'create';
+  mode: 'create' | 'update' | 'reinvertir' = 'create';
   pidu = '10';
   tipo_cuenta: string;
   htmlToAdd: string
@@ -30,6 +30,7 @@ export class InversionEdicionComponent implements OnInit {
   tiposInversion: TipoInversion[];
   tiposCuenta: TipoCuenta[];
   cuentas: Cuenta[];
+  defaults: Inversion;
   variable = 'Hola';
   periodos = [
     'Mensual',
@@ -41,7 +42,7 @@ export class InversionEdicionComponent implements OnInit {
   ];
 
   constructor(private dialogRef: MatDialogRef<InversionEdicionComponent>,
-    @Inject(MAT_DIALOG_DATA) private defaults: Inversion,
+    @Inject(MAT_DIALOG_DATA) private transfer: {data:Inversion, type:'create' | 'update' | 'reinvertir'},
     private bancoService: BancoService,
     private tipoInversionService: TipoInversionService,
     private tipoCuentaService: TipoCuentaService,
@@ -52,14 +53,14 @@ export class InversionEdicionComponent implements OnInit {
 
 
   ngOnInit() {
-
+    this.defaults=this.transfer? this.transfer.data : null;
     this.updateBancos();
     this.updateTiposInversion();
     this.updateTiposCuenta();
     this.updateCuentas();
 
     if (this.defaults) {
-      this.mode = 'update';
+      this.mode = this.transfer.type;
     } else {
       this.defaults = {} as Inversion;
     }
@@ -100,7 +101,7 @@ export class InversionEdicionComponent implements OnInit {
 
 
   save() {
-    if (this.mode === 'create') {
+    if (this.mode === 'create' || this.mode === 'reinvertir') {
       this.create();
     } else if (this.mode === 'update') {
       this.update();
@@ -172,7 +173,7 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   isCreateMode() {
-    return this.mode === 'create';
+    return this.mode === 'create' || this.mode === 'reinvertir';
   }
 
   isUpdateMode() {
@@ -206,18 +207,15 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   provision() {
-    this.tipo_cuenta = 'PROVISION';
-    console.log(this.tipo_cuenta)
+    this.tipo_cuenta = 'PROVISION';    
   }
 
   inversion() {
-    this.tipo_cuenta = 'INVERSION';
-    console.log(this.tipo_cuenta)
+    this.tipo_cuenta = 'INVERSION';    
   }
 
   interes() {
-    this.tipo_cuenta = 'INTERES';
-    console.log(this.tipo_cuenta)
+    this.tipo_cuenta = 'INTERES';    
   }
 
   setCuenta(id) {

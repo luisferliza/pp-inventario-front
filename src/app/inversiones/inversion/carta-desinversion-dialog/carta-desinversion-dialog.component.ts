@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
 import { Calculos } from '../calculos/calculos';
 import { DesinversionCreator } from './carta-desinversion';
 
@@ -23,16 +24,15 @@ export class CartaDesinversionDialogComponent implements OnInit {
     private desinvCreator: DesinversionCreator,
     private common: CommonFunction,
     private snackBar: MatSnackBar,
-    private calculos: Calculos) { }
+    private reporteService: ReportesInversionesService) { }
 
 
   ngOnInit() {
-    console.log(this.defaults)  
+        
     
-
     this.form = this.fb.group({
-      fecha_acta: this.defaults.fecha_acta.split('T')[0],
-      acta_japp: this.defaults.acta_japp,
+      fecha_acta: '',
+      acta_japp: '',
       referencia: this.defaults.referencia,
       cuenta: this.defaults.cuenta,
       monto: this.defaults.monto,   
@@ -51,6 +51,7 @@ export class CartaDesinversionDialogComponent implements OnInit {
       entrega_txt: '',
       fecha_txt: ''
     });
+    
     this.calcularInteres();
   }
 
@@ -73,9 +74,11 @@ export class CartaDesinversionDialogComponent implements OnInit {
     this.form.controls['fecha_txt'].setValue(new Date(this.form.value.fecha).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));    
   }
 
-  calcularInteres() {
-    this.form.controls['dias_interes'].setValue(this.calculos.calcularDiasInteres(this.defaults, new Date(this.form.value.vencimiento)));
-    this.form.controls['interes'].setValue(this.calculos.calcularInteres(this.defaults, new Date(this.form.value.vencimiento)));
+  calcularInteres() {    
+    this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults ).subscribe(data =>{
+      this.form.controls['dias_interes'].setValue(data.diasInteres);
+      this.form.controls['interes'].setValue(data.interes);
+    })    
   }
 
   close() {        

@@ -15,7 +15,7 @@ import { Variable } from 'app/modelos/inventario/reportes/variable';
 @Injectable({
   providedIn: 'root'
 })
-export class ReportesService {
+export class ReportesInventarioService {
   
   url: string = INVENTARIO_HOST;
   

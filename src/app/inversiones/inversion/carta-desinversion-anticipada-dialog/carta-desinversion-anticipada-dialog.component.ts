@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
-import { Calculos } from '../calculos/calculos';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
 import { DesinversionAnticipadaCreator } from './desinversion-anticipada';
 
 @Component({
@@ -23,15 +23,15 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
     private desinvCreator: DesinversionAnticipadaCreator,
     private common: CommonFunction,
     private snackBar: MatSnackBar,
-    private calculos: Calculos) { }
+    private reporteService: ReportesInversionesService) { }
 
 
   ngOnInit() {
 
 
     this.form = this.fb.group({
-      fecha_acta: this.defaults.fecha_acta.split('T')[0],
-      acta_japp: this.defaults.acta_japp,
+      fecha_acta: '',
+      acta_japp: '',
       referencia: this.defaults.referencia,
       cuenta: this.defaults.cuenta,
       monto: this.defaults.monto,
@@ -55,9 +55,18 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
   }
 
 
-  calcularInteres() {
-    this.form.controls['dias_interes'].setValue(this.calculos.calcularDiasInteres(this.defaults, new Date(this.form.value.vencimiento)));
-    this.form.controls['interes'].setValue(this.calculos.calcularInteres(this.defaults, new Date(this.form.value.vencimiento)));
+  calcularInteres() {    
+    console.log('Caluclando interes...') 
+    if(!isNaN(new Date(this.form.value.vencimiento).getTime())){
+    let vencimiento = this.defaults.vencimiento;
+    this.defaults.vencimiento = this.form.value.vencimiento;
+    this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults ).subscribe(data =>{
+      this.form.controls['dias_interes'].setValue(data.diasInteres);
+      this.form.controls['interes'].setValue(data.interes);
+      this.defaults.vencimiento=vencimiento;
+    })  
+  }
+    
   }
 
   savePDF() {

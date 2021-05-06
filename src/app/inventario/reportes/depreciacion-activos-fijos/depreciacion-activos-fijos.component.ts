@@ -4,7 +4,7 @@ import { CommonFunction } from 'app/inventario/shared/common';
 import { Categoria } from 'app/modelos/inventario/categoria';
 import { DepreciacionActivosFijos } from 'app/modelos/inventario/reportes/depreciacionActivosFijos';
 import { CategoriaService } from 'app/servicios/inventario/categoria.service';
-import { ReportesService } from 'app/servicios/inventario/reportes.service';
+import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 // Import pdfmake-wrapper and the fonts to use
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -29,7 +29,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
   date = new Date();
   //False es bienes activos, true es fungibles
 
-  constructor(private reportesService: ReportesService,
+  constructor(private reportesService: ReportesInventarioService,
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar) { }

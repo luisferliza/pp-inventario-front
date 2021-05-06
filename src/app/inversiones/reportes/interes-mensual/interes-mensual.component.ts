@@ -31,8 +31,7 @@ export class InteresMensualComponent implements OnInit {
     public common: CommonFunction,
     private snackBar: MatSnackBar) { }
 
-  ngOnInit(): void {
-    this.date.setMinutes(this.date.getMinutes() - this.date.getTimezoneOffset());
+  ngOnInit(): void {    
     this.getBancos();    
 
   }
@@ -224,7 +223,7 @@ export class InteresMensualComponent implements OnInit {
                                               this.common.getDate(p.fecha_colocacion),
                                               p.tasa_interes,
                                               p.diasInteres,
-                                              p.interes,   
+                                              { text: 'Q' + p.interes.toLocaleString('en', this.common.options), alignment: 'right' },   
                                               ])),
               [{}, {}, { text: 'Total:', colSpan: 1, bold: true },
               { text: 'Q ' + element.inversiones.reduce((sum, p) => sum + (p.monto), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' }
@@ -234,6 +233,21 @@ export class InteresMensualComponent implements OnInit {
           ]                 
         },
         layout: 'headerLineOnly'
+      },
+      {
+        text: `Guatemala, ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`,            
+        alignment: "left",
+        fontSize: 10,
+        bold: true,
+        margin: [0, 15, 0, 15],
+      },
+      {
+        text: `${this.common.contador}\r\nContador General Plan de Prestaciones`,
+        style: 'subheader',
+        alignment: "left",
+        fontSize: 10,
+        bold: true,
+        margin: [40, 40, 0, 15],
       }
     ]
     // fin de metodo 
