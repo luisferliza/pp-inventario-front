@@ -1,0 +1,59 @@
+<div class="simple-table">
+
+  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true">
+  </elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Reportería'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div class="sticky">
+        <mat-card fxFlex.gt-md="300px">
+          <mat-card-title>Tasa promedio de inversión</mat-card-title>
+          <mat-card-content fxLayout="column">            
+            <b>
+              <p>Seleccione el año:</p>
+            </b>
+            <input matInput  type="number" placeholder="año" [(ngModel)]="anio">            
+            <br>
+            <button mat-raised-button color="warn" (click)="getTasasDTO()">Actualizar tabla</button>
+            <br>
+            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
+            <br>
+            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex class="mat-elevation-z2">
+        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true"
+          [class.table-condensed]="false" [class.table-bordered]="true">
+          <thead>
+            <tr>
+              <th>Institución</th>
+              <th>Ene</th>
+              <th>Feb</th>
+              <th>Mar</th>
+              <th>Abr</th>
+              <th>May</th>
+              <th>Jun</th>  
+              <th>Jul</th>  
+              <th>Ago</th>              
+              <th>Sep</th>              
+              <th>Oct</th>              
+              <th>Nov</th>              
+              <th>Dic</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of rows">
+              <td *ngFor="let element of row | slice:0:1">{{ element }}</td>              
+              <td *ngFor="let element of row | slice:1">{{ element }}%</td>              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,8 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { INVENTARIO_HOST, INVERSIONES_HOST } from "app/inventario/shared/var.constants";
+import { Firmante } from "app/modelos/inversiones/firmante";
 import { InteresPorBanco } from "app/modelos/inversiones/InteresPorBanco";
 import { Inversion } from "app/modelos/inversiones/inversion";
+import { TasaDTO } from "app/modelos/inversiones/TasaDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -33,8 +35,18 @@ export class ReportesInversionesService {
     return this.http.get<InteresPorBanco[]>(`${this.url}/reportes/interesmensualcompleto?pidu=${pidu}&fecha=${fecha}`);
   }
 
+  tasaMaxima(pidu: String, anio: number) {
+    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasamaxima?pidu=${pidu}&anio=${anio}`);
+  }
+
+  tasaPromedio(pidu: String, anio: number) {
+    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasapromedio?pidu=${pidu}&anio=${anio}`);
+  }
+
   calculoInteres(pidu: String, fecha: string, inversion: Inversion) {
     return this.http.put<Inversion>(`${this.url}/reportes/calculointeres?pidu=${pidu}&fecha=${fecha}`, inversion);
   }
+
+  
 
 }

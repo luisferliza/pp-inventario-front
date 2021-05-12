@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{puesto}}</h2>
+
+<form [formGroup]="form" (ngSubmit)="update()">
+  <mat-dialog-content>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Nombre</mat-placeholder>
+        <input required type="text" formControlName="nombre" matInput>
+      </mat-form-field>      
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>Texto de despliegue</mat-placeholder>
+        <input type="text" required formControlName="despliegue" matInput>
+      </mat-form-field>
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">    
+    <button mat-button [disabled]="!form.valid">Actualizar puesto</button>
+  </mat-dialog-actions>
+</form>

@@ -126,14 +126,25 @@
     </div>
 
 
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-label>Estado de inversión</mat-label>
+        <mat-select required formControlName="estado_inversion">
+          <mat-option *ngFor="let estado of estados" [value]="estado.id_estado">
+            {{estado.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div style="padding-top: 3%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="calculo_especial">¿Cálculo especial?</mat-checkbox>
+      </div>    
+    </div>
+
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>Observación</mat-placeholder>
         <textarea type="text" formControlName="observacion" maxlength="500" matInput></textarea>
-      </mat-form-field>  
-      <div style="padding-top: 5%;">
-        <mat-checkbox [checked]="true" color="primary" formControlName="calculo_especial">¿Cálculo especial?</mat-checkbox>
-      </div>    
+      </mat-form-field>        
     </div>
 
     <!---->

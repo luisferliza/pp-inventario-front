@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
-import { Calculos } from 'app/inversiones/inversion/calculos/calculos';
 import { Banco } from 'app/modelos/inversiones/banco';
 import { InteresPorBanco } from 'app/modelos/inversiones/InteresPorBanco';
 import { Inversion } from 'app/modelos/inversiones/inversion';

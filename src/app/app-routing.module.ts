@@ -98,6 +98,10 @@ const routes: Routes = [
         path: 'inversiones/inversiones',
         loadChildren: 'app/inversiones/inversion/inversion.module#InversionModule'
       },  
+      {
+        path: 'inversiones/firmantes',
+        loadChildren: 'app/inversiones/firmante/firmante.module#FirmanteModule'
+      },  
       // Reportes
       {
         path: 'inversiones/reportes/interes-mensual',
@@ -110,6 +114,34 @@ const routes: Routes = [
       {
         path: 'inversiones/reportes/control-vencimiento',
         loadChildren: 'app/inversiones/reportes/control-vencimiento/control-vencimiento.module#ControlVencimientoModule'
+      },
+      {
+        path: 'inversiones/reportes/anexo4',
+        loadChildren: 'app/inversiones/reportes/anexo4/anexo4.module#Anexo4Module'
+      },
+      {
+        path: 'inversiones/reportes/autorizacion-inversion',
+        loadChildren: 'app/inversiones/reportes/autorizacion-inversion/autorizacion-inversion.module#AutorizacionInversionModule'
+      },
+      {
+        path: 'inversiones/reportes/inversiones-emitidas',
+        loadChildren: 'app/inversiones/reportes/inversiones-emitidas/inversiones-emitidas.module#InversionesEmitidasModule'
+      },
+      {
+        path: 'inversiones/reportes/inversiones-vencen',
+        loadChildren: 'app/inversiones/reportes/inversiones-vencen/inversiones-vencen.module#InversionesVencenModule'
+      },
+      {
+        path: 'inversiones/reportes/tasa-maxima',
+        loadChildren: 'app/inversiones/reportes/tasa-maxima/tasa-maxima.module#TasaMaximaModule'
+      },
+      {
+        path: 'inversiones/reportes/tasa-promedio',
+        loadChildren: 'app/inversiones/reportes/tasa-promedio/tasa-promedio.module#TasaPromedioModule'
+      },
+      {
+        path: 'inversiones/reportes/vencimientos-reinversiones',
+        loadChildren: 'app/inversiones/reportes/vencimiento-inversiones/vencimiento-inversiones.module#VencimientoInversionesModule'
       },
       
       //###########################################################################

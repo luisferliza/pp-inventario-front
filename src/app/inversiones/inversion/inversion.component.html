@@ -22,8 +22,13 @@
             <mat-cell *matCellDef="let row"> {{ row[column.property] }}</mat-cell>
           </ng-container>
         </ng-container>
-
+        
         <!-- Date and Joined Columns-->
+        <ng-container matColumnDef="monto">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
+          <mat-cell *matCellDef="let row"> Q{{ row.monto.toLocaleString('en', this.common.options) }} </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="fecha_colocacion">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de colocación </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_colocacion)}} </mat-cell>

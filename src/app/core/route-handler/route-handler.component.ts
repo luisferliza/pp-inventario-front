@@ -586,6 +586,16 @@ export class RouteHandlerComponent implements OnInit {
         routerLinkActiveOptions: {
           exact: true
         }
+      }),
+      new SidenavItem({
+        name: 'Firmantes',
+        route: '/inversiones/firmantes',
+        parent: gestionDatosInversiones,
+        subItems: [ ],
+        position: 1,
+        routerLinkActiveOptions: {
+          exact: true
+        }
       })
     ];
 
@@ -628,6 +638,55 @@ export class RouteHandlerComponent implements OnInit {
         routerLinkActiveOptions: {
           exact: true
         }
+      }),
+      new SidenavItem({
+        name: 'Anexo 4',
+        route: '/inversiones/reportes/anexo4',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Autorización de inversion',
+        route: '/inversiones/reportes/autorizacion-inversion',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Inversiones Emitidas',
+        route: '/inversiones/reportes/inversiones-emitidas',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Inversiones que vencen',
+        route: '/inversiones/reportes/inversiones-vencen',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Tasa Máxima',
+        route: '/inversiones/reportes/tasa-maxima',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Tasa Promedio',
+        route: '/inversiones/reportes/tasa-promedio',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
+        name: 'Vencimientos y reinversiones Plan',
+        route: '/inversiones/reportes/vencimientos-reinversiones',
+        parent: reportesInventario,
+        subItems: [ ],
+        position: 1
       })
     ]
 

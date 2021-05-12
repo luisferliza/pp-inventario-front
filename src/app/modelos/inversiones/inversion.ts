@@ -1,5 +1,6 @@
 import { Banco } from "./banco";
 import { Cuenta } from "./cuenta";
+import { EstadoInversion } from "./estadoinversion";
 import { TipoInversion } from "./tipo-inversion";
 
 export class Inversion{
@@ -20,6 +21,7 @@ export class Inversion{
 	periodo_pago: string;
 	vencimiento: string;
 	tipo_Inversion: TipoInversion;
+	estado: EstadoInversion;
 	banco: Banco;
 	cuenta_inversion: Cuenta;
 	cuenta_provision: Cuenta;

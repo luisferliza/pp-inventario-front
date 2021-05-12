@@ -21,8 +21,10 @@ export class CommonFunction {
   public options = { 
     minimumFractionDigits: 2,
     maximumFractionDigits: 2 
-  };
+  }; 
 
-  public contador = "Lic. Bagnner Santana Gramajo Barreno";
-  public administrador = "Licda. Ana María Recinos Rivera de Córdova"
+  public contador = "Contador General";
+  public administrador = "Administrador Ejecutivo"
+  public presidenteJunta = "Presidente"
+  public secretarioJunta = "Secretario"
 }

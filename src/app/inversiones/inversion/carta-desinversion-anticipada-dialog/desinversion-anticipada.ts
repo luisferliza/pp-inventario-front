@@ -94,19 +94,19 @@ export class DesinversionAnticipadaCreator {
         {
           text: `"ID Y ENSEÑAD A TODOS"`,
           alignment: "center",
-          margin: [10, 60, 10, 20],
+          margin: [10, 50, 10, 10],
           fontSize: 10,
         },
         {
-          text: `Licda. Ana María Recinos Rivera de Córdova`,
-          alignment: "left",
-          margin: [300, 40, 10, 2],
+          text: form.value.firmante,
+          alignment: "center", 
+          margin: [10, 30, 10, 2],
           fontSize: 10,
         },
         {
-          text: `Administradora Ejecutiva`,
-          alignment: "left",
-          margin: [350, 2, 10, 20],
+          text: form.value.puestoFirmante,
+          alignment: "center",
+          margin: [2, 2, 10, 40],
           fontSize: 10,
         },
         {
@@ -156,8 +156,8 @@ export class DesinversionAnticipadaCreator {
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>
     <p style="text-align: center;">&nbsp;</p>
-    <p style="text-align: right;">Licda. Ana Mar&iacute;a Recinos Rivera de C&oacute;rdova</p>
-    <p style="text-align: right;">Administradora Ejecutiva&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+    <p style="margin: 0cm; line-height: 14.2pt; text-align: center;">${form.value.firmante}</p>
+    <p style="margin: 0cm; line-height: 14.2pt; text-align: center;">${form.value.puestoFirmante}</p>
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: left;">Vo. Bo. _____________________________</p>
     <p style="text-align: left;">/amrdec</p>`

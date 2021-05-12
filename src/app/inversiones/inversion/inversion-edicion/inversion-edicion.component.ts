@@ -3,11 +3,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { Banco } from 'app/modelos/inversiones/banco';
 import { Cuenta } from 'app/modelos/inversiones/cuenta';
+import { EstadoInversion } from 'app/modelos/inversiones/estadoinversion';
 import { Inversion } from 'app/modelos/inversiones/inversion';
 import { TipoCuenta } from 'app/modelos/inversiones/tipo-cuenta';
 import { TipoInversion } from 'app/modelos/inversiones/tipo-inversion';
 import { BancoService } from 'app/servicios/inversiones/banco.service';
 import { CuentaService } from 'app/servicios/inversiones/cuenta.service';
+import { EstadoInversionService } from 'app/servicios/inversiones/estadoinversion.service';
 import { InversionService } from 'app/servicios/inversiones/inversion.service';
 import { TipoCuentaService } from 'app/servicios/inversiones/tipo-cuenta.service';
 import { TipoInversionService } from 'app/servicios/inversiones/tipo-inversion.service';
@@ -29,6 +31,7 @@ export class InversionEdicionComponent implements OnInit {
   bancos: Banco[] = [];
   tiposInversion: TipoInversion[];
   tiposCuenta: TipoCuenta[];
+  estados: EstadoInversion[];
   cuentas: Cuenta[];
   defaults: Inversion;
   variable = 'Hola';
@@ -48,6 +51,7 @@ export class InversionEdicionComponent implements OnInit {
     private tipoCuentaService: TipoCuentaService,
     private cuentaService: CuentaService,
     private inversionService: InversionService,
+    private estadoService: EstadoInversionService,
     private fb: FormBuilder,
     private snackBar: MatSnackBar) { }
 
@@ -58,6 +62,7 @@ export class InversionEdicionComponent implements OnInit {
     this.updateTiposInversion();
     this.updateTiposCuenta();
     this.updateCuentas();
+    this.updateEstados();
 
     if (this.defaults) {
       this.mode = this.transfer.type;
@@ -84,6 +89,7 @@ export class InversionEdicionComponent implements OnInit {
 
 
       tipo_Inversion_id: this.defaults.tipo_Inversion ? this.defaults.tipo_Inversion.id_tipo_inversion : null,
+      estado_inversion: this.defaults.estado ? this.defaults.estado.id_estado : null,
       banco_id: this.defaults.banco ? this.defaults.banco.id_banco : null,
       cuenta_inversion_codigo: this.defaults.cuenta_inversion ? this.defaults.cuenta_inversion.numero : null,
       cuenta_provision_codigo: this.defaults.cuenta_provision ? this.defaults.cuenta_provision.numero : null,
@@ -132,6 +138,9 @@ export class InversionEdicionComponent implements OnInit {
     inversion.cuenta_inversion = new Cuenta();
     inversion.cuenta_inversion.id_cuenta = this.form.value.cuenta_inversion_id;
 
+    inversion.estado = new EstadoInversion();
+    inversion.estado.id_estado = this.form.value.estado_inversion;
+
     console.log(inversion);
 
     this.inversionService.registrar(inversion, this.pidu).subscribe(() => {
@@ -165,6 +174,9 @@ export class InversionEdicionComponent implements OnInit {
     inversion.cuenta_inversion = new Cuenta();
     inversion.cuenta_inversion.id_cuenta = this.form.value.cuenta_inversion_id;
 
+    inversion.estado = new EstadoInversion();
+    inversion.estado.id_estado = this.form.value.estado_inversion;
+
     console.log(inversion);
 
     this.inversionService.modificar(inversion, this.pidu).subscribe(() => {
@@ -193,8 +205,7 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   updateTiposCuenta() {
-    this.tipoCuentaService.listar(this.pidu).subscribe(data => {
-      console.log(data)
+    this.tipoCuentaService.listar(this.pidu).subscribe(data => {      
       this.tiposCuenta = data;
     })
   }
@@ -203,7 +214,12 @@ export class InversionEdicionComponent implements OnInit {
     this.cuentaService.listar(this.pidu).subscribe(data => {
       this.cuentas = data;
     })
+  }
 
+  updateEstados(){
+    this.estadoService.listar(this.pidu).subscribe(data => {
+      this.estados = data;
+    })
   }
 
   provision() {

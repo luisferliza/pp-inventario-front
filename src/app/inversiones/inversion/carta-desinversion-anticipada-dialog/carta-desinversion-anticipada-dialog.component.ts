@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
+import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
 import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
 import { DesinversionAnticipadaCreator } from './desinversion-anticipada';
 
@@ -23,7 +24,8 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
     private desinvCreator: DesinversionAnticipadaCreator,
     private common: CommonFunction,
     private snackBar: MatSnackBar,
-    private reporteService: ReportesInversionesService) { }
+    private reporteService: ReportesInversionesService,
+    private firmanteService: FirmanteService) { }
 
 
   ngOnInit() {
@@ -48,44 +50,53 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
       fecha_acta_txt: '',
       vencimiento_txt: '',
       entrega_txt: '',
-      fecha_txt: ''
+      fecha_txt: '',
+      firmante:'',
+      puestoFirmante:''
     });
 
     this.calcularInteres();
   }
 
 
-  calcularInteres() {    
-    console.log('Caluclando interes...') 
-    if(!isNaN(new Date(this.form.value.vencimiento).getTime())){
-    let vencimiento = this.defaults.vencimiento;
-    this.defaults.vencimiento = this.form.value.vencimiento;
-    this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults ).subscribe(data =>{
-      this.form.controls['dias_interes'].setValue(data.diasInteres);
-      this.form.controls['interes'].setValue(data.interes);
-      this.defaults.vencimiento=vencimiento;
-    })  
-  }
-    
-  }
+  calcularInteres() {
+    console.log('Caluclando interes...')
+    if (!isNaN(new Date(this.form.value.vencimiento).getTime())) {
+      let vencimiento = this.defaults.vencimiento;
+      this.defaults.vencimiento = this.form.value.vencimiento;
+      this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults).subscribe(data => {
+        this.form.controls['dias_interes'].setValue(data.diasInteres);
+        this.form.controls['interes'].setValue(data.interes);
+        this.defaults.vencimiento = vencimiento;
+      })
+    }
 
-  savePDF() {
-    this.generarFechas();
-    this.desinvCreator.createPDF(this.form, this.common);
-  }
-
-  saveWord() {
-    this.generarFechas();
-    this.desinvCreator.createWord(this.form, this.common);
   }
 
 
 
-  generarFechas() {    
-    this.form.controls['fecha_acta_txt'].setValue(new Date(this.form.value.fecha_acta).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['vencimiento_txt'].setValue(new Date(this.form.value.vencimiento).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['entrega_txt'].setValue(new Date(this.form.value.entrega).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['fecha_txt'].setValue(new Date(this.form.value.fecha).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
+
+  generarDocumento(tipoDoc) {
+    this.firmanteService.obtenerFirmante(this.pidu, 'Administrador Ejecutivo').subscribe(data => {      
+      if (data.length>0) {
+        this.form.controls['fecha_acta_txt'].setValue(new Date(this.form.value.fecha_acta).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
+        this.form.controls['vencimiento_txt'].setValue(new Date(this.form.value.vencimiento).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
+        this.form.controls['entrega_txt'].setValue(new Date(this.form.value.entrega).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
+        this.form.controls['fecha_txt'].setValue(new Date(this.form.value.fecha).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
+        this.form.controls['firmante'].setValue(data[0].nombre);
+        this.form.controls['puestoFirmante'].setValue(data[0].despliegue);
+        if(tipoDoc === "pdf"){
+          this.desinvCreator.createPDF(this.form, this.common);
+        }else{
+          this.desinvCreator.createWord(this.form, this.common);
+        }
+      } else {
+        this.snackBar.open('Administrador Ejecutivo no encontrado', 'AVISO', {
+          duration: 2000
+        });
+      }
+    })
+
   }
 
   close() {

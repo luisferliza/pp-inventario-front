@@ -84,8 +84,8 @@
   </mat-dialog-content>
 
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
-    <button type="button" (click)="saveWord()" mat-button [disabled]="!form.valid">Crear carta Word</button>    
-    <button type="button" (click)="savePDF()" mat-button [disabled]="!form.valid" color="primary">Crear carta PDF</button>    
+    <button type="button" (click)="generarDocumento('word')" mat-button [disabled]="!form.valid">Crear carta Word</button>    
+    <button type="button" (click)="generarDocumento('pdf')" mat-button [disabled]="!form.valid" color="primary">Crear carta PDF</button>    
     <button type="button" (click)="close()" mat-button color="warn">Cerrar</button>    
   </mat-dialog-actions>
 </form>
