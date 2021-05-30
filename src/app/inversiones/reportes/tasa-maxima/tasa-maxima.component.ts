@@ -5,10 +5,11 @@ import { Banco } from 'app/modelos/inversiones/banco';
 import { Firmante } from 'app/modelos/inversiones/firmante';
 import { BancoService } from 'app/servicios/inversiones/banco.service';
 import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
-import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+import { PlantillaTasaMaxima } from './tasa-maxima-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -20,22 +21,20 @@ export class TasaMaximaComponent implements OnInit {
 
   pidu = '10';
   rows = [];
-  firmante : Firmante = new Firmante();
+  contador : Firmante;
   bancos: Banco[];
-  anio = new Date().getFullYear();
-
-  //False es bienes activos, true es fungibles
+  anio = new Date().getFullYear();  
 
   constructor(private reportesService: ReportesInversionesService,
     private bancoService: BancoService,
     private firmanteService: FirmanteService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private plantilla: PlantillaTasaMaxima) { }
 
   ngOnInit(): void {
     this.getBancos();
     this.getFirmante();
-
   }
 
   getBancos() {
@@ -48,10 +47,9 @@ export class TasaMaximaComponent implements OnInit {
   getFirmante(){
     this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data =>{
       if(data.length>0){
-        this.firmante = data[0];
+        this.contador = data[0];
       }else{
-        this.firmante.nombre=""
-        this.firmante.puesto=""
+        this.contador= new Firmante();        
         this.snackBar.open(`${this.common.contador} no registrado`, 'AVISO', {
           duration: 2000
         });
@@ -60,7 +58,7 @@ export class TasaMaximaComponent implements OnInit {
     })
   }
 
-
+  // Crea la matriz de datos con mes en el encabezado y banco en el eje lateral
   getTasasDTO() {
     this.reportesService.tasaMaxima(this.pidu, this.anio).subscribe(data => {
       this.rows = [];
@@ -87,121 +85,17 @@ export class TasaMaximaComponent implements OnInit {
     })
   }
 
-
   downloadPDF() {
-    if (this.rows.length > 0) {
-      console.log(this.rows)
-      console.log(this.rows[0].slice(1).reduce((sum, p) => sum + (p.tasa), 0))
-
-      let docDefinition = {
-        pageMargins: [50, 90, 50, 50],
-        pageSize: 'FOLIO',
-        pageOrientation: 'landscape',
-        header: function (currentPage, pageCount, pageSize) {
-          return [
-            {
-              text: `UNIVERSIDAD DE SAN CARLOS DE GUATEMALA \r\n PLAN DE PRESTACIONES`,
-              style: 'header',
-              alignment: "left",
-              fontSize: 10,
-              bold: true,
-              margin: [50, 50, 50, 50],
-            }
-          ]
-        },
-        content: [
-          {
-            text: `TASA MÁXIMA POR BANCO EN ${this.anio}`,
-            style: 'header',
-            alignment: "center",
-            fontSize: 10,
-            bold: true,
-            decoration: 'underline',
-            margin: [10, 20, 10, 20],
-          },
-          {
-            style: 'tableExample',
-            margin: [7, 8, 7, 50],
-            fontSize: 9,
-            alignment: "center",
-            table: {
-              headerRows: 1,
-              widths: ['12.75%', '6.5%', '6.5%', '6.75%', '6.75%', '6.5%', '6.5%', '6.5%', '6.5%', '7.5%', '6.5%', '7.25%', '7%', '6.5%'],
-              body: [
-                this.getHeaders(),
-                ...this.rows.map(element =>([
-                  element[0],
-                  `${element[1]}%`,
-                  `${element[2]}%`,
-                  `${element[3]}%`,
-                  `${element[4]}%`,
-                  `${element[5]}%`,
-                  `${element[6]}%`,
-                  `${element[7]}%`,
-                  `${element[8]}%`,
-                  `${element[9]}%`,
-                  `${element[10]}%`,
-                  `${element[11]}%`,
-                  `${element[12]}%`,
-                  this.getAvg(element)+"%"
-                ])),                                
-              ]
-            },
-            layout: 'headerLineOnly'
-          },
-          {
-            text: `Guatemala, ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`,
-            alignment: "left",
-            fontSize: 10,
-            bold: true,
-            margin: [0, 15, 0, 15],
-          },
-          {
-            text: `${this.firmante.nombre}\r\n${this.firmante.puesto}`,
-            style: 'subheader',
-            alignment: "center",
-            fontSize: 10,
-            bold: true,
-            margin: [20, 40, 600, 15],
-          }
-        ]
-      };
-      console.log(docDefinition)
+    if (this.rows.length > 0) {      
+      let docDefinition = this.plantilla.getDocument(this.rows, this.anio, this.contador);      
       pdfMake.createPdf(docDefinition).open();
-      this.getTasasDTO();
+      this.getTasasDTO(); // En la generacion del PDF se modifican los datos
     }
     else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
         duration: 2000
       });
     }
-  }
-
-  getHeaders(){
-    return [{ text: 'Banco', style: 'tableHeader' },
-    { text: 'Enero', style: 'tableHeader' },
-    { text: 'Febrero', style: 'tableHeader' },
-    { text: 'Marzo', style: 'tableHeader' },
-    { text: 'Abril', style: 'tableHeader' },
-    { text: 'Mayo', style: 'tableHeader' },
-    { text: 'Junio', style: 'tableHeader' },
-    { text: 'Julio', style: 'tableHeader' },
-    { text: 'Agosto', style: 'tableHeader' },
-    { text: 'Septiembre', style: 'tableHeader' },
-    { text: 'Octubre', style: 'tableHeader' },
-    { text: 'Noviembre', style: 'tableHeader' },
-    { text: 'Diciembre', style: 'tableHeader' },
-    { text: 'Promedio', style: 'tableHeader' },
-    ]
-  }
-
-  // Evita la division por 0
-  getAvg(element){
-    let total = element.slice(1).reduce((sum, p) => sum + (p==0?0:1), 0);
-    if(total===0){
-      return 0
-    }
-    return (element.slice(1).reduce((sum, p) => sum + (p), 0)/total).toFixed(2)
   }
 
   downloadExcel() {

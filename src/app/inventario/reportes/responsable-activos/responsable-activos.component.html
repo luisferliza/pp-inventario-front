@@ -55,7 +55,7 @@
           <tr *ngFor="let row of rows">            
             <td>{{ getValor() }}</td>
             <td>{{ row.inventario }}</td>
-            <td>{{ common.getDate(row.fecha_compra)}}</td>
+            <td>{{ common.getLocalDateString(row.fecha_compra)}}</td>
             <td>{{ row.precio }}</td>
             <td>{{ row.descripcion }}</td>            
             <td>{{ row.responsable }}</td>

@@ -13,6 +13,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CommonFunction } from '../shared/common';
 import { TarjetaResponsabilidadEdicionComponent } from './tarjeta-responsabilidad-edicion/tarjeta-responsabilidad-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'elastic-tarjeta-responsabilidad',
@@ -29,17 +30,16 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_interno', property: 'id_interno', visible: false, isModelProperty: true  },
-    { name: 'No. Tarjeta', property: 'id_tarjeta_responsabilidad', visible: true, isModelProperty: true },        
-    { name: 'Fecha de creación', property: 'fecha_creacion', visible: true, isModelProperty: false },    
-    { name: 'Inventario', property: 'inventario', visible: true, isModelProperty: false },    
-    { name: 'Articulo', property: 'articulo', visible: true, isModelProperty: false },    
-    { name: 'Descripcion', property: 'descripcion', visible: false, isModelProperty: false },  
-    { name: 'Sección', property: 'departamento', visible: true, isModelProperty: false },      
-    { name: 'Receptor', property: 'receptor', visible: true, isModelProperty: false },    
-    { name: 'Traslados', property: 'traslados', visible: true, isModelProperty: false },  
+    { name: 'ID_interno', property: 'id_interno', visible: false, isModelProperty: true },
+    { name: 'No. Tarjeta', property: 'id_tarjeta_responsabilidad', visible: true, isModelProperty: true },
+    { name: 'Fecha de creación', property: 'fecha_creacion', visible: true, isModelProperty: false },
+    { name: 'Inventario', property: 'inventario', visible: true, isModelProperty: false },
+    { name: 'Descripcion', property: 'descripcion', visible: false, isModelProperty: false },
+    { name: 'Sección', property: 'departamento', visible: true, isModelProperty: false },
+    { name: 'Receptor', property: 'receptor', visible: true, isModelProperty: false },
+    { name: 'Traslados', property: 'traslados', visible: true, isModelProperty: false },
 
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
@@ -49,15 +49,15 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
   database: ListDatabase<TarjetaResponsabilidad>;
   trasladosVisibles: boolean = false;
   pidu = '10';
-  id_traslado:number;
+  id_traslado: number;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private TarjetaResponsabilidadService: TarjetaResponsabilidadService, 
-              private snackBar: MatSnackBar, 
-              private dialog: MatDialog,
-              public common: CommonFunction) { }
+  constructor(private TarjetaResponsabilidadService: TarjetaResponsabilidadService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    public common: CommonFunction) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -73,7 +73,7 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
   }
 
   updateData() {
-    this.TarjetaResponsabilidadService.listar(this.pidu).subscribe(data => {      
+    this.TarjetaResponsabilidadService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -93,8 +93,8 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
     });
   }
 
-  verifyState(evt){    
-    this.trasladosVisibles = false;    
+  verifyState(evt) {
+    this.trasladosVisibles = false;
   }
 
   applyFilter(filterValue: string) {
@@ -109,7 +109,7 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
         this.updateData();
         this.TarjetaResponsabilidadService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(TarjetaResponsabilidad) {
@@ -124,10 +124,14 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
   }
 
   delete(TarjetaResponsabilidad: TarjetaResponsabilidad) {
-    let idTarjeta = TarjetaResponsabilidad.id_interno;
-    this.TarjetaResponsabilidadService.eliminar(idTarjeta, this.pidu).subscribe(() => {
-      this.updateData();
-      this.TarjetaResponsabilidadService.message.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idTarjeta = TarjetaResponsabilidad.id_interno;
+        this.TarjetaResponsabilidadService.eliminar(idTarjeta, this.pidu).subscribe(() => {
+          this.updateData();
+          this.TarjetaResponsabilidadService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -138,13 +142,13 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
     this.dataSource.filter = value;
   }
 
-  showTraslados(id_interno : number){
+  showTraslados(id_interno: number) {
     this.id_traslado = id_interno;
-    this.trasladosVisibles = true;    
+    this.trasladosVisibles = true;
   }
 
   ngOnDestroy(): void {
   }
-  
+
 
 }

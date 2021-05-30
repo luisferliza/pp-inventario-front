@@ -61,10 +61,10 @@
           <tbody>
           <tr *ngFor="let row of rows">            
             <td>{{ getFila() }}</td>            
-            <td>{{ common.getDate(row.fecha_compra)}}</td>
+            <td>{{ common.getLocalDateString(row.fecha_compra)}}</td>
             <td>{{ row.numero }}</td>
             <td>{{ row.descripcion }}</td>
-            <td> Q{{ row.precio.toLocaleString('en', common.options) }}</td>
+            <td> Q{{ row.precio.toLocaleString(this.common.localNumber, common.numberOptions ) }}</td>
             <td>{{ getValor() }}</td>
             <td>{{ row.tarjeta == null? '-': row.tarjeta }}</td>
           </tr>

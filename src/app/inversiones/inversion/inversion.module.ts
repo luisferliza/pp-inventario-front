@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatPaginatorIntl } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -13,9 +13,14 @@ import { CartaInversionDialogComponent } from './carta-inversion-dialog/carta-in
 import { CartaReinversionDialogComponent } from './carta-reinversion-dialog/carta-reinversion-dialog.component';
 import { CartaDesinversionDialogComponent } from './carta-desinversion-dialog/carta-desinversion-dialog.component';
 import { CartaDesinversionAnticipadaDialogComponent } from './carta-desinversion-anticipada-dialog/carta-desinversion-anticipada-dialog.component';
+import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfiguration';
 
 @NgModule({
   declarations: [InversionComponent, InversionEdicionComponent, CartaInversionDialogComponent, CartaReinversionDialogComponent, CartaDesinversionDialogComponent, CartaDesinversionAnticipadaDialogComponent],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -33,7 +38,11 @@ import { CartaDesinversionAnticipadaDialogComponent } from './carta-desinversion
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
-    InversionRoutingModule,    
+    InversionRoutingModule,        
+    MatCardModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,    
 
     // Core
     ListModule,    

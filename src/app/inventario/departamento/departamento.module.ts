@@ -10,6 +10,8 @@ import { DepartamentoComponent } from './departamento.component';
 import { DepartamentoRoutingModule } from './departamento.routing';
 import { DepartamentoEdicionComponent } from './departamento-edicion/departamento-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    DeleteDialogModule,
     
 
     // Core
@@ -42,7 +45,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     BreadcrumbsModule,
     DepartamentoRoutingModule,
   ], entryComponents:[
-    DepartamentoEdicionComponent
+    DepartamentoEdicionComponent, DeleteDialogComponent
   ],exports:[
     DepartamentoEdicionComponent
   ]

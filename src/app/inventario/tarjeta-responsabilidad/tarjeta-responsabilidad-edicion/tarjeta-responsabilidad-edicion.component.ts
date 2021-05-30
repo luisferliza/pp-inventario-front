@@ -12,6 +12,7 @@ import { DepartamentoService } from 'app/servicios/inventario/departamento.servi
 import { TarjetaResponsabilidadService } from 'app/servicios/inventario/tarjeta-responsabilidad.service';
 import { TrasladoService } from 'app/servicios/inventario/traslado.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
+import { CommonFunction } from 'app/inventario/shared/common';
 
 @Component({
   selector: 'elastic-tarjeta-responsabilidad-edicion',
@@ -34,7 +35,8 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     private departamentoService: DepartamentoService,
     private articuloService: ArticuloService,
     private usuarioService: UsuarioService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private common: CommonFunction
   ) { }
 
 
@@ -100,7 +102,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
       this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((data) => {        
         const traslado: Traslado = new Traslado();
         traslado.fecha_fin = null;
-        traslado.fecha_inicio = data.articulo.fecha_compra;
+        traslado.fecha_inicio = this.common.parseDate(data.articulo.fecha_compra).toISOString();
 
         traslado.usuario = new Usuario();
         traslado.usuario.registro = data.receptor.registro;
@@ -110,7 +112,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
 
         traslado.seccion = new Departamento();
         traslado.seccion.id_departamento = data.departamento.id_departamento;
-
+        
         this.trasladoService.registrar(traslado, this.pidu).subscribe(()=>{
           this.dialogRef.close(tarjetaResponsabilidad);  
         })        

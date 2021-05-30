@@ -24,14 +24,14 @@
               <p>Seleccione la fecha:</p>
             </b>
             <mat-form-field>
-              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="date" (dateChange)="update()">
+              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha" (dateChange)="update()">
               <mat-datepicker-toggle matSuffix [for]="formDatepickerRef"></mat-datepicker-toggle>              
             </mat-form-field>
             <mat-datepicker #formDatepickerRef  ></mat-datepicker>            
             <br>
-            <button mat-raised-button color="primary" (click)="createTablesArray()">Generar PDF</button>
+            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
             <br>
-            <button mat-raised-button color="accent" (click)="createXLSXArray()">Generar Excel</button>
+            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
 
           </mat-card-content>
         </mat-card>
@@ -57,15 +57,15 @@
           <tbody>
             <tr *ngFor="let row of rows">
               <td>{{ row.tipo_Inversion.nombre }}</td>
-              <td>{{ row.referencia}}</td>
+              <td>{{ row.certificado}}</td>
               <td>{{ row.cuenta }}</td>
-              <td>{{ common.getDate(row.fecha_colocacion) }}</td>
+              <td>{{ common.getLocalDateString(row.fecha_colocacion) }}</td>
               <td>{{ row.tasa_interes }}</td>
               <td>{{ row.plazo }}%</td>
               <td>{{ row.periodo_pago }}</td>
-              <td>{{ common.getDate(row.vencimiento) }}</td>
-              <td>{{ getNextDate(row.vencimiento) }}</td>
-              <td> Q{{ row.monto.toLocaleString('en', this.common.options) }}</td>              
+              <td>{{ common.getLocalDateString(row.vencimiento) }}</td>
+              <td>{{ common.getFechaPagoString(row.vencimiento)}}</td>
+              <td> Q{{ row.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>              
             </tr>
           </tbody>
         </table>

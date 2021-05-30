@@ -3,9 +3,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
-import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
-import { Calculos } from '../calculos/calculos';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones.service';
 import { ReInversionCreator } from './carta-reinversion';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { Firmante } from 'app/modelos/inversiones/firmante';
+import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
 
 @Component({
   selector: 'elastic-carta-reinversion-dialog',
@@ -16,6 +18,7 @@ export class CartaReinversionDialogComponent implements OnInit {
 
   form: FormGroup;  
   pidu = '10';
+  administrador: Firmante;
   
 
   constructor(private dialogRef: MatDialogRef<CartaReinversionDialogComponent>,
@@ -24,15 +27,19 @@ export class CartaReinversionDialogComponent implements OnInit {
     private reInvCreator: ReInversionCreator,
     private common: CommonFunction,
     private snackBar: MatSnackBar,
-    private reporteService: ReportesInversionesService) { }
+    private reporteService: ReportesInversionesService,
+    private firmanteService: FirmanteService) { }
 
 
   ngOnInit() {    
-    let fechaReinversion = new Date(this.defaults.vencimiento);
-    fechaReinversion.setDate(fechaReinversion.getDate()+1);
+    let fechaReinversion = this.common.parseDate(this.defaults.vencimiento)
+    fechaReinversion.setDate(fechaReinversion.getDate() + 1); // La reinversion se realiza un dia despues del vencimiento
+    let vencimientoReinversion = this.common.parseDate(this.defaults.vencimiento)
+    vencimientoReinversion.setDate(vencimientoReinversion.getDate()+1+this.defaults.plazo)
+
     this.form = this.fb.group({
       periodo_pago: this.defaults.periodo_pago,
-      referencia: this.defaults.referencia,      
+      certificado: this.defaults.certificado,      
       cuenta: this.defaults.cuenta,            
       plazo: this.defaults.plazo,      
       tasa_interes: this.defaults.tasa_interes,
@@ -44,34 +51,78 @@ export class CartaReinversionDialogComponent implements OnInit {
       puesto: 'Gerente General',
       apellido: this.defaults.banco.nombre_gerente.split(' ')[1],
       nombre: this.defaults.banco.nombre_gerente.split(' ')[0],
-      fecha: new Date().toISOString().split('T')[0],      
+      fecha: new Date(),      
       banco: this.defaults.banco.nombre,      
       dias_interes: '',  
       interes: '',        
-      fecha_reinversion: fechaReinversion.toISOString().split('T')[0],  
-      vencimiento: this.defaults.vencimiento,    
-      vencimiento_reinversion: this.defaults.vencimiento,    
-      fecha_acta_txt: '',
-      vencimiento_txt: this.defaults.vencimiento,      
-      fecha_txt: '',
-      fecha_reinversion_txt: '',
-      vencimiento_reinversion_txt: ''
+      fecha_reinversion: fechaReinversion,  
+      vencimiento: this.common.parseDate(this.defaults.vencimiento),    
+      vencimiento_reinversion: vencimientoReinversion,          
       });
 
-      this.changeDate();
       this.calcularInteres();
+      this.getFirmante();
   }
 
-  savePDF() {    
-    this.generarFechas()
-    let inv :Inversion = this.form.value;
-    console.log(inv)
-    this.reInvCreator.createPDF(this.form, this.common);        
+  getFirmante() {
+    this.firmanteService.obtenerFirmante(this.pidu, this.common.administrador).subscribe(data => {
+      if (data.length > 0) {
+        this.administrador = data[0];
+      } else {
+        this.snackBar.open(`${this.common.administrador} No encontrado`, 'AVISO', {
+          duration: 2000
+        });
+        this.administrador = new Firmante();
+      }
+    });
   }
 
-  saveWord() {    
-    this.generarFechas()
-    this.reInvCreator.createWord(this.form, this.common);        
+  savePDF() {        
+    this.reInvCreator.createPDF(
+      this.form.value.periodo_pago,
+      this.form.value.certificado,
+      this.form.value.cuenta,
+      this.form.value.plazo,
+      this.form.value.tasa_interes,
+      this.form.value.monto,
+      this.form.value.fecha_acta,
+      this.form.value.acta_japp,      
+      this.form.value.grado,
+      this.form.value.puesto,
+      this.form.value.apellido,
+      this.form.value.nombre,
+      this.form.value.fecha,
+      this.form.value.banco,
+      this.form.value.dias_interes,
+      this.form.value.interes,
+      this.form.value.fecha_reinversion,
+      this.form.value.vencimiento,
+      this.form.value.vencimiento_reinversion,
+      this.administrador);
+  }
+
+  saveWord() {        
+    this.reInvCreator.createWord(
+      this.form.value.periodo_pago,
+      this.form.value.certificado,
+      this.form.value.cuenta,
+      this.form.value.plazo,
+      this.form.value.tasa_interes,
+      this.form.value.monto,
+      this.form.value.fecha_acta,
+      this.form.value.acta_japp,      
+      this.form.value.grado,
+      this.form.value.puesto,
+      this.form.value.apellido,
+      this.form.value.nombre,
+      this.form.value.fecha,
+      this.form.value.banco,
+      this.form.value.dias_interes,
+      this.form.value.interes,
+      this.form.value.fecha_reinversion,
+      this.form.value.vencimiento,
+      this.form.value.vencimiento_reinversion,
+      this.administrador);
   }
 
   close() {        
@@ -79,29 +130,16 @@ export class CartaReinversionDialogComponent implements OnInit {
   }
 
   calcularInteres() {
-    this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults ).subscribe(data =>{
+    this.reporteService.calculoInteres(this.pidu, this.common.parseDate(this.defaults.vencimiento), this.defaults ).subscribe(data =>{
       this.form.controls['dias_interes'].setValue(data.diasInteres);
       this.form.controls['interes'].setValue(data.interes);
     })        
   }
 
-  generarFechas(){
-    console.log(this.form.value.fecha_acta)
-    this.form.controls['fecha_acta_txt'].setValue(new Date(this.form.value.fecha_acta).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['vencimiento_txt'].setValue(new Date(this.form.value.vencimiento).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['fecha_reinversion_txt'].setValue(new Date(this.form.value.fecha_reinversion).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-    this.form.controls['fecha_txt'].setValue(new Date(this.form.value.fecha).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));    
-    this.form.controls['vencimiento_reinversion_txt'].setValue(new Date(this.form.value.vencimiento_reinversion).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));    
-  }
-
-  changeDate() {
-    let yourDate = this.form.value.fecha_reinversion
-    let period = this.form.value.plazo
-    let futureDate = new Date(yourDate);
-    futureDate.setDate(futureDate.getDate() + period)        
-    this.form.controls['vencimiento_reinversion'].setValue(futureDate.toISOString().split('T')[0]);
-  }
-
-  
+  changeDate() {    
+    let futureDate = this.common.parseDate(this.form.value.fecha_reinversion);
+    futureDate.setDate(futureDate.getDate() + this.form.value.plazo)        
+    this.form.controls['vencimiento_reinversion'].setValue(futureDate);
+  }  
 
 }

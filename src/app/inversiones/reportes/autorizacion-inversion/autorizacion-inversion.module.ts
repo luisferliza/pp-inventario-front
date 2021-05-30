@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MAT_DATE_LOCALE_FACTORY, MatPaginatorIntl } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
 import { BreadcrumbsModule } from 'app/core/breadcrumbs/breadcrumbs.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AutorizacionInversionComponent } from './autorizacion-inversion.component';
 import { AutorizacionInversionRoutingModule } from './autorizacion-inversion.routing';
+import { AutorizacionInversionDialogComponent } from './autorizacion-inversion-dialog/autorizacion-inversion-dialog.component';
+import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfiguration';
 
 @NgModule({
-  declarations: [AutorizacionInversionComponent],
+  declarations: [AutorizacionInversionComponent, AutorizacionInversionDialogComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+  ],entryComponents:[
+    AutorizacionInversionDialogComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +37,9 @@ import { AutorizacionInversionRoutingModule } from './autorizacion-inversion.rou
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    AutorizacionInversionRoutingModule,
+    AutorizacionInversionRoutingModule,    
+    ReactiveFormsModule,
+    
 
     // Core
     ListModule,    

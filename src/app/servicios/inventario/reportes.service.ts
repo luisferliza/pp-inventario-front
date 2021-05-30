@@ -29,8 +29,8 @@ export class ReportesInventarioService {
     return this.http.get<InventarioActivosFijos[]>(`${this.url}/reportes/bajasactivosfijos?pidu=${pidu}&fungible=${fungible}`);
   }
 
-  depreciacionActivosFijos(pidu: String, date:string, categoria:number) {
-    return this.http.get<DepreciacionActivosFijos[]>(`${this.url}/reportes/activosfijosdepreciacion?pidu=${pidu}&date=${date}&id_categoria=${categoria}`);
+  depreciacionActivosFijos(pidu: String, date:Date, categoria:number) {
+    return this.http.get<DepreciacionActivosFijos[]>(`${this.url}/reportes/activosfijosdepreciacion?pidu=${pidu}&date=${date.toISOString()}&id_categoria=${categoria}`);
   }
 
   responsableActivosFijos(pidu: String, fungible:string) {

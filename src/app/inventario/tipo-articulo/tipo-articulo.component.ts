@@ -15,6 +15,7 @@ import { TipoArticuloService } from 'app/servicios/inventario/tipo-articulo.serv
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { TipoArticuloEdicionComponent } from './tipo-articulo-edicion/tipo-articulo-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 
 @Component({
@@ -32,9 +33,9 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_TipoArticulo', property: 'id_tipo_articulo', visible: false, isModelProperty: true  },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'ID_TipoArticulo', property: 'id_tipo_articulo', visible: false, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
@@ -64,7 +65,7 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
   }
 
   listar() {
-    this.tipoArticuloService.listar(this.pidu).subscribe(data => {      
+    this.tipoArticuloService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -84,7 +85,7 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
     });
   }
 
-  
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -98,7 +99,7 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
         this.listar();
         this.tipoArticuloService.mensajeCambio.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(estado) {
@@ -113,10 +114,14 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
   }
 
   delete(estado: TipoArticulo) {
-    let idEstado = estado.id_tipo_articulo;
-    this.tipoArticuloService.eliminar(idEstado, this.pidu).subscribe(() => {
-      this.listar();
-      this.tipoArticuloService.mensajeCambio.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idEstado = estado.id_tipo_articulo;
+        this.tipoArticuloService.eliminar(idEstado, this.pidu).subscribe(() => {
+          this.listar();
+          this.tipoArticuloService.mensajeCambio.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -130,5 +135,5 @@ export class TipoArticuloComponent implements List<TipoArticulo>, OnInit, OnDest
 
   ngOnDestroy(): void {
   }
-  
+
 }

@@ -14,6 +14,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { componentDestroyed } from 'app/core/utils/component-destroyed';
 import { List } from 'app/core/list/list.interface';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-categoria',
@@ -32,8 +33,8 @@ export class CategoriaComponent implements List<Categoria>, OnInit, OnDestroy {
   columns: ListColumn[] = [
     { name: 'ID_Categoria', property: 'id_categoria', visible: false },
     { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
-    { name: 'Depreciación', property: 'depreciacion', visible: true},
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'Depreciación', property: 'depreciacion', visible: true },
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
@@ -63,7 +64,7 @@ export class CategoriaComponent implements List<Categoria>, OnInit, OnDestroy {
   }
 
   updateData() {
-    this.categoriaService.listar(this.pidu).subscribe(data => {      
+    this.categoriaService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -83,7 +84,7 @@ export class CategoriaComponent implements List<Categoria>, OnInit, OnDestroy {
     });
   }
 
-  
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -107,7 +108,7 @@ export class CategoriaComponent implements List<Categoria>, OnInit, OnDestroy {
         this.updateData();
         this.categoriaService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(categoria) {
@@ -122,10 +123,14 @@ export class CategoriaComponent implements List<Categoria>, OnInit, OnDestroy {
   }
 
   delete(categoria: Categoria) {
-    let idCategoria = categoria.id_categoria;
-    this.categoriaService.eliminar(idCategoria, this.pidu).subscribe(() => {
-      this.updateData();
-      this.categoriaService.message.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idCategoria = categoria.id_categoria;
+        this.categoriaService.eliminar(idCategoria, this.pidu).subscribe(() => {
+          this.updateData();
+          this.categoriaService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 

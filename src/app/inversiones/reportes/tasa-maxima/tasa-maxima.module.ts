@@ -12,7 +12,7 @@ import { TasaMaximaRoutingModule } from './tasa-maxima.routing';
 @NgModule({
   declarations: [TasaMaximaComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
   ],
   imports: [
     CommonModule,

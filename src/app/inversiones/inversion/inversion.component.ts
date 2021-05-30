@@ -45,9 +45,9 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Inversion', property: 'id_inversion', visible: false, isModelProperty: true },
-    { name: 'Referencia', property: 'referencia', visible: true, isModelProperty: true },
+    { name: 'Referencia PP', property: 'referencia_pp', visible: true, isModelProperty: true },
     { name: 'Monto', property: 'monto', visible: true, isModelProperty: false },
-    { name: 'No. Inversión', property: 'no_inversion', visible: true, isModelProperty: true },
+    { name: 'No. Certificado', property: 'certificado', visible: true, isModelProperty: true },
     { name: 'Acta JAPP', property: 'acta_japp', visible: true, isModelProperty: true },
     { name: 'Tasa', property: 'tasa_interes', visible: true, isModelProperty: true },
     { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },    
@@ -112,7 +112,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
         this.resultsLength = inversiones.length;
       });
 
-      this.dataSource = new ListDataSource<Inversion>(this.database, this.sort, this.paginator, this.columns);
+      this.dataSource = new ListDataSource<Inversion>(this.database, this.sort, this.paginator, this.columns);      
       document.getElementById('table').click();
 
     });
@@ -125,6 +125,8 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
+
+  
 
   crear() {
     this.dialog.open(InversionEdicionComponent).afterClosed().subscribe((articulo: Articulo) => {

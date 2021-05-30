@@ -4,8 +4,9 @@ import { MatDialogRef, MatSnackBar, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Inversion } from 'app/modelos/inversiones/inversion';
 import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
-import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones.service';
 import { DesinversionAnticipadaCreator } from './desinversion-anticipada';
+import { Firmante } from 'app/modelos/inversiones/firmante';
 
 @Component({
   selector: 'elastic-carta-desinversion-anticipada-dialog',
@@ -16,6 +17,7 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
 
   form: FormGroup;
   pidu = '10';
+  administrador: Firmante;
 
 
   constructor(private dialogRef: MatDialogRef<CartaDesinversionAnticipadaDialogComponent>,
@@ -29,23 +31,21 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
 
 
   ngOnInit() {
-
-
     this.form = this.fb.group({
       fecha_acta: '',
       acta_japp: '',
-      referencia: this.defaults.referencia,
+      certificado: this.defaults.certificado,
       cuenta: this.defaults.cuenta,
       monto: this.defaults.monto,
       dias_interes: '',
       interes: '',
-      vencimiento: this.defaults.vencimiento.split('T')[0],
-      entrega: this.defaults.vencimiento.split('T')[0],
+      vencimiento: this.common.parseDate(this.defaults.vencimiento),
+      entrega: this.common.parseDate(this.defaults.vencimiento),
       grado: this.defaults.banco.titulo_gerente,
       puesto: 'Gerente General',
       apellido: this.defaults.banco.nombre_gerente.split(' ')[1],
       nombre: this.defaults.banco.nombre_gerente.split(' ')[0],
-      fecha: new Date().toISOString().split('T')[0],
+      fecha: new Date(),
       banco: this.defaults.banco.nombre,
       fecha_acta_txt: '',
       vencimiento_txt: '',
@@ -56,48 +56,75 @@ export class CartaDesinversionAnticipadaDialogComponent implements OnInit {
     });
 
     this.calcularInteres();
+    this.getFirmante();
   }
 
-
-  calcularInteres() {
-    console.log('Caluclando interes...')
-    if (!isNaN(new Date(this.form.value.vencimiento).getTime())) {
-      let vencimiento = this.defaults.vencimiento;
-      this.defaults.vencimiento = this.form.value.vencimiento;
-      this.reporteService.calculoInteres(this.pidu, this.defaults.vencimiento, this.defaults).subscribe(data => {
-        this.form.controls['dias_interes'].setValue(data.diasInteres);
-        this.form.controls['interes'].setValue(data.interes);
-        this.defaults.vencimiento = vencimiento;
-      })
-    }
-
-  }
-
-
-
-
-  generarDocumento(tipoDoc) {
-    this.firmanteService.obtenerFirmante(this.pidu, 'Administrador Ejecutivo').subscribe(data => {      
-      if (data.length>0) {
-        this.form.controls['fecha_acta_txt'].setValue(new Date(this.form.value.fecha_acta).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-        this.form.controls['vencimiento_txt'].setValue(new Date(this.form.value.vencimiento).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-        this.form.controls['entrega_txt'].setValue(new Date(this.form.value.entrega).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-        this.form.controls['fecha_txt'].setValue(new Date(this.form.value.fecha).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }));
-        this.form.controls['firmante'].setValue(data[0].nombre);
-        this.form.controls['puestoFirmante'].setValue(data[0].despliegue);
-        if(tipoDoc === "pdf"){
-          this.desinvCreator.createPDF(this.form, this.common);
-        }else{
-          this.desinvCreator.createWord(this.form, this.common);
-        }
+  getFirmante() {
+    this.firmanteService.obtenerFirmante(this.pidu, this.common.administrador).subscribe(data => {
+      if (data.length > 0) {
+        this.administrador = data[0];
       } else {
-        this.snackBar.open('Administrador Ejecutivo no encontrado', 'AVISO', {
+        this.snackBar.open(`${this.common.administrador} No encontrado`, 'AVISO', {
           duration: 2000
         });
+        this.administrador = new Firmante();
       }
-    })
-
+    });
   }
+
+
+  calcularInteres() {    
+    if (!isNaN(this.form.value.vencimiento.getTime())) {      
+      this.reporteService.calculoInteres(this.pidu, this.form.value.vencimiento, this.defaults).subscribe(data => {
+        this.form.controls['dias_interes'].setValue(data.diasInteres);
+        this.form.controls['interes'].setValue(data.interes);        
+      })
+    }else{
+      console.log('Error en la fecha de vencimiento')      
+    }
+  }
+
+  savePDF() {        
+    this.desinvCreator.createPDF(
+      this.form.value.fecha,
+      this.form.value.grado,
+      this.form.value.nombre,
+      this.form.value.apellido,
+      this.form.value.puesto,
+      this.form.value.banco,
+      this.form.value.fecha_acta,
+      this.form.value.acta_japp,
+      this.form.value.certificado,
+      this.form.value.cuenta,
+      this.form.value.monto,   
+      this.form.value.dias_interes,  
+      this.form.value.interes,  
+      this.form.value.vencimiento,
+      this.form.value.entrega,
+      this.administrador
+      );        
+  }
+
+  saveWord() {       
+    this.desinvCreator.createWord(
+      this.form.value.fecha,
+      this.form.value.grado,
+      this.form.value.nombre,
+      this.form.value.apellido,
+      this.form.value.puesto,
+      this.form.value.banco,
+      this.form.value.fecha_acta,
+      this.form.value.acta_japp,
+      this.form.value.certificado,
+      this.form.value.cuenta,
+      this.form.value.monto,   
+      this.form.value.dias_interes,  
+      this.form.value.interes,  
+      this.form.value.vencimiento,
+      this.form.value.entrega,
+      this.administrador
+    );        
+  }  
 
   close() {
     this.dialogRef.close();

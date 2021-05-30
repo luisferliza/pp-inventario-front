@@ -10,6 +10,8 @@ import { BreadcrumbsModule } from 'app/core/breadcrumbs/breadcrumbs.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CategoriaEdicionComponent } from './categoria-edicion/categoria-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [CategoriaComponent, CategoriaEdicionComponent],
@@ -33,6 +35,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    DeleteDialogModule,
     
 
     // Core
@@ -41,7 +44,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     BreadcrumbsModule,
     CategoriaRoutingModule,
   ], entryComponents:[
-    CategoriaEdicionComponent
+    CategoriaEdicionComponent, DeleteDialogComponent
   ],exports:[
     CategoriaEdicionComponent
   ]

@@ -1,3 +1,81 @@
-<p>
-  vencimiento-inversiones works!
-</p>
+<div class="simple-table">
+
+  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true">
+  </elastic-page-header>
+
+  <div class="container">
+
+    <elastic-breadcrumbs [currentPage]="'Reportería'" [header]="'primary'"></elastic-breadcrumbs>
+
+    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
+      <div class="sticky">
+        <mat-card fxFlex.gt-md="300px">
+          <mat-card-title>Vencimiento y reinversiones plan</mat-card-title>
+          <mat-card-content fxLayout="column">            
+            <b>
+              <p>Seleccione la fecha de inicio:</p>
+            </b>
+            <mat-form-field>
+              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha_ini" (dateChange)="update()">
+              <mat-datepicker-toggle matSuffix [for]="formDatepickerRef"></mat-datepicker-toggle>              
+            </mat-form-field>
+            <mat-datepicker #formDatepickerRef  ></mat-datepicker>
+            <b>
+              <p>Seleccione la fecha final:</p>
+            </b>
+            <mat-form-field>
+              <input matInput [matDatepicker]="formDatepickerRef2" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha_fin" (dateChange)="update()">
+              <mat-datepicker-toggle matSuffix [for]="formDatepickerRef2"></mat-datepicker-toggle>              
+            </mat-form-field>
+            <mat-datepicker #formDatepickerRef2  ></mat-datepicker>       
+            <br>
+            <button mat-raised-button color="primary" (click)="downloadPDF()">Generar PDF</button>
+            <br>
+            <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div fxFlex class="mat-elevation-z2">
+        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true"
+          [class.table-condensed]="false" [class.table-bordered]="true">
+          <thead>
+            <tr>              
+              <th>Institución</th>
+              <th>Cuenta</th>
+              <th>No. Certificado</th>              
+              <th>Fecha de emisión</th>
+              <th>Tasa</th>
+              <th>Plazo (días)</th>                            
+              <th>Fecha de vencimiento</th>                             
+              <th>Valor nominal</th>              
+              <th>Interes</th>              
+              <th>Total</th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="10"><b>VENCIMIENTOS</b></td>
+            </tr>
+            <tr *ngFor="let row of rows">
+              <td>{{ row.tipo_Inversion.nombre }}</td>              
+              <td>{{ row.cuenta }}</td>
+              <td>{{ row.certificado}}</td>
+              <td>{{ common.getLocalDateString(row.fecha_colocacion) }}</td>
+              <td>{{ row.tasa_interes }}%</td>
+              <td>{{ row.plazo }}</td>              
+              <td>{{ common.getLocalDateString(row.vencimiento) }}</td>              
+              <td> Q{{ row.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>              
+              <td>Q{{ row.interes.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
+              <td>Q{{ (row.interes+row.monto).toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>                        
+            </tr>
+            <tr>
+              <td colspan="10"><b>INVERSIONES Y REINVERSIONES</b></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

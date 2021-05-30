@@ -115,8 +115,8 @@ export class DonacionesComponent implements OnInit {
               body: [
                 [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor residual', style: 'tableHeader' }],
                 [{}, {text:`Cuenta: ${this.getCategoryName()}`, bold:true, alignment: 'left' }, {},{}],
-                ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}])),
-                [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}]
+                ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),
+                [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]
               ]
             }
           },

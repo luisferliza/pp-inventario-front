@@ -27,19 +27,15 @@
         
 
         <ng-container matColumnDef="fecha_creacion">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de creacion </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.articulo.fecha_compra)}} </mat-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de compra </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.articulo.fecha_compra)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="inventario">
           <mat-header-cell *matHeaderCellDef mat-sort-header> No. y Clave de control </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.articulo.inventario}} </mat-cell>
-        </ng-container>
+        </ng-container>       
         
-        <ng-container matColumnDef="articulo">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Artículo </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{row.articulo.codigo}} </mat-cell>
-        </ng-container>
 
         <ng-container matColumnDef="descripcion">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </mat-header-cell>

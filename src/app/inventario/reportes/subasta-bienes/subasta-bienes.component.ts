@@ -36,8 +36,7 @@ export class SubastaBienesComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog) { }
 
-  ngOnInit(): void {
-    console.log('Hola!')
+  ngOnInit(): void {    
     this.getCategorias()
 
   }
@@ -128,8 +127,8 @@ export class SubastaBienesComponent implements OnInit {
               [{ text: 'No. ', style: 'tableHeader', rowSpan: 3}, { text: 'Descripción', style: 'tableHeader', rowSpan: 3 }, { text: 'No. Inventario', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor Q', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor residual', style: 'tableHeader', rowSpan: 3 }, { text: 'Responsable', style: 'tableHeader', colSpan:4 },{},{},{}],
             [{},{},{},{},{},{text: 'Nombre', rowSpan: 2}, {text: 'Interesado',  colSpan:2 }, {}, {text: 'Firma', rowSpan: 2}],
             [{},{},{},{},{},{}, {text: 'Si'},{text: 'No'}, {}],            
-            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, {text: p.residual.toLocaleString('en', this.common.options), alignment: 'right'}, p.responsable, '','',''])),              
-            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {},{},{},{}]
+            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, p.responsable, '','',''])),              
+            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {},{},{},{}]
             ]
           }         
         }

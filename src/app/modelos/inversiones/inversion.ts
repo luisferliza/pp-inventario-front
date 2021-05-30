@@ -5,16 +5,17 @@ import { TipoInversion } from "./tipo-inversion";
 
 export class Inversion{
     id_inversion: number;
-	referencia: string;
+	referencia_pp: string;
 	monto: number;
 	fecha_colocacion: string;	
-	no_inversion: string;
+	certificado: string;
 	acta_japp: string;
 	observacion: string;
 	tasa_interes: number;
 	plazo: number;
 	cuenta: string;
 	calculo_especial: boolean;
+	reinversion: boolean;
 	fecha_acta: string;
 	fecha_pago: string;
 	dias_anuales: number;

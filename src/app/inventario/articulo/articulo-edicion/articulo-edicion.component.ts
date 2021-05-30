@@ -13,6 +13,7 @@ import { DepartamentoService } from 'app/servicios/inventario/departamento.servi
 import { EstadoService } from 'app/servicios/inventario/estado.service';
 import { ArticuloService } from 'app/servicios/inventario/articulo.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { CommonFunction } from 'app/inventario/shared/common';
 
 
 
@@ -43,7 +44,8 @@ export class ArticuloEdicionComponent implements OnInit {
     private estadoService: EstadoService,
     private proveedorService: ProveedorService,
     private tipoArticuloService: TipoArticuloService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private common: CommonFunction) { }
 
 
   ngOnInit() {
@@ -64,7 +66,7 @@ export class ArticuloEdicionComponent implements OnInit {
       descripcion: this.defaults.descripcion || '',      
       residual: this.defaults.residual || 0.05,     
       inventario: this.defaults.inventario || '',      
-      fecha_compra: this.defaults.fecha_compra? this.defaults.fecha_compra.split('T')[0] : null,      
+      fecha_compra: this.defaults.fecha_compra? this.common.parseDate(this.defaults.fecha_compra) : new Date(),      
       precio: this.defaults.precio || 0,            
       marca: this.defaults.marca || '',            
       fungible: this.defaults.fungible || false,            
@@ -120,7 +122,9 @@ export class ArticuloEdicionComponent implements OnInit {
 
     articulo.departamento = new Departamento();
     articulo.departamento.id_departamento = this.form.value.id_departamento;   
-    
+
+    articulo.fecha_compra = this.form.value.fecha_compra.toISOString() // Convierte la fecha
+        
     this.articuloService.registrar(articulo, this.pidu).subscribe(()=>{
       this.dialogRef.close(articulo);
     })
@@ -145,6 +149,8 @@ export class ArticuloEdicionComponent implements OnInit {
     articulo.departamento = new Departamento();
     articulo.departamento.id_departamento = this.form.value.id_departamento;   
     
+    articulo.fecha_compra = this.form.value.fecha_compra.toISOString() // Convierte la fecha
+
     this.articuloService.modificar(articulo, this.pidu).subscribe(()=>{
       this.dialogRef.close(articulo);
     })    

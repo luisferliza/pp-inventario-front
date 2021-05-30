@@ -44,7 +44,7 @@
           <thead>
             <tr>
               <th>Institución</th>
-              <th>Referencia</th>
+              <th>Certificado</th>
               <th>Plazo</th>
               <th>Fecha de vencimiento</th>
               <th>Fecha de pago</th>
@@ -58,15 +58,15 @@
           <tbody>
             <tr *ngFor="let row of rows">
               <td>{{ row.banco.nombre }}</td>
-              <td>{{ row.referencia }}</td>
+              <td>{{ row.certificado }}</td>
               <td>{{ row.plazo }}</td>
-              <td>{{ common.getDate(row.vencimiento) }}</td>
-              <td>{{ getFechaPago(row) }} </td>
-              <td>Q{{ row.monto.toLocaleString('en', this.common.options) }}</td>
+              <td>{{ this.common.getLocalDateString(row.vencimiento) }}</td>
+              <td>{{ this.common.getFechaPagoString(row.vencimiento) }} </td>
+              <td>Q{{ row.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
               <td>{{ row.tasa_interes }}%</td>
               <td>{{ row.diasInteres }}</td>
-              <td>Q{{ row.interes.toLocaleString('en', this.common.options) }}</td>
-              <td>Q{{ (row.interes+row.diasInteres).toLocaleString('en', this.common.options) }}</td>              
+              <td>Q{{ row.interes.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
+              <td>Q{{ (row.interes+row.monto).toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>              
             </tr>
           </tbody>
         </table>

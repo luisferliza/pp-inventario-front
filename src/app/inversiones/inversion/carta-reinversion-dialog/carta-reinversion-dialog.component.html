@@ -8,10 +8,11 @@
         <mat-placeholder>Banco</mat-placeholder>
         <input required type="text" formControlName="banco" matInput>
       </mat-form-field>   
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha</mat-placeholder>
-        <input required type="date" formControlName="fecha" matInput>
-      </mat-form-field>   
+      <mat-form-field fxFlex>      
+        <input matInput required [matDatepicker]="fecha" placeholder="Fecha:" formControlName="fecha">
+        <mat-datepicker-toggle matSuffix [for]="fecha"></mat-datepicker-toggle>
+        <mat-datepicker #fecha></mat-datepicker>
+      </mat-form-field>      
       <mat-form-field fxFlex>
         <mat-placeholder>Nombre Gerente</mat-placeholder>
         <input required type="text" formControlName="nombre" matInput>
@@ -38,9 +39,10 @@
         <mat-placeholder>Acta JAPP</mat-placeholder>
         <input required type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
-        <input required type="date" formControlName="fecha_acta" matInput>
+      <mat-form-field fxFlex>      
+        <input matInput required [matDatepicker]="fecha_acta" placeholder="Fecha acta JAPP:" formControlName="fecha_acta">
+        <mat-datepicker-toggle matSuffix [for]="fecha_acta"></mat-datepicker-toggle>
+        <mat-datepicker #fecha_acta></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>Valor de inversión</mat-placeholder>
@@ -53,10 +55,11 @@
         <mat-placeholder>Tasa de interés</mat-placeholder>
         <input required type="number" formControlName="tasa_interes" matInput>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de reinversión</mat-placeholder>
-        <input required type="date" formControlName="fecha_reinversion" (change)="changeDate()" matInput>
-      </mat-form-field>        
+      <mat-form-field fxFlex>      
+        <input matInput required [matDatepicker]="fecha_reinversion" placeholder="Fecha de reinversión:" formControlName="fecha_reinversion">
+        <mat-datepicker-toggle matSuffix [for]="fecha_reinversion"></mat-datepicker-toggle>
+        <mat-datepicker #fecha_reinversion></mat-datepicker>
+      </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>Plazo (Días)</mat-placeholder>
         <input required type="number" formControlName="plazo"  (change)="changeDate()" matInput>
@@ -64,27 +67,26 @@
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha vencimiento reinversión</mat-placeholder>
-        <input required type="date" formControlName="vencimiento_reinversion" matInput>
-      </mat-form-field>     
-      <mat-form-field fxFlex>
-        <mat-placeholder>Forma de pago</mat-placeholder>
-        <input required type="text" formControlName="periodo_pago" matInput>
-      </mat-form-field>        
+      <mat-form-field fxFlex>      
+        <input matInput required [matDatepicker]="vencimiento_reinversion" placeholder="Fecha vencimiento reinversión:" formControlName="vencimiento_reinversion">
+        <mat-datepicker-toggle matSuffix [for]="vencimiento_reinversion"></mat-datepicker-toggle>
+        <mat-datepicker #vencimiento_reinversion></mat-datepicker>
+      </mat-form-field>           
       <mat-form-field fxFlex>
         <mat-placeholder>Días de interés</mat-placeholder>
         <input required type="number" formControlName="dias_interes" matInput>
       </mat-form-field>
-    </div>
-
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
-      
       <mat-form-field fxFlex>
         <mat-placeholder>Interés por cobrar:</mat-placeholder>
         <input required type="text" formControlName="interes" matInput>
-      </mat-form-field>       
+      </mat-form-field>      
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">            
+      <mat-form-field fxFlex>
+        <mat-placeholder>Forma de pago</mat-placeholder>
+        <input required type="text" formControlName="periodo_pago" matInput>
+      </mat-form-field> 
     </div>
 
     

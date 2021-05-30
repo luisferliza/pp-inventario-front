@@ -9,8 +9,9 @@
         <input required type="text" formControlName="banco" matInput>
       </mat-form-field>         
       <mat-form-field fxFlex>
-        <mat-placeholder>Fecha</mat-placeholder>
-        <input required type="date" formControlName="fecha" matInput>
+        <input required matInput [matDatepicker]="fecha" placeholder="Fecha:" formControlName="fecha">
+        <mat-datepicker-toggle matSuffix [for]="fecha"></mat-datepicker-toggle>
+        <mat-datepicker #fecha></mat-datepicker>
       </mat-form-field>   
       <mat-form-field fxFlex>
         <mat-placeholder>Nombre Gerente</mat-placeholder>
@@ -40,12 +41,13 @@
         <input required type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
-        <input required type="date" formControlName="fecha_acta" matInput>
+        <input matInput required [matDatepicker]="fecha_acta" placeholder="Fecha acta:" formControlName="fecha_acta">
+        <mat-datepicker-toggle matSuffix [for]="fecha_acta"></mat-datepicker-toggle>
+        <mat-datepicker #fecha_acta></mat-datepicker>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>No. referencia</mat-placeholder>
-        <input required type="text" formControlName="referencia" matInput>
+        <mat-placeholder>No. Certificado</mat-placeholder>
+        <input required type="text" formControlName="certificado" matInput>
       </mat-form-field>
     </div>
 
@@ -72,13 +74,15 @@
         <input required type="text" formControlName="interes" matInput>
       </mat-form-field>        
       <mat-form-field fxFlex>
-        <mat-placeholder>Fecha Vencimiento</mat-placeholder>
-        <input required type="date" formControlName="vencimiento" (change)="calcularInteres()" matInput>
-      </mat-form-field>  
+        <input matInput required [matDatepicker]="vencimiento" placeholder="Fecha vencimiento:" formControlName="vencimiento" (dateChange)="calcularInteres()">
+        <mat-datepicker-toggle matSuffix [for]="vencimiento"></mat-datepicker-toggle>
+        <mat-datepicker #vencimiento></mat-datepicker>
+      </mat-form-field>      
       <mat-form-field fxFlex>
-        <mat-placeholder>Recoger cheque el:</mat-placeholder>
-        <input required type="date" formControlName="entrega" matInput>
-      </mat-form-field>        
+        <input matInput required [matDatepicker]="entrega" placeholder="Fecha de entrega:" formControlName="entrega">
+        <mat-datepicker-toggle matSuffix [for]="entrega"></mat-datepicker-toggle>
+        <mat-datepicker #entrega></mat-datepicker>
+      </mat-form-field>     
     </div>
 
 

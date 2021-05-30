@@ -5,6 +5,7 @@ import { FormGroup } from "@angular/forms";
 import { CommonFunction } from "app/inventario/shared/common";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Firmante } from "app/modelos/inversiones/firmante";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
@@ -12,10 +13,29 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 
 export class InversionCreator {
+
+  constructor(private common: CommonFunction){}
   // tslint:disable-next-line: typedef
 
 
-  public createPDF(form: FormGroup, common: CommonFunction) {
+  public createPDF(periodo_pago: string,
+    cuenta: string,
+    tipo_Inversion: string,
+    vencimiento,
+    plazo: string,
+    fecha_colocacion: Date,
+    tasa_interes:  string,
+    monto: number,
+    fecha_acta: Date,
+    acta_japp: string,
+    cheque: string,
+    grado: string,
+    puesto: string,
+    apellido: string,
+    nombre: string,
+    fecha: Date,
+    banco: string,
+    firmante: Firmante) {
 
     let docDefinition = {
       content: [
@@ -26,31 +46,31 @@ export class InversionCreator {
           fontSize: 10,
         },
         {
-          text: `Guatemala, \r\n ${form.value.fecha}`,
+          text: `Guatemala, \r\n ${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
           alignment: "left",
           margin: [400, 35, 25, 20],
           fontSize: 10,
         },
         {
-          text: `${form.value.grado}`,
+          text: `${grado}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}`,
+          text: `${nombre.toUpperCase()} ${apellido.toUpperCase()}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.puesto}`,
+          text: `${puesto}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.banco.toUpperCase()}`,
+          text: `${banco.toUpperCase()}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
@@ -62,17 +82,17 @@ export class InversionCreator {
           fontSize: 10,
         },
         {
-          text: `${form.value.grado} ${form.value.apellido}:`,
+          text: `${grado} ${apellido}:`,
           alignment: "left",
           margin: [10, 20, 10, 0],
           fontSize: 10,
         },
         {
           text: `\u200B\t\tAtentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
-            `${form.value.fecha_acta}, Acta No. ${form.value.acta_japp}, acordó invertir en ese banco el valor de ` +
-            `Q${form.value.monto.toLocaleString('en', common.options)}, a partir del día ${form.value.fecha_colocacion}, en ${form.value.tipo_Inversion} ` +
-            `a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento}.`,
+            `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó invertir en ese banco el valor de ` +
+            `Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, a partir del día ${fecha_colocacion.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, en ${tipo_Inversion} ` +
+            `a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${tasa_interes}%, ` +
+            `con pago ${periodo_pago.toLowerCase()} y plazo de ${plazo} días que vencerá el día ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
@@ -86,8 +106,8 @@ export class InversionCreator {
           fontSize: 10,
         },
         {
-          text: `\u200B\t\tPara el efecto, se envía el cheque No. ${form.value.cheque} de la cuenta ${form.value.cuenta} por un valor de ` +
-            `Q${form.value.monto.toLocaleString('en', common.options)}.`,
+          text: `\u200B\t\tPara el efecto, se envía el cheque No. ${cheque} de la cuenta ${cuenta} por un valor de ` +
+            `Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
@@ -105,16 +125,11 @@ export class InversionCreator {
           fontSize: 10,
         },
         {
-          text: `Licda. Ana María Recinos Rivera de Córdova`,
-          alignment: "left",
-          margin: [300, 40, 10, 2],
-          fontSize: 10,
-        },
-        {
-          text: `Administradora Ejecutiva`,
-          alignment: "left",
-          margin: [350, 2, 10, 20],
-          fontSize: 10,
+          text: `${firmante.nombre}\r\n${firmante.despliegue}`,
+          style: 'subheader',
+          alignment: "center",
+          fontSize: 10,          
+          margin: [300, 10, 10, 20],
         },
         {
           text: `Vo. Bo. _______________________________________`,
@@ -134,7 +149,24 @@ export class InversionCreator {
     pdfMake.createPdf(docDefinition).open();
   }
 
-  createWord(form: FormGroup, common: CommonFunction) {
+  createWord(periodo_pago: string,
+    cuenta: string,
+    tipo_Inversion: string,
+    vencimiento,
+    plazo: string,
+    fecha_colocacion: Date,
+    tasa_interes:  string,
+    monto: number,
+    fecha_acta: Date,
+    acta_japp: string,
+    cheque: string,
+    grado: string,
+    puesto: string,
+    apellido: string,
+    nombre: string,
+    fecha: Date,
+    banco: string,
+    firmante: Firmante) {
     let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
       "xmlns:w='urn:schemas-microsoft-com:office:word' " +
       "xmlns='http://www.w3.org/TR/REC-html40'>" +
@@ -143,31 +175,31 @@ export class InversionCreator {
     let content = `<p style="text-align: right;">REF: PP-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">Guatemala,&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
-    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${form.value.fecha}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.grado}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.puesto}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.banco.toUpperCase()}</p>
+    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${grado}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${nombre.toUpperCase()} ${apellido.toUpperCase()}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${puesto}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${banco.toUpperCase()}</p>
     <p style="margin: 0cm; line-height: 14.2pt;">Ciudad</p>
     <p style="text-align: left;">&nbsp;</p>
-    <p style="text-align: left;">${form.value.grado} ${form.value.apellido}:</p>
+    <p style="text-align: left;">${grado} ${apellido}:</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora `+
-    `del Plan de Prestaciones, en sesi&oacute;n del ${form.value.fecha_acta}, Acta No. Acta-JAPP, acord&oacute; invertir en ese `+
-    `banco el valor de Q${form.value.monto.toLocaleString('en', common.options)}, a partir del d&iacute;a ${form.value.fecha_colocacion}`+
-    `, en ${form.value.tipo_Inversion} a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fja de inter&eacute;s anual del `+
-    `${form.value.tasa_interes}%, con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} d&iacute;as `+
-    `que vencer&aacute; el d&iacute;a ${form.value.vencimiento}.</p>
+    `del Plan de Prestaciones, en sesi&oacute;n del ${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acord&oacute; invertir en ese `+
+    `banco el valor de Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, a partir del d&iacute;a ${fecha_colocacion.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`+
+    `, en ${tipo_Inversion} a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fja de inter&eacute;s anual del `+
+    `${tasa_interes}%, con pago ${periodo_pago.toLowerCase()} y plazo de ${plazo} d&iacute;as `+
+    `que vencer&aacute; el d&iacute;a ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certifcado incluya lo relativo a la `+
     `desinversi&oacute;n anticipada, forma de pago de intereses y la identifcaci&oacute;n de las personas que suscriben con `+
     `sus respectivos cargos y sellos del banco.</p>
-    <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Para el efecto, se env&iacute;a el cheque No. ${form.value.cheque} `+
-    `de la cuenta ${form.value.cuenta} por un valor de Q${form.value.monto.toLocaleString('en', common.options)}.</p>
+    <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Para el efecto, se env&iacute;a el cheque No. ${cheque} `+
+    `de la cuenta ${cuenta} por un valor de Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Agradeciendo su atenci&oacute;n, le saludamos deferentemente.</p>
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>
     <p style="text-align: center;">&nbsp;</p>
-    <p style="text-align: right;">Licda. Ana Mar&iacute;a Recinos Rivera de C&oacute;rdova</p>
-    <p style="text-align: right;">Administradora Ejecutiva&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+    <p align=center style='margin-top:0cm;margin-right:-4.65pt;margin-bottom:0cm;
+    margin-left:191.4pt;text-align:center'>${firmante.nombre}<br>${firmante.despliegue}</p>    
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: left;">Vo. Bo. _____________________________</p>
     <p style="text-align: left;">/amrdec</p>`

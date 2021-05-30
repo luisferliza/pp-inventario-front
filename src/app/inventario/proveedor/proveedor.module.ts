@@ -10,6 +10,8 @@ import { ProveedorComponent } from './proveedor.component';
 import { ProveedorRoutingModule } from './proveedor.routing';
 import { ProveedorEdicionComponent } from './proveedor-edicion/proveedor-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [ProveedorComponent, ProveedorEdicionComponent],
@@ -33,6 +35,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    DeleteDialogModule,
     
 
     // Core
@@ -41,7 +44,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     BreadcrumbsModule,
     ProveedorRoutingModule
   ], entryComponents:[
-    ProveedorEdicionComponent
+    ProveedorEdicionComponent, DeleteDialogComponent
   ],exports:[
     ProveedorEdicionComponent
   ]

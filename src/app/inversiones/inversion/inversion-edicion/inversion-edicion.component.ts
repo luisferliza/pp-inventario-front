@@ -13,6 +13,7 @@ import { EstadoInversionService } from 'app/servicios/inversiones/estadoinversio
 import { InversionService } from 'app/servicios/inversiones/inversion.service';
 import { TipoCuentaService } from 'app/servicios/inversiones/tipo-cuenta.service';
 import { TipoInversionService } from 'app/servicios/inversiones/tipo-inversion.service';
+import { CommonFunction } from 'app/inventario/shared/common';
 
 @Component({
   selector: 'elastic-inversion-edicion',
@@ -53,7 +54,8 @@ export class InversionEdicionComponent implements OnInit {
     private inversionService: InversionService,
     private estadoService: EstadoInversionService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private common: CommonFunction) { }
 
 
   ngOnInit() {
@@ -71,10 +73,10 @@ export class InversionEdicionComponent implements OnInit {
     }
 
     this.form = this.fb.group({
-      referencia: this.defaults.referencia || '',
+      referencia_pp: this.defaults.referencia_pp || '',
       monto: this.defaults.monto || 0.0,
-      fecha_colocacion: this.defaults.fecha_colocacion ? this.defaults.fecha_colocacion : null,
-      no_inversion: this.defaults.no_inversion || '',
+      fecha_colocacion: this.defaults.fecha_colocacion ? this.common.parseDate(this.defaults.fecha_colocacion) : null,
+      certificado: this.defaults.certificado || '',
       acta_japp: this.defaults.acta_japp || '',
       periodo_pago: this.defaults.periodo_pago || 'Mensual',
       observacion: this.defaults.observacion || '',
@@ -82,11 +84,11 @@ export class InversionEdicionComponent implements OnInit {
       plazo: this.defaults.plazo || 365,
       cuenta: this.defaults.cuenta || '',
       calculo_especial: this.defaults.calculo_especial || false,
-      fecha_acta: this.defaults.fecha_acta ? this.defaults.fecha_acta : null,
+      reinversion: this.defaults.reinversion || false,
+      fecha_acta: this.defaults.fecha_acta ? this.common.parseDate(this.defaults.fecha_acta) : null,
       dias_anuales: this.defaults.dias_anuales || 365,
-      vencimiento: this.defaults.vencimiento ? this.defaults.vencimiento : null,
-      fecha_pago: this.defaults.fecha_pago ? this.defaults.fecha_pago : null,
-
+      vencimiento: this.defaults.vencimiento ? this.common.parseDate(this.defaults.vencimiento) : null,
+      fecha_pago: this.defaults.fecha_pago ? this.common.parseDate(this.defaults.fecha_pago) : null,
 
       tipo_Inversion_id: this.defaults.tipo_Inversion ? this.defaults.tipo_Inversion.id_tipo_inversion : null,
       estado_inversion: this.defaults.estado ? this.defaults.estado.id_estado : null,
@@ -141,7 +143,12 @@ export class InversionEdicionComponent implements OnInit {
     inversion.estado = new EstadoInversion();
     inversion.estado.id_estado = this.form.value.estado_inversion;
 
-    console.log(inversion);
+    //Conversion de fechas
+    inversion.fecha_colocacion = this.form.value.fecha_colocacion.toISOString() // Convierte la fecha
+    inversion.fecha_acta = this.form.value.fecha_acta.toISOString() // Convierte la fecha
+    inversion.vencimiento = this.form.value.vencimiento.toISOString() // Convierte la fecha
+    inversion.fecha_pago = this.form.value.fecha_pago.toISOString() // Convierte la fecha
+    
 
     this.inversionService.registrar(inversion, this.pidu).subscribe(() => {
       this.dialogRef.close(inversion);
@@ -177,7 +184,11 @@ export class InversionEdicionComponent implements OnInit {
     inversion.estado = new EstadoInversion();
     inversion.estado.id_estado = this.form.value.estado_inversion;
 
-    console.log(inversion);
+    //Conversion de fechas
+    inversion.fecha_colocacion = this.form.value.fecha_colocacion.toISOString() // Convierte la fecha
+    inversion.fecha_acta = this.form.value.fecha_acta.toISOString() // Convierte la fecha
+    inversion.vencimiento = this.form.value.vencimiento.toISOString() // Convierte la fecha
+    inversion.fecha_pago = this.form.value.fecha_pago.toISOString() // Convierte la fecha    
 
     this.inversionService.modificar(inversion, this.pidu).subscribe(() => {
       this.dialogRef.close(inversion);
@@ -211,7 +222,7 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   updateCuentas() {
-    this.cuentaService.listar(this.pidu).subscribe(data => {
+    this.cuentaService.listarActivas(this.pidu).subscribe(data => {
       this.cuentas = data;
     })
   }
@@ -319,50 +330,33 @@ export class InversionEdicionComponent implements OnInit {
     this.ChangePayDate();
   }
 
-  changeEndDate() {
-    let yourDate = this.form.value.fecha_colocacion
-    let period = this.form.value.plazo
-    let futureDate = new Date(yourDate);
-    futureDate.setDate(futureDate.getDate() + period - 1)
-    this.form.controls['vencimiento'].setValue(futureDate.toISOString().split('T')[0]);
+  changeEndDate() {    
+    let futureDate: Date = this.form.value.fecha_colocacion;
+    futureDate.setDate(futureDate.getDate() + this.form.value.plazo - 1)
+    this.form.controls['vencimiento'].setValue(futureDate);
   }
 
   ChangePayDate() {
     let periodo = this.form.value.periodo_pago;
-    if (periodo === "Mensual") {
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);
+    let fecha_pago: Date = this.form.value.fecha_colocacion;
+    console.log(fecha_pago)
+    if (periodo === "Mensual") {      
       fecha_pago.setMonth(fecha_pago.getMonth() + 1);
       fecha_pago.setDate(0);
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if (periodo === "Anual") {
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);
-      fecha_pago.setFullYear(fecha_pago.getFullYear() + 1, fecha_pago.getMonth(), fecha_pago.getDate());
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if (periodo === "Semestral") {
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);
+    } else if (periodo === "Anual") {      
+      fecha_pago.setFullYear(fecha_pago.getFullYear() + 1, fecha_pago.getMonth(), fecha_pago.getDate());      
+    } else if (periodo === "Semestral") {      
       fecha_pago.setMonth(fecha_pago.getMonth() + 6, fecha_pago.getDate());
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if (periodo === "Trimestral") {
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);
-      fecha_pago.setMonth(fecha_pago.getMonth() + 3, fecha_pago.getDate());
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if (periodo === "Cuatrimestral") {
-      let fecha_pago = new Date(this.form.value.fecha_colocacion);
+    } else if (periodo === "Trimestral") {      
+      fecha_pago.setMonth(fecha_pago.getMonth() + 3, fecha_pago.getDate());      
+    } else if (periodo === "Cuatrimestral") {      
       fecha_pago.setMonth(fecha_pago.getMonth() + 4, fecha_pago.getDate());
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
-
-    } else if (periodo === "A término") {
-      let fecha_pago = new Date(this.form.value.vencimiento);
-      fecha_pago.setDate(fecha_pago.getDate() + 1)
-      this.form.controls['fecha_pago'].setValue(fecha_pago.toISOString().split('T')[0]);
+    } else if (periodo === "A término") {      
+      fecha_pago.setDate(fecha_pago.getDate() + 1)      
     } else {
       alert('PERIODO DE PAGO DESCONOCIDO')
     }
-
+    this.form.controls['fecha_pago'].setValue(fecha_pago);
   }
 
 

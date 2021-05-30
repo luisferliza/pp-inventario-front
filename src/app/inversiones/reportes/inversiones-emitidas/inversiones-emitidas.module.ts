@@ -12,7 +12,7 @@ import { InversionesEmitidasRoutingModule } from './inversiones-emitidas.routing
 @NgModule({
   declarations: [InversionesEmitidasComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
   ],
   imports: [
     CommonModule,

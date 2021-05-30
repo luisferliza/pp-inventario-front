@@ -15,6 +15,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import { CommonFunction } from 'app/inventario/shared/common';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -143,10 +144,14 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
   }
 
   delete(traslado: Traslado) {
-    let idTraslado = traslado.id_traslado;
-    this.trasladoService.eliminar(idTraslado, this.pidu).subscribe(() => {
-      this.updateData();
-      this.trasladoService.message.next('Traslado eliminado correctamente.');
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idTraslado = traslado.id_traslado;
+        this.trasladoService.eliminar(idTraslado, this.pidu).subscribe(() => {
+          this.updateData();
+          this.trasladoService.message.next('Traslado eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -164,7 +169,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
             headerRows: 0,
             widths: ['13%', '18%', '33%', '18%', '18%'],
             body: [
-              ...this.traslados.map(p => ([this.common.getDate(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombre, '']))
+              ...this.traslados.map(p => ([this.common.getLocalDateString(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombre, '']))
 
             ]
           },
@@ -196,7 +201,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
     let data = []
     this.traslados.forEach(p => {
       data.push({
-        fecha_inicio: this.common.getDate(p.fecha_inicio),
+        fecha_inicio: this.common.getLocalDateString(p.fecha_inicio),
         seccion: p.seccion.nombre,
         usuario: p.usuario.nombre
       })

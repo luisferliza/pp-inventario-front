@@ -12,7 +12,7 @@ import { InteresMensualRoutingModule } from './interes-mensual.routing';
 @NgModule({
   declarations: [InteresMensualComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
   ],
   imports: [
     CommonModule,

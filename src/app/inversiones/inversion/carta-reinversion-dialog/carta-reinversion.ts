@@ -5,6 +5,7 @@ import { FormGroup } from "@angular/forms";
 import { CommonFunction } from "app/inventario/shared/common";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Firmante } from "app/modelos/inversiones/firmante";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
@@ -13,9 +14,30 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export class ReInversionCreator {
     // tslint:disable-next-line: typedef
+    constructor(private common: CommonFunction){}
 
 
-    public createPDF(form: FormGroup, common: CommonFunction) {
+    public createPDF(
+        periodo_pago: string,
+        certificado: string,
+        cuenta: string,
+        plazo: string,
+        tasa_interes: string,
+        monto: number,
+        fecha_acta: Date,
+        acta_japp: string,        
+        grado: string,
+        puesto: string,
+        apellido: string,
+        nombre: string,
+        fecha: Date,
+        banco: string,
+        dias_interes: string,
+        interes: number,
+        fecha_reinversion: Date,
+        vencimiento: Date,
+        vencimiento_reinversion: Date,
+        firmante: Firmante) {
 
         let docDefinition = {
             content: [
@@ -26,31 +48,31 @@ export class ReInversionCreator {
                     fontSize: 10,
                 },
                 {
-                    text: `Guatemala, \r\n ${form.value.fecha_txt}`,
+                    text: `Guatemala, \r\n ${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
                     alignment: "left",
                     margin: [400, 35, 25, 20],
                     fontSize: 10,
                 },
                 {
-                    text: `${form.value.grado}`,
+                    text: `${grado}`,
                     alignment: "left",
                     margin: [10, 2, 10, 0],
                     fontSize: 10,
                 },
                 {
-                    text: `${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}`,
+                    text: `${nombre.toUpperCase()} ${apellido.toUpperCase()}`,
                     alignment: "left",
                     margin: [10, 2, 10, 0],
                     fontSize: 10,
                 },
                 {
-                    text: `${form.value.puesto}`,
+                    text: `${puesto}`,
                     alignment: "left",
                     margin: [10, 2, 10, 0],
                     fontSize: 10,
                 },
                 {
-                    text: `${form.value.banco.toUpperCase()}`,
+                    text: `${banco.toUpperCase()}`,
                     alignment: "left",
                     margin: [10, 2, 10, 0],
                     fontSize: 10,
@@ -62,31 +84,30 @@ export class ReInversionCreator {
                     fontSize: 10,
                 },
                 {
-                    text: `${form.value.grado} ${form.value.apellido}:`,
+                    text: `${grado} ${apellido}:`,
                     alignment: "left",
                     margin: [10, 20, 10, 0],
                     fontSize: 10,
                 },
                 {
                     text: `\u200B\t\tAtentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
-                        `${form.value.fecha_acta_txt}, Acta No. ${form.value.acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
-                        `No. ${form.value.referencia}, Cuenta ${form.value.cuenta} por Q${form.value.monto.toLocaleString('en', common.options)}, ` +
-                        `mas intereses de ${form.value.dias_interes} días por Q${form.value.interes.toLocaleString('en', common.options)} ` +
-                        `al ${form.value.vencimiento_txt}, fecha de vencimiento del certificado.`,
+                        `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
+                        `No. ${certificado}, Cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, ` +
+                        `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+                        `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha de vencimiento del certificado.`,
                     alignment: "justify",
                     margin: [10, 20, 10, 0],
                     fontSize: 10,
                 },
                 {
                     text: `\u200B\t\tPor lo anterior, solicitamos se sirvan efectuar la reinversión con fecha ` +
-                        `${form.value.fecha_reinversion_txt} por valor de Q${(form.value.monto + form.value.interes).toLocaleString('en', common.options)} ` +
-                        `a nombre de PLAN DE PRESTACIONES, USAC,a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-                        `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}.`,
+                        `${fecha_reinversion.toLocaleDateString(this.common.localDate, this.common.dateOptions)} por valor de Q${(monto + interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+                        `a nombre de PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${tasa_interes}%, ` +
+                        `con pago ${periodo_pago.toLowerCase()} y plazo de ${plazo} días que vencerá el día ${vencimiento_reinversion.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.`,
                     alignment: "justify",
                     margin: [10, 20, 10, 0],
                     fontSize: 10,
                 },
-
                 {
                     text: `\u200B\t\tAsimismo, se requiere que el certificado incluya lo relativo a la desinversión anticipada, forma ` +
                         `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
@@ -108,16 +129,11 @@ export class ReInversionCreator {
                     fontSize: 10,
                 },
                 {
-                    text: `Licda. Ana María Recinos Rivera de Córdova`,
-                    alignment: "left",
-                    margin: [300, 40, 10, 2],
-                    fontSize: 10,
-                },
-                {
-                    text: `Administradora Ejecutiva`,
-                    alignment: "left",
-                    margin: [350, 2, 10, 20],
-                    fontSize: 10,
+                    text: `${firmante.nombre}\r\n${firmante.despliegue}`,
+                    style: 'subheader',
+                    alignment: "center",
+                    fontSize: 10,          
+                    margin: [300, 10, 10, 20],
                 },
                 {
                     text: `Vo. Bo. _______________________________________`,
@@ -137,7 +153,27 @@ export class ReInversionCreator {
         pdfMake.createPdf(docDefinition).open();
     }
 
-    createWord(form: FormGroup, common: CommonFunction) {
+    createWord(
+        periodo_pago: string,
+        certificado: string,
+        cuenta: string,
+        plazo: string,
+        tasa_interes: string,
+        monto: number,
+        fecha_acta: Date,
+        acta_japp: string,        
+        grado: string,
+        puesto: string,
+        apellido: string,
+        nombre: string,
+        fecha: Date,
+        banco: string,
+        dias_interes: string,
+        interes: number,
+        fecha_reinversion: Date,
+        vencimiento: Date,
+        vencimiento_reinversion: Date,
+        firmante: Firmante) {
         let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
             "xmlns:w='urn:schemas-microsoft-com:office:word' " +
             "xmlns='http://www.w3.org/TR/REC-html40'>" +
@@ -146,22 +182,22 @@ export class ReInversionCreator {
         let content = `<p style="text-align: right;">REF: PP-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">Guatemala,&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
-    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${form.value.fecha}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.grado}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.puesto}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.banco.toUpperCase()}</p>
+    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${grado}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${nombre.toUpperCase()} ${apellido.toUpperCase()}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${puesto}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${banco.toUpperCase()}</p>
     <p style="margin: 0cm; line-height: 14.2pt;">Ciudad</p>    
-    <p style="text-align: left;">${form.value.grado} ${form.value.apellido}:</p>
+    <p style="text-align: left;">${grado} ${apellido}:</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
-            `${form.value.fecha_acta_txt}, Acta No. ${form.value.acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
-            `No. ${form.value.referencia}, Cuenta ${form.value.cuenta} por Q${form.value.monto.toLocaleString('en', common.options)}, ` +
-            `mas intereses de ${form.value.dias_interes} días por Q${form.value.interes.toLocaleString('en', common.options)} ` +
-            `al ${form.value.vencimiento_txt}, fecha de vencimiento del certificado.</p>
+            `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
+            `No. ${certificado}, Cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, ` +
+            `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+            `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha de vencimiento del certificado.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Por lo anterior, solicitamos se sirvan efectuar la reinversión con fecha ` +
-            `${form.value.fecha_reinversion_txt} por valor de Q${(form.value.monto + form.value.interes).toLocaleString('en', common.options)} ` +
-            `a nombre de PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${form.value.tasa_interes}%, ` +
-            `con pago ${form.value.periodo_pago.toLowerCase()} y plazo de ${form.value.plazo} días que vencerá el día ${form.value.vencimiento_reinversion_txt}.</p>
+            `${fecha_reinversion.toLocaleDateString(this.common.localDate, this.common.dateOptions)} por valor de Q${(monto + interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+            `a nombre de PLAN DE PRESTACIONES, USAC, a una tasa fija de interés anual del ${tasa_interes}%, ` +
+            `con pago ${periodo_pago.toLowerCase()} y plazo de ${plazo} días que vencerá el día ${vencimiento_reinversion.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certificado incluya lo relativo a la desinversión anticipada, forma ` +
             `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
             `sellos del banco.</p>
@@ -169,8 +205,8 @@ export class ReInversionCreator {
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>
     <p style="text-align: center;">&nbsp;</p>
-    <p style="text-align: right;">Licda. Ana Mar&iacute;a Recinos Rivera de C&oacute;rdova</p>
-    <p style="text-align: right;">Administradora Ejecutiva&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
+    <p align=center style='margin-top:0cm;margin-right:-4.65pt;margin-bottom:0cm;
+    margin-left:191.4pt;text-align:center'>${firmante.nombre}<br>${firmante.despliegue}</p>    
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: left;">Vo. Bo. _____________________________</p>
     <p style="text-align: left;">/amrdec</p>`
@@ -180,7 +216,7 @@ export class ReInversionCreator {
         let fileDownload = document.createElement("a");
         document.body.appendChild(fileDownload);
         fileDownload.href = source;
-        fileDownload.download = 'inversion.doc';
+        fileDownload.download = 'carta-reinversion.doc';
         fileDownload.click();
         document.body.removeChild(fileDownload);
     }

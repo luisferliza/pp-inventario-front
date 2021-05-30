@@ -18,6 +18,10 @@ export class CuentaService {
   listar(pidu: String) {
     return this.http.get<Cuenta[]>(`${this.url}/cuentas?pidu=${pidu}`);
   }
+  
+  listarActivas(pidu: String) {
+    return this.http.get<Cuenta[]>(`${this.url}/cuentas/activas?pidu=${pidu}`);
+  }
 
   listarPorId(idCuenta: number, pidu: String) {
     return this.http.get<Cuenta>(`${this.url}/cuentas/${idCuenta}?pidu=${pidu}`);

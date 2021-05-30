@@ -5,6 +5,7 @@ import { FormGroup } from "@angular/forms";
 import { CommonFunction } from "app/inventario/shared/common";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Firmante } from "app/modelos/inversiones/firmante";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Injectable({
@@ -13,9 +14,25 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export class DesinversionAnticipadaCreator {
   // tslint:disable-next-line: typedef
+  constructor(private common: CommonFunction){}
 
 
-  public createPDF(form: FormGroup, common: CommonFunction) {
+  public createPDF(fecha: Date,
+    grado: string,
+    nombre: string,
+    apellido: string,
+    puesto: string,
+    banco: string,
+    fecha_acta: Date,
+    acta_japp: string,
+    certificado: string,
+    cuenta: string,
+    monto: number,
+    dias_interes: number,
+    interes: number,
+    vencimiento: Date,
+    entrega: Date,
+    firmante: Firmante) {
 
     let docDefinition = {
       content: [
@@ -26,31 +43,31 @@ export class DesinversionAnticipadaCreator {
           fontSize: 10,
         },
         {
-          text: `Guatemala, \r\n ${form.value.fecha_txt}`,
+          text: `Guatemala, \r\n ${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
           alignment: "left",
           margin: [400, 35, 25, 20],
           fontSize: 10,
         },
         {
-          text: `${form.value.grado}`,
+          text: `${grado}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}`,
+          text: `${nombre.toUpperCase()} ${apellido.toUpperCase()}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.puesto}`,
+          text: `${puesto}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
         },
         {
-          text: `${form.value.banco.toUpperCase()}`,
+          text: `${banco.toUpperCase()}`,
           alignment: "left",
           margin: [10, 2, 10, 0],
           fontSize: 10,
@@ -62,25 +79,25 @@ export class DesinversionAnticipadaCreator {
           fontSize: 10,
         },
         {
-          text: `${form.value.grado} ${form.value.apellido}:`,
+          text: `${grado} ${apellido}:`,
           alignment: "left",
           margin: [10, 20, 10, 0],
           fontSize: 10,
         },
         {
           text: `\u200B\t\tAtentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
-            `${form.value.fecha_acta_txt}, Acta No. ${form.value.acta_japp}, acordó desinvertir en ese banco el valor del ` +
-            `certificado ${form.value.referencia}, cuenta ${form.value.cuenta} por Q${form.value.monto.toLocaleString('en', common.options)}, `+
-            `mas intereses de ${form.value.dias_interes} días por Q${form.value.interes.toLocaleString('en', common.options)} `+
-            `al ${form.value.vencimiento_txt}, fecha en que se realizará la desinversión.`,
+            `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó desinvertir en ese banco el valor del ` +
+            `certificado ${certificado}, cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, `+
+            `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
+            `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha en que se realizará la desinversión.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
         },
         {
           text: `\u200B\t\tPor lo anterior solicitamos sirvan emitir cheque a nombre de PLAN DE PRESTACIONES USAC, `+
-            `por un valor de Q${(form.value.monto+form.value.interes).toLocaleString('en', common.options)} para `+
-            `recogerlos el día ${form.value.entrega_txt}.`,
+            `por un valor de Q${(monto+interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} para `+
+            `recogerlos el día ${entrega.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
           fontSize: 10,
@@ -98,16 +115,11 @@ export class DesinversionAnticipadaCreator {
           fontSize: 10,
         },
         {
-          text: form.value.firmante,
-          alignment: "center", 
-          margin: [10, 30, 10, 2],
-          fontSize: 10,
-        },
-        {
-          text: form.value.puestoFirmante,
+          text: `${firmante.nombre}\r\n${firmante.despliegue}`,
+          style: 'subheader',
           alignment: "center",
-          margin: [2, 2, 10, 40],
-          fontSize: 10,
+          fontSize: 10,          
+          margin: [300, 10, 10, 20],
         },
         {
           text: `Vo. Bo. _______________________________________`,
@@ -127,7 +139,22 @@ export class DesinversionAnticipadaCreator {
     pdfMake.createPdf(docDefinition).open();
   }
 
-  createWord(form: FormGroup, common: CommonFunction) {
+  createWord(fecha: Date,
+    grado: string,
+    nombre: string,
+    apellido: string,
+    puesto: string,
+    banco: string,
+    fecha_acta: Date,
+    acta_japp: string,
+    certificado: string,
+    cuenta: string,
+    monto: number,
+    dias_interes: number,
+    interes: number,
+    vencimiento: Date,
+    entrega: Date,
+    firmante: Firmante) {
     let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
       "xmlns:w='urn:schemas-microsoft-com:office:word' " +
       "xmlns='http://www.w3.org/TR/REC-html40'>" +
@@ -136,28 +163,28 @@ export class DesinversionAnticipadaCreator {
     let content = `<p style="text-align: right;">REF: PP-&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">Guatemala,&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
-    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${form.value.fecha_txt}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.grado}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.nombre.toUpperCase()} ${form.value.apellido.toUpperCase()}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.puesto}</p>
-    <p style="margin: 0cm; line-height: 14.2pt;">${form.value.banco.toUpperCase()}</p>
+    <p style="text-align: right; margin: 0cm; line-height: 14.2pt;">${fecha.toLocaleDateString(this.common.localDate, this.common.dateOptions)}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${grado}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${nombre.toUpperCase()} ${apellido.toUpperCase()}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${puesto}</p>
+    <p style="margin: 0cm; line-height: 14.2pt;">${banco.toUpperCase()}</p>
     <p style="margin: 0cm; line-height: 14.2pt;">Ciudad</p>
     <p style="text-align: left;">&nbsp;</p>
-    <p style="text-align: left;">${form.value.grado} ${form.value.apellido}:</p>
+    <p style="text-align: left;">${grado} ${apellido}:</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
-    `${form.value.fecha_acta_txt}, Acta No. ${form.value.acta_japp}, acordó desinvertir en ese banco el valor del ` +
-    `certificado ${form.value.referencia}, cuenta ${form.value.cuenta} por Q${form.value.monto.toLocaleString('en', common.options)}, `+
-    `mas intereses de ${form.value.dias_interes} días por Q${form.value.interes.toLocaleString('en', common.options)} `+
-    `al ${form.value.vencimiento_txt}, fecha en que se realizará la desinversión.</p>
+    `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó desinvertir en ese banco el valor del ` +
+    `certificado ${certificado}, cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, `+
+    `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
+    `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha en que se realizará la desinversión.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Por lo anterior solicitamos sirvan emitir cheque a nombre de PLAN DE PRESTACIONES USAC, `+
-    `por un valor de Q${(form.value.monto+form.value.interes).toLocaleString('en', common.options)} para `+
-    `recogerlos el día ${form.value.entrega_txt}.</p>    
+    `por un valor de Q${(monto+interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} para `+
+    `recogerlos el día ${entrega.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.</p>    
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Agradeciendo su atenci&oacute;n, le saludamos deferentemente.</p>
     <p style="text-align: left;">&nbsp;</p>
     <p style="text-align: center;">"ID Y ENSE&Ntilde;AD A TODOS"</p>
     <p style="text-align: center;">&nbsp;</p>
-    <p style="margin: 0cm; line-height: 14.2pt; text-align: center;">${form.value.firmante}</p>
-    <p style="margin: 0cm; line-height: 14.2pt; text-align: center;">${form.value.puestoFirmante}</p>
+    <p align=center style='margin-top:0cm;margin-right:-4.65pt;margin-bottom:0cm;
+    margin-left:191.4pt;text-align:center'>${firmante.nombre}<br>${firmante.despliegue}</p>    
     <p style="text-align: right;">&nbsp;</p>
     <p style="text-align: left;">Vo. Bo. _____________________________</p>
     <p style="text-align: left;">/amrdec</p>`
@@ -167,7 +194,7 @@ export class DesinversionAnticipadaCreator {
     let fileDownload = document.createElement("a");
     document.body.appendChild(fileDownload);
     fileDownload.href = source;
-    fileDownload.download = 'inversion.doc';
+    fileDownload.download = 'carta-desinversion.doc';
     fileDownload.click();
     document.body.removeChild(fileDownload);
   }

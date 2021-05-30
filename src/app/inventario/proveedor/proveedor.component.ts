@@ -14,6 +14,7 @@ import { ProveedorService } from 'app/servicios/inventario/proveedor.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { ProveedorEdicionComponent } from './proveedor-edicion/proveedor-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-proveedor',
@@ -30,14 +31,14 @@ export class ProveedorComponent implements List<Proveedor>, OnInit, OnDestroy {
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Proveedor', property: 'id_proveedor', visible: false, isModelProperty: true  },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
-    { name: 'Dirección', property: 'direccion', visible: true, isModelProperty: true },  
-    { name: 'Nit', property: 'nit', visible: true, isModelProperty: true },  
-    { name: 'Telefono', property: 'telefono', visible: true, isModelProperty: true },  
-    { name: 'Correo', property: 'email', visible: true, isModelProperty: true },  
-    { name: 'Asesor de ventas', property: 'asesor', visible: true, isModelProperty: true },  
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'ID_Proveedor', property: 'id_proveedor', visible: false, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
+    { name: 'Dirección', property: 'direccion', visible: true, isModelProperty: true },
+    { name: 'Nit', property: 'nit', visible: true, isModelProperty: true },
+    { name: 'Telefono', property: 'telefono', visible: true, isModelProperty: true },
+    { name: 'Correo', property: 'email', visible: true, isModelProperty: true },
+    { name: 'Asesor de ventas', property: 'asesor', visible: true, isModelProperty: true },
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
@@ -66,7 +67,7 @@ export class ProveedorComponent implements List<Proveedor>, OnInit, OnDestroy {
   }
 
   listar() {
-    this.proveedorService.listar(this.pidu).subscribe(data => {      
+    this.proveedorService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -98,7 +99,7 @@ export class ProveedorComponent implements List<Proveedor>, OnInit, OnDestroy {
         this.listar();
         this.proveedorService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(proveedor) {
@@ -113,10 +114,14 @@ export class ProveedorComponent implements List<Proveedor>, OnInit, OnDestroy {
   }
 
   delete(proveedor: Proveedor) {
-    let idEstado = proveedor.id_proveedor;
-    this.proveedorService.eliminar(idEstado, this.pidu).subscribe(() => {
-      this.listar();
-      this.proveedorService.message.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idEstado = proveedor.id_proveedor;
+        this.proveedorService.eliminar(idEstado, this.pidu).subscribe(() => {
+          this.listar();
+          this.proveedorService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -129,6 +134,6 @@ export class ProveedorComponent implements List<Proveedor>, OnInit, OnDestroy {
 
   ngOnDestroy(): void {
   }
-  
+
 
 }

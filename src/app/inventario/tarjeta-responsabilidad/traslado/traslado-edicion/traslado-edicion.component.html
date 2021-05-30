@@ -6,15 +6,17 @@
     
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de asignación</mat-placeholder>
-        <input required type="date" formControlName="fecha_inicio" matInput>
+      <mat-form-field fxFlex>        
+        <input matInput [matDatepicker]="fecha_inicio" placeholder="Fecha de asignación" formControlName="fecha_inicio">
+        <mat-datepicker-toggle matSuffix [for]="fecha_inicio"></mat-datepicker-toggle>              
       </mat-form-field>
-      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px"></div>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de desasignación</mat-placeholder>
-        <input type="date" formControlName="fecha_fin" matInput>
+      <mat-datepicker #fecha_inicio></mat-datepicker>
+
+      <mat-form-field fxFlex>        
+        <input matInput [matDatepicker]="fecha_fin" placeholder="Ingrese la fecha deseada" formControlName="fecha_fin">
+        <mat-datepicker-toggle matSuffix [for]="fecha_fin"></mat-datepicker-toggle>              
       </mat-form-field>
+      <mat-datepicker #fecha_fin></mat-datepicker>
     </div>
 
 

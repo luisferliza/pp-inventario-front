@@ -26,12 +26,12 @@
         <!-- Date and Joined Columns-->
         <ng-container matColumnDef="monto">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Monto </mat-header-cell>
-          <mat-cell *matCellDef="let row"> Q{{ row.monto.toLocaleString('en', this.common.options) }} </mat-cell>
+          <mat-cell *matCellDef="let row"> Q{{ row.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="fecha_colocacion">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de colocación </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_colocacion)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.fecha_colocacion)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="calculo_especial">
@@ -41,13 +41,13 @@
 
         <ng-container matColumnDef="fecha_acta">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de acta </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_acta)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.fecha_acta)}} </mat-cell>
         </ng-container>
         
 
         <ng-container matColumnDef="vencimiento">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de vencimiento </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.vencimiento)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.vencimiento)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="tipo_Inversion">

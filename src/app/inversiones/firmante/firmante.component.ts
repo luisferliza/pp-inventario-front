@@ -86,7 +86,8 @@ export class FirmanteComponent implements OnInit {
 
   modificar(estado) {    
     this.dialog.open(FirmanteEdicionComponent, {
-      data: estado
+      data: estado,
+      width: '600px' 
     }).afterClosed().subscribe(resp => {
       if (resp) {
         this.listar();

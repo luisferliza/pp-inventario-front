@@ -63,8 +63,8 @@
             <td>{{ getValor() }}</td>                        
             <td>{{ row.descripcion }}</td>
             <td>{{ row.inventario }}</td>
-            <td> Q{{ row.precio.toLocaleString('en', this.common.options) }}</td>            
-            <td> Q{{ row.residual.toLocaleString('en', this.common.options) }}</td>            
+            <td> Q{{ row.precio.toLocaleString(this.common.localNumber, this.tions) }}</td>            
+            <td> Q{{ row.residual.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>            
             <td> {{ row.responsable }}</td>            
           </tr>
           </tbody>

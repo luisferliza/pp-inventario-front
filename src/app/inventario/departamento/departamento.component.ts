@@ -14,6 +14,7 @@ import { DepartamentoService } from 'app/servicios/inventario/departamento.servi
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { DepartamentoEdicionComponent } from './departamento-edicion/departamento-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-departamento',
@@ -31,8 +32,8 @@ export class DepartamentoComponent implements List<Departamento>, OnInit, OnDest
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Departamento', property: 'id_departamento', visible: false, isModelProperty: true },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
   pageSize = 10;
@@ -61,7 +62,7 @@ export class DepartamentoComponent implements List<Departamento>, OnInit, OnDest
 
 
   updateData() {
-    this.departamentoService.listar(this.pidu).subscribe(data => {      
+    this.departamentoService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -81,7 +82,7 @@ export class DepartamentoComponent implements List<Departamento>, OnInit, OnDest
     });
   }
 
-  
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -105,7 +106,7 @@ export class DepartamentoComponent implements List<Departamento>, OnInit, OnDest
         this.updateData();
         this.departamentoService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(categoria) {
@@ -120,10 +121,14 @@ export class DepartamentoComponent implements List<Departamento>, OnInit, OnDest
   }
 
   delete(departamento: Departamento) {
-    let idDepartamento = departamento.id_departamento;
-    this.departamentoService.eliminar(idDepartamento, this.pidu).subscribe(() => {
-      this.updateData();
-      this.departamentoService.message.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idDepartamento = departamento.id_departamento;
+        this.departamentoService.eliminar(idDepartamento, this.pidu).subscribe(() => {
+          this.updateData();
+          this.departamentoService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 

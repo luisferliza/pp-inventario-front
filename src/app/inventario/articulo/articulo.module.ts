@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorIntl, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorIntl, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MatNativeDateModule, MatDatepickerModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -10,12 +10,14 @@ import { ArticuloComponent } from './articulo.component';
 import { ArticuloRoutingModule } from './articulo.routing';
 import { ArticuloEdicionComponent } from './articulo-edicion/articulo-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
 
 
 @NgModule({
   declarations: [ArticuloComponent, ArticuloEdicionComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
     {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
   ],
   imports: [
@@ -35,6 +37,9 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,    
+    DeleteDialogModule,
 
     // Core
     ListModule,
@@ -43,7 +48,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     PageHeaderModule,
     BreadcrumbsModule
   ], entryComponents:[
-    ArticuloEdicionComponent
+    ArticuloEdicionComponent, DeleteDialogComponent
   ],exports:[
     ArticuloEdicionComponent
   ]

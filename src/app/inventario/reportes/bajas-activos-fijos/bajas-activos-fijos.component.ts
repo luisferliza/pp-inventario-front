@@ -17,7 +17,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class BajasActivosFijosComponent implements OnInit {
 
-  pidu = '10';  
+  pidu = '10';
   first_row: number = 0;
   last_row: number = 0;
   correlativo: number = 1;
@@ -33,15 +33,23 @@ export class BajasActivosFijosComponent implements OnInit {
     private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
-    this.reportesService.obtenerVariable(this.pidu, 'BAJAS').subscribe(data =>{      
-      this.correlativo = data.valor;
-      this.variable = data;
+    this.reportesService.obtenerVariable(this.pidu, 'BAJAS').subscribe(data => {
+      if (data) {
+        this.correlativo = data.valor;
+        this.variable = data;
+      } else {
+        this.snackBar.open(`No se encontro ningún número de orden`, 'AVISO', {
+          duration: 2000
+        });
+        this.correlativo = 1;
+        this.variable = null;
+      }
     })
     this.listar(this.tipo_bien);
 
   }
 
-  listar(tipo_bien) {    
+  listar(tipo_bien) {
     this.reportesService.bajasActivosFijos(this.pidu, tipo_bien).subscribe(data => {
       this.valor = 1;
       this.rows = data;
@@ -55,17 +63,24 @@ export class BajasActivosFijosComponent implements OnInit {
     this.listar(this.tipo_bien);
   }
 
-  updateOrderNo(){
-    this.variable.valor = this.correlativo + this.rows.length;
-    this.reportesService.modificarVariable(this.pidu, this.variable).subscribe(()=>{
-      this.snackBar.open(`No. Orden modificado a ${this.variable.valor}`, 'AVISO', {
+  updateOrderNo() {
+    if (this.variable != null) {
+      this.variable.valor = this.correlativo + this.rows.length;
+      this.reportesService.modificarVariable(this.pidu, this.variable).subscribe(() => {
+        this.snackBar.open(`No. Orden modificado a ${this.variable.valor}`, 'AVISO', {
+          duration: 2000
+        });
+      })
+    } else {
+      this.snackBar.open(`No. se ha creado un número de orden`, 'AVISO', {
         duration: 2000
       });
-    })
+    }
+
   }
 
-  getValor() {    
-    if (this.valorCorrelativo >= this.correlativo + this.rows.length || this.valorCorrelativo < this.correlativo){
+  getValor() {
+    if (this.valorCorrelativo >= this.correlativo + this.rows.length || this.valorCorrelativo < this.correlativo) {
       this.valorCorrelativo = this.correlativo;
     }
     return this.valorCorrelativo++;
@@ -95,8 +110,8 @@ export class BajasActivosFijosComponent implements OnInit {
               widths: ['8%', '12%', '16%', '37%', '16%', '10%'],
               body: [
                 [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.orden, p.fecha, p.numero, {text:p.descripcion, alignment: 'justify'}, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.tarjeta])),
-                [{}, {}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}]
+                ...usefullData.map(p => ([p.orden, p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, p.tarjeta])),
+                [{}, {}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }, {}]
               ]
             },
             layout: 'headerLineOnly'
@@ -144,7 +159,7 @@ export class BajasActivosFijosComponent implements OnInit {
     while (cont < this.last_row && cont < this.rows.length) {
       data.push({
         orden: correlativoTmp++,
-        fecha: this.common.getDate(this.rows[cont].fecha_compra),
+        fecha: this.common.getLocalDateString(this.rows[cont].fecha_compra),
         numero: this.rows[cont].numero,
         descripcion: this.rows[cont].descripcion,
         precio: this.rows[cont].precio,

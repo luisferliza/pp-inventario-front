@@ -15,6 +15,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CommonFunction } from '../shared/common';
 import { ArticuloEdicionComponent } from './articulo-edicion/articulo-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-articulo',
@@ -31,18 +32,18 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Estado', property: 'id_articulo', visible: false, isModelProperty: true },    
+    { name: 'ID_Estado', property: 'id_articulo', visible: false, isModelProperty: true },
     { name: 'No. inventario', property: 'inventario', visible: true, isModelProperty: true },
-    { name: 'Descripción', property: 'descripcion', visible: true, isModelProperty: true },      
+    { name: 'Descripción', property: 'descripcion', visible: true, isModelProperty: true },
     { name: 'Precio', property: 'precio', visible: true, isModelProperty: false },
     { name: 'Marca', property: 'marca', visible: true, isModelProperty: true },
-    { name: 'Tipo de bien', property: 'fungible', visible: false},
-    { name: 'Fecha de compra', property: 'fecha_compra', visible: true},    
-    { name: 'Categoría', property: 'categoria', visible: false},    
-    { name: 'Tipo de artículo', property: 'tipo_articulo', visible: false},
-    { name: 'Estado', property: 'estado', visible: false},    
-    { name: 'Proveedor', property: 'proveedor', visible: false},    
-    { name: 'Departamento', property: 'departamento', visible: false},    
+    { name: 'Tipo de bien', property: 'fungible', visible: false },
+    { name: 'Fecha de compra', property: 'fecha_compra', visible: true },
+    { name: 'Categoría', property: 'categoria', visible: false },
+    { name: 'Tipo de artículo', property: 'tipo_articulo', visible: false },
+    { name: 'Estado', property: 'estado', visible: false },
+    { name: 'Proveedor', property: 'proveedor', visible: false },
+    { name: 'Departamento', property: 'departamento', visible: false },
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
 
@@ -56,10 +57,10 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private articuloService: ArticuloService, 
-              private snackBar: MatSnackBar, 
-              private dialog: MatDialog,
-              public common: CommonFunction) { }
+  constructor(private articuloService: ArticuloService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    public common: CommonFunction) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -84,15 +85,15 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((categorias: Articulo[]) => {
-        this.articulos = categorias;
-        this.database.dataChange.next(categorias);
-        this.resultsLength = categorias.length;
+      ).subscribe((articulos: Articulo[]) => {        
+        this.articulos = articulos;
+        this.database.dataChange.next(articulos);
+        this.resultsLength = articulos.length;
       });
 
       this.dataSource = new ListDataSource<Articulo>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
-      
+
     });
   }
 
@@ -104,16 +105,16 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
-  create() {    
+  create() {
     this.dialog.open(ArticuloEdicionComponent).afterClosed().subscribe((articulo: Articulo) => {
       if (articulo) {
         this.updateData();
         this.articuloService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
-  modify(estado) {    
+  modify(estado) {
     this.dialog.open(ArticuloEdicionComponent, {
       data: estado
     }).afterClosed().subscribe(resp => {
@@ -121,14 +122,17 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
         this.updateData();
         this.articuloService.message.next('Registro modificado correctamente.');
       }
-    });    
+    });
   }
 
   delete(articulo: Articulo) {
-    let idArticulo = articulo.id_articulo;
-    this.articuloService.eliminar(idArticulo, this.pidu).subscribe(() => {
-      this.updateData();
-      this.articuloService.message.next('Registro eliminado correctamente.');
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {        
+        this.articuloService.eliminar(articulo.id_articulo, this.pidu).subscribe(() => {
+          this.updateData();
+          this.articuloService.message.next('Registro eliminado correctamente.');
+        });        
+      }
     });
   }
 

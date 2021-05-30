@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Banco } from 'app/modelos/inversiones/banco';
-import { InteresPorBanco } from 'app/modelos/inversiones/InteresPorBanco';
+import { InversionesPorBanco } from 'app/modelos/inversiones/InversionesPorBanco';
 import { Inversion } from 'app/modelos/inversiones/inversion';
 import { BancoService } from 'app/servicios/inversiones/banco.service';
-import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones';
+import { ReportesInversionesService } from 'app/servicios/inversiones/reportes-inversiones.service';
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+import { Firmante } from 'app/modelos/inversiones/firmante';
+import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
+import { PlantillaInteresMensual } from './interes-mensual-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -22,16 +25,20 @@ export class InteresMensualComponent implements OnInit {
   rows: Inversion[];
   bancos: Banco[];
   id_banco: number;
-  date = new Date();
+  fecha = new Date();
+  contador: Firmante;
   //False es bienes activos, true es fungibles
 
   constructor(private reportesService: ReportesInversionesService,
     private bancoService: BancoService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private firmanteService: FirmanteService,
+    private plantilla: PlantillaInteresMensual) { }
 
   ngOnInit(): void {    
     this.getBancos();    
+    this.getFirmante();
 
   }
 
@@ -43,8 +50,22 @@ export class InteresMensualComponent implements OnInit {
     })
   }
 
+  
+  getFirmante() {
+    this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data => {
+      if (data.length > 0) {
+        this.contador = data[0];
+      } else {
+        this.snackBar.open(`${this.common.contador} No encontrado`, 'AVISO', {
+          duration: 2000
+        });
+        this.contador = new Firmante();
+      }
+    });
+  }
+
   listar(id_categoria) {        
-    this.reportesService.interesMensual(this.pidu, this.date.toISOString().split('T')[0], id_categoria).subscribe(data => {     
+    this.reportesService.interesMensual(this.pidu, this.fecha, id_categoria).subscribe(data => {     
       this.rows = data;     
       document.getElementById('table').click();
     });
@@ -52,61 +73,26 @@ export class InteresMensualComponent implements OnInit {
 
   update() {
     this.listar(this.id_banco);
+  }  
+
+  downloadExcel() {
+    this.reportesService.interesMensualCompleto(this.pidu, this.fecha).subscribe(data => {
+      if (data.length > 0) {
+        let wb = this.createDataArray(data);
+        writeFile(wb, 'Interes Mensual.xlsx');
+      } else {
+        this.snackBar.open('No hay datos para exportar', 'AVISO', {
+          duration: 2000
+        });
+      }
+    })
   }
 
-  getNextDate(date){        
-    let futureDate = new Date(date);
-    futureDate.setDate(futureDate.getDate() + 1)    
-    return this.common.getDate(futureDate.toISOString().split('T')[0]);
-  }
-
-
-
-  downloadPDF(data) {    
-    if (data.length > 0) {
-      let docDefinition = {
-        pageMargins: [50, 90, 50, 50],
-        pageSize: 'LETTER',
-        pageOrientation: 'landscape',
-        header: function (currentPage, pageCount, pageSize) {
-          return [
-            {
-              text: `UNIVERSIDAD DE SAN CARLOS DE GUATEMALA \r\n PLAN DE PRESTACIONES`,
-              style: 'header',
-              alignment: "left",
-              fontSize: 10,
-              bold: true,
-              margin: [50, 50, 50, 50],
-            }
-          ]
-        }, footer: function (currentPage, pageCount) {
-          return {
-            text: 'Página ' + currentPage.toString() + ' de ' + pageCount + '   ',
-            fontSize: 8,
-            alignment: 'center',
-            margin: [0, 10, 0, 20]
-          }
-        },
-        content: [
-          ...data
-        ]
-      };
-      pdfMake.createPdf(docDefinition).open();
-    }
-    else {
-      this.snackBar.open('No hay datos para exportar', 'AVISO', {
-        duration: 2000
-      });
-    }
-  }
-
-  
-  downloadExcel(data: InteresPorBanco[]) {
-    if (this.rows.length > 0) {
-      const wb: WorkBook = utils.book_new();
+  createDataArray(data: InversionesPorBanco[]) {    
+    const wb: WorkBook = utils.book_new();
       data.forEach(element => {
         let ws: WorkSheet;
-        ws = utils.json_to_sheet(this.getXLSLData(element.inversiones),{ header: [], skipHeader: false });
+        ws = utils.json_to_sheet(this.getInversioninfo(element.inversiones),{ header: [], skipHeader: false });
         // Encabezados personalizados
         if (ws.A1) { // Valida si hay datos
           ws.A1.v = 'Tipo Docto.';
@@ -120,138 +106,37 @@ export class InteresMensualComponent implements OnInit {
       
       utils.book_append_sheet(wb, ws, element.banco);
       });
-      
-      writeFile(wb, 'Integración a plazo.xlsx');
-    } else {
-      this.snackBar.open('No hay datos para exportar', 'AVISO', {
-        duration: 2000
-      });
-    }
+    return wb;
   }
 
-  createXLSXArray(){
-    this.reportesService.interesMensualCompleto(this.pidu, this.date.toISOString().split('T')[0]).subscribe(data => {      
-      this.downloadExcel(data);
-    })
-  }
 
-  getXLSLData(inv: Inversion[]){    
+  getInversioninfo(inv: Inversion[]) {
     return inv.map(p => ([
-          p.tipo_Inversion.nombre,
-          p.referencia,
-          p.monto,
-          this.common.getDate(p.fecha_colocacion),
-          p.tasa_interes,
-          p.diasInteres,
-          p.interes
-      ]))
+      p.tipo_Inversion.nombre,
+      p.certificado,
+      p.monto,
+      this.common.getLocalDateString(p.fecha_colocacion),
+      p.tasa_interes,
+      p.diasInteres,
+      p.interes
+    ]))
   }
 
-  createTablesArray() {
-    let tablas = [];
-    let reference = this;
-    this.reportesService.interesMensualCompleto(this.pidu, this.date.toISOString().split('T')[0]).subscribe(data => {      
-      for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        tablas.push(
-          ... this.getTitleDescription(reference, element),          
-          ... this.getTable(element),
-          {
-            text: '',
-            pageBreak: "after" // or after
-          }
-        )
+
+  downloadPDF() {
+    this.reportesService.interesMensualCompleto(this.pidu, this.fecha).subscribe(data => {
+      if (data.length > 0) {
+        let docDefinition = this.plantilla.createPDF(data, this.fecha, this.contador);
+        pdfMake.createPdf(docDefinition).open();
       }
-      tablas.pop();
-      this.downloadPDF(tablas);
+      else {
+        this.snackBar.open('No hay datos para exportar', 'AVISO', {
+          duration: 2000
+        });
+      }
     })
   }
-
-
-  getTitleDescription(reference, element){
-    return [      
-      {
-        text: `INSTITUCIÓN: ${element.banco.toUpperCase()} `,
-        style: 'subheader',
-        alignment: "center",
-        fontSize: 10,
-        bold: true,
-        margin: [0, 5, 0, 0],
-      },
-      {
-        text: `INTERESES AL ${new Date(reference.date).toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' }).toUpperCase()}  `,
-        style: 'subheader',
-        alignment: "center",
-        fontSize: 10,
-        bold: true,
-        margin: [0, 5, 0, 0],
-      },
-      {
-        text: `EXPRESADO EN QUETZALES`,
-        style: 'subheader',
-        alignment: "center",
-        fontSize: 10,
-        bold: true,
-        margin: [0, 5, 0, 10],
-      },
-    ]
-    // fin de método
-  }
-
-  getTable(element: InteresPorBanco){
-    return [
-      {
-        style: 'tableExample',
-        margin: [10, 8, 10, 50],
-        fontSize: 8,
-        alignment: "center",
-        table: {
-          headerRows: 1,
-          widths: ['14%', '14%', '15%', '14%', '14%', '14%', '15%'],
-          body: [
-            [{ text: 'Tipo Docto. ', style: 'tableHeader' },
-            { text: 'No. registro', style: 'tableHeader' },
-            { text: 'Valor nominal', style: 'tableHeader' },            
-            { text: 'Fecha de emisión', style: 'tableHeader' },
-            { text: 'Tasa (%)', style: 'tableHeader' },
-            { text: 'Días corridos', style: 'tableHeader' },
-            { text: 'Intereses', style: 'tableHeader' }],            
-            ...element.inversiones.map(p => ([p.tipo_Inversion.nombre,
-                                              p.referencia,                                              
-                                              { text: 'Q' + p.monto.toLocaleString('en', this.common.options), alignment: 'right' },
-                                              this.common.getDate(p.fecha_colocacion),
-                                              p.tasa_interes,
-                                              p.diasInteres,
-                                              { text: 'Q' + p.interes.toLocaleString('en', this.common.options), alignment: 'right' },   
-                                              ])),
-              [{}, {}, { text: 'Total:', colSpan: 1, bold: true },
-              { text: 'Q ' + element.inversiones.reduce((sum, p) => sum + (p.monto), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' }
-              ,{},{},
-              { text: 'Q ' + element.inversiones.reduce((sum, p) => sum + (p.interes), 0).toLocaleString('en', this.common.options), bold: true, alignment: 'right' }
-              ]
-          ]                 
-        },
-        layout: 'headerLineOnly'
-      },
-      {
-        text: `Guatemala, ${new Date().toLocaleDateString('es', { year: 'numeric', month: 'long', day: 'numeric' })}`,            
-        alignment: "left",
-        fontSize: 10,
-        bold: true,
-        margin: [0, 15, 0, 15],
-      },
-      {
-        text: `${this.common.contador}\r\nContador General Plan de Prestaciones`,
-        style: 'subheader',
-        alignment: "left",
-        fontSize: 10,
-        bold: true,
-        margin: [40, 40, 0, 15],
-      }
-    ]
-    // fin de metodo 
-  }
-
+  
 
 
 }

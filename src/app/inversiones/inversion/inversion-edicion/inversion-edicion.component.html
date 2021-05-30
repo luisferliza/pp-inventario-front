@@ -14,11 +14,11 @@
       </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>No. de certificado</mat-placeholder>
-        <input required type="text" formControlName="no_inversion" matInput>
+        <input required type="text" formControlName="certificado" matInput>
       </mat-form-field>  
       <mat-form-field fxFlex>
         <mat-placeholder>Referencia PP</mat-placeholder>
-        <input required type="text" formControlName="referencia" matInput>
+        <input required type="text" formControlName="referencia_pp" matInput>
       </mat-form-field>  
     </div>
 
@@ -39,18 +39,20 @@
 
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de colocación</mat-placeholder>
-        <input required type="date" formControlName="fecha_colocacion" (change)="changeDate()" matInput>
+      <mat-form-field fxFlex>      
+        <input matInput [matDatepicker]="fecha_colocacion" placeholder="Fecha de colocación" formControlName="fecha_colocacion" (dateChange)="changeDate()">
+        <mat-datepicker-toggle matSuffix [for]="fecha_colocacion"></mat-datepicker-toggle>              
       </mat-form-field>
+      <mat-datepicker #fecha_colocacion  ></mat-datepicker> 
       <mat-form-field fxFlex>
         <mat-placeholder>Plazo (Días)</mat-placeholder>
         <input required type="number" formControlName="plazo" (change)="changeDate()" matInput>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha Vencimiento</mat-placeholder>
-        <input required type="date" formControlName="vencimiento" matInput>
-      </mat-form-field>  
+      <mat-form-field fxFlex>      
+        <input matInput [matDatepicker]="vencimiento" placeholder="Fecha Vencimiento" formControlName="vencimiento">
+        <mat-datepicker-toggle matSuffix [for]="vencimiento"></mat-datepicker-toggle>              
+      </mat-form-field>
+      <mat-datepicker #vencimiento  ></mat-datepicker> 
     </div>
 
     
@@ -100,10 +102,12 @@
         <mat-placeholder>Acta JAPP</mat-placeholder>
         <input required type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha Acta JAPP</mat-placeholder>
-        <input required type="date" formControlName="fecha_acta" matInput>
+
+      <mat-form-field fxFlex>      
+        <input matInput [matDatepicker]="fecha_acta" placeholder="Fecha Acta JAPP" formControlName="fecha_acta">
+        <mat-datepicker-toggle matSuffix [for]="fecha_acta"></mat-datepicker-toggle>              
       </mat-form-field>
+      <mat-datepicker #fecha_acta></mat-datepicker>       
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
@@ -115,10 +119,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field fxFlex>
-        <mat-placeholder>Primera fecha pago</mat-placeholder>
-        <input required type="date" formControlName="fecha_pago" matInput>
+
+      <mat-form-field fxFlex>      
+        <input matInput [matDatepicker]="fecha_pago" placeholder="Primera fecha pago" formControlName="fecha_pago">
+        <mat-datepicker-toggle matSuffix [for]="fecha_pago"></mat-datepicker-toggle>              
       </mat-form-field>
+      <mat-datepicker #fecha_pago></mat-datepicker>  
       <mat-form-field fxFlex>
         <mat-placeholder>Días Anuales</mat-placeholder>
         <input required type="number" formControlName="dias_anuales" matInput>
@@ -135,9 +141,9 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div style="padding-top: 3%;">
-        <mat-checkbox [checked]="true" color="primary" formControlName="calculo_especial">¿Cálculo especial?</mat-checkbox>
-      </div>    
+      <div style="padding-top: 3%; padding-right: 4.75%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="reinversion">¿Reinversión?</mat-checkbox>
+      </div>              
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
@@ -145,6 +151,9 @@
         <mat-placeholder>Observación</mat-placeholder>
         <textarea type="text" formControlName="observacion" maxlength="500" matInput></textarea>
       </mat-form-field>        
+      <div style="padding-top: 4.5%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="calculo_especial">¿Cálculo especial?</mat-checkbox>
+      </div>
     </div>
 
     <!---->

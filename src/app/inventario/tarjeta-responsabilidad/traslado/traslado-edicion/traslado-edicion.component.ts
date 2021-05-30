@@ -8,6 +8,7 @@ import { Usuario } from 'app/modelos/inventario/usuario';
 import { DepartamentoService } from 'app/servicios/inventario/departamento.service';
 import { TrasladoService } from 'app/servicios/inventario/traslado.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
+import { CommonFunction } from 'app/inventario/shared/common';
 
 @Component({
   selector: 'elastic-traslado-edicion',
@@ -29,7 +30,8 @@ export class TrasladoEdicionComponent implements OnInit {
     private trasladoService: TrasladoService,
     private departamentosService: DepartamentoService,
     private usuarioService: UsuarioService,    
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private common: CommonFunction) { }
 
 
   ngOnInit() {
@@ -44,8 +46,8 @@ export class TrasladoEdicionComponent implements OnInit {
 
     this.form = this.fb.group({                               
       departamento: this.defaults.traslado.seccion? this.defaults.traslado.seccion.id_departamento: null,   
-      fecha_inicio: this.defaults.traslado.fecha_inicio? this.defaults.traslado.fecha_inicio.split('T')[0] : null,      
-      fecha_fin: this.defaults.traslado.fecha_fin? this.defaults.traslado.fecha_fin.split('T')[0] : null,             
+      fecha_inicio: this.defaults.traslado.fecha_inicio? this.common.parseDate(this.defaults.traslado.fecha_inicio) : new Date(),      
+      fecha_fin: this.defaults.traslado.fecha_fin? this.common.parseDate(this.defaults.traslado.fecha_fin) : null,             
       registro: this.defaults.traslado.usuario? this.defaults.traslado.usuario.registro : null                          
     });
     
@@ -70,7 +72,12 @@ export class TrasladoEdicionComponent implements OnInit {
     traslado.tarjeta.id_interno = this.defaults.tarjeta;    
 
     traslado.seccion = new Departamento();
-    traslado.seccion.id_departamento = this.form.value.departamento;    
+    traslado.seccion.id_departamento = this.form.value.departamento;  
+    
+    traslado.fecha_inicio = this.form.value.fecha_inicio.toISOString()
+    if(traslado.fecha_fin != null){
+      traslado.fecha_fin = this.form.value.fecha_fin.toISOString()
+    }
     
     this.trasladoService.registrar(traslado, this.pidu).subscribe(()=>{
       this.dialogRef.close(traslado);
@@ -90,6 +97,11 @@ export class TrasladoEdicionComponent implements OnInit {
     traslado.seccion = new Departamento();
     traslado.seccion.id_departamento = this.form.value.departamento;
     
+    traslado.fecha_inicio = this.form.value.fecha_inicio.toISOString()
+    if(traslado.fecha_fin != null){
+      traslado.fecha_fin = this.form.value.fecha_fin.toISOString()
+    }
+
     this.trasladoService.modificar(traslado, this.pidu).subscribe(()=>{
       this.dialogRef.close(traslado);
     })    

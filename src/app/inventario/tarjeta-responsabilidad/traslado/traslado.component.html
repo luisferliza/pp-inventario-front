@@ -18,12 +18,12 @@
         <!-- Joined Columns -->
         <ng-container matColumnDef="fecha_inicio">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de inicio </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_inicio)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.fecha_inicio)}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="fecha_fin">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de fin </mat-header-cell>
-          <mat-cell *matCellDef="let row"> {{common.getDate(row.fecha_fin)}} </mat-cell>
+          <mat-cell *matCellDef="let row"> {{common.getLocalDateString(row.fecha_fin)}} </mat-cell>
         </ng-container>        
 
         <ng-container matColumnDef="usuario">

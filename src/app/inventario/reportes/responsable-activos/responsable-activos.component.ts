@@ -55,8 +55,7 @@ export class ResponsableActivosComponent implements OnInit {
   downloadPDF() {
     // Set the fonts to use    
     if (this.rows.length > 0) {
-      let usefullData = this.getSpecificData();
-      console.log(usefullData)
+      let usefullData = this.getSpecificData();      
       let docDefinition = {
         content: [
           {
@@ -75,8 +74,8 @@ export class ResponsableActivosComponent implements OnInit {
               widths: ['13%', '12%', '13%', '30%', '17%', '15%'],
               body: [
                 [{ text: 'Número Inventario', style: 'tableHeader' }, { text: 'Alta el', style: 'tableHeader' }, { text: 'Valor factura', style: 'tableHeader' }, { text: 'Activo', style: 'tableHeader' }, { text: 'Responsable', style: 'tableHeader' }, { text: 'Ubicación', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.inventario, p.fecha_compra, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.descripcion, p.responsable, p.ubicacion])),
-                [{}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}, {}, {}]
+                ...usefullData.map(p => ([p.inventario, p.fecha_compra, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, p.descripcion, p.responsable, p.ubicacion])),
+                [{}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {}, {}, {}]
               ]
             },
             layout: 'headerLineOnly'
@@ -121,7 +120,7 @@ export class ResponsableActivosComponent implements OnInit {
     while (cont < this.last_row && cont < this.rows.length) {
       data.push({
         inventario: this.rows[cont].inventario,
-        fecha_compra: this.common.getDate(this.rows[cont].fecha_compra),
+        fecha_compra: this.common.getLocalDateString(this.rows[cont].fecha_compra),
         precio: this.rows[cont].precio,
         descripcion: this.rows[cont].descripcion,
         responsable: this.rows[cont].responsable,

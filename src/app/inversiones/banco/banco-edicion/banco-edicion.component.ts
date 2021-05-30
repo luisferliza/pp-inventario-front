@@ -75,9 +75,7 @@ export class BancoEdicionComponent implements OnInit {
     banco.id_banco = this.defaults.id_banco;
 
     banco.tipo_Entidad = new TipoEntidad();
-    banco.tipo_Entidad.id_tipo_entidad = this.form.value.tipo_entidad_id;
-
-    console.log(banco)    
+    banco.tipo_Entidad.id_tipo_entidad = this.form.value.tipo_entidad_id;        
     this.bancoService.modificar(banco, this.pidu).subscribe(()=>{
       this.dialogRef.close(banco);
     })

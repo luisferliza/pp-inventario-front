@@ -35,8 +35,7 @@ export class CompraExternaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog) { }
 
-  ngOnInit(): void {
-    console.log('Hola!')
+  ngOnInit(): void {    
     this.getCategorias()
 
   }
@@ -125,8 +124,8 @@ export class CompraExternaComponent implements OnInit {
             widths: ['14%', '32%', '19%', '16%', '19%'],
             body: [
               [{ text: 'No. ', style: 'tableHeader'}, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor Q', style: 'tableHeader' }, { text: 'Valor residual Q', style: 'tableHeader' }],            
-            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, {text: p.residual.toLocaleString('en', this.common.options), alignment: 'right'}])),              
-            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}]
+            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),              
+            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]
             ]
           }         
         }

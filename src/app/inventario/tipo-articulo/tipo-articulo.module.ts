@@ -10,6 +10,8 @@ import { TipoArticuloComponent } from './tipo-articulo.component';
 import { TipoArticuloRoutingModule } from './tipo-articulo.routing';
 import { TipoArticuloEdicionComponent } from './tipo-articulo-edicion/tipo-articulo-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @NgModule({
   declarations: [TipoArticuloComponent, TipoArticuloEdicionComponent],
@@ -33,6 +35,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    DeleteDialogModule,
 
     // Core
     ListModule,    
@@ -41,7 +44,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     TipoArticuloRoutingModule
         
   ], entryComponents:[
-    TipoArticuloEdicionComponent
+    TipoArticuloEdicionComponent, DeleteDialogComponent
   ],exports:[
     TipoArticuloEdicionComponent
   ]

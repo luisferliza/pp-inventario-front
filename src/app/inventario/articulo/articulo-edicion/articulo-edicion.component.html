@@ -15,11 +15,11 @@
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
-      <mat-form-field fxFlex>
-        <mat-placeholder>Fecha de compra</mat-placeholder>
-        <input required type="date" formControlName="fecha_compra" matInput>
+      <mat-form-field fxFlex>      
+        <input matInput [matDatepicker]="fecha_compra" placeholder="Fecha de compra" formControlName="fecha_compra">
+        <mat-datepicker-toggle matSuffix [for]="fecha_compra"></mat-datepicker-toggle>              
       </mat-form-field>
-
+      <mat-datepicker #fecha_compra></mat-datepicker>        
       <mat-form-field fxFlex>
         <mat-placeholder>Marca</mat-placeholder>
         <input type="text" formControlName="marca" maxlength="25" matInput>

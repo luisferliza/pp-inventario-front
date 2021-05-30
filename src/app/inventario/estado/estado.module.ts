@@ -10,6 +10,8 @@ import { EstadoComponent } from './estado.component';
 import { EstadoRoutingModule } from './estado.routing';
 import { EstadoEdicionComponent } from './estado-edicion/estado-edicion.component';
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     ReactiveFormsModule,    
     MatRadioModule,
     MatSelectModule,
+    DeleteDialogModule,
 
     // Core
     ListModule,    
@@ -41,7 +44,7 @@ import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
     BreadcrumbsModule,
     EstadoRoutingModule,
   ], entryComponents:[
-    EstadoEdicionComponent
+    EstadoEdicionComponent, DeleteDialogComponent
   ],exports:[
     EstadoEdicionComponent
   ]

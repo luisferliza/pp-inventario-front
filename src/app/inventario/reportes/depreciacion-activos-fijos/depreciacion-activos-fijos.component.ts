@@ -48,7 +48,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
   }
 
   listar(categoria) {    
-    this.reportesService.depreciacionActivosFijos(this.pidu, this.date.toISOString().split('T')[0], categoria).subscribe(data => {
+    this.reportesService.depreciacionActivosFijos(this.pidu, this.date, categoria).subscribe(data => {
       this.valor = 1;
       this.rows = data;
       this.last_row = data.length;
@@ -86,7 +86,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
           return currentPage === 1 ?
             [
               {
-                text: `Universidad de San Carlos de Guatemala \r\n Reporte de inventario de Activos Fijos con depreciación acumulada \r\n ${reference.date.toLocaleDateString('es', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`,
+                text: `Universidad de San Carlos de Guatemala \r\n Reporte de inventario de Activos Fijos con depreciación acumulada \r\n ${reference.date.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
                 style: 'header',
                 alignment: "center",
                 fontSize: 10,
@@ -123,11 +123,11 @@ export class DepreciacionActivosFijosComponent implements OnInit {
               widths: ['12%', '16%', '30%', '14%', '14%', '14%'],
               body: [
                 [{ text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Depre. Acum', style: 'tableHeader' }, { text: 'Valor', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, {text: p.depreciacion.toLocaleString('en', this.common.options), alignment: 'right'}, {text: p.valor.toLocaleString('en', this.common.options), alignment: 'right'}])),
+                ...usefullData.map(p => ([p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.depreciacion.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.valor.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),
                 [{}, {}, { text: 'Total:', colSpan: 1, bold: true },
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'},
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.depreciacion), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'},
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.valor), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}]]
+                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'},
+                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.depreciacion), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'},
+                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.valor), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]]
             },
             layout: 'headerLineOnly'
           }
@@ -172,7 +172,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {
       data.push({
-        fecha: this.common.getDate(this.rows[cont].fecha_compra),
+        fecha: this.common.getLocalDateString(this.rows[cont].fecha_compra),
         numero: this.rows[cont].numero,
         descripcion: this.rows[cont].descripcion,
         precio: fixed ? this.rows[cont].precio.toFixed(2) : this.rows[cont].precio,

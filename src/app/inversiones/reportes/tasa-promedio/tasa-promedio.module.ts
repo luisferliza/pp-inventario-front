@@ -12,7 +12,7 @@ import { TasaPromedioRoutingModule } from './tasa-promedio.routing';
 @NgModule({
   declarations: [TasaPromedioComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
   ],
   imports: [
     CommonModule,

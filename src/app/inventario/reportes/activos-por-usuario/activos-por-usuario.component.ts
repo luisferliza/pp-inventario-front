@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { ActivosPorUsuario } from 'app/modelos/inventario/reportes/activosPorUsuario';
-import { InventarioActivosFijos } from 'app/modelos/inventario/reportes/InventarioActivosFijos';
 import { Usuario } from 'app/modelos/inventario/usuario';
 import { ReportesInventarioService } from 'app/servicios/inventario/reportes.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
@@ -77,7 +76,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
           {
             text: `Universidad de San Carlos de Guatemala \r\n
                    Constancia de bienes asignados - Plan de prestaciones \r\n                    
-                   ${new Date().toLocaleDateString('es', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`,
+                   ${new Date().toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
             style: 'header',
             alignment: "center",
             fontSize: 10,
@@ -94,8 +93,8 @@ export class ActivosPorUsuarioComponent implements OnInit {
               widths: ['19%', '29%', '19%', '14%', '19%'],
               body: [
                 [ { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }, { text: 'Fecha Asignación', style: 'tableHeader' }],
-                ...usefulData.map(p => ([p.inventario, {text:p.descripcion, alignment: 'justify'}, {text: p.precio.toLocaleString('en', this.common.options), alignment: 'right'}, p.tarjeta, p.inicio])),                
-                [{},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString('en', this.common.options), bold: true , alignment: 'right'}, {}, {}]
+                ...usefulData.map(p => ([p.inventario, {text:p.descripcion, alignment: 'justify'}, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, p.tarjeta, p.inicio])),                
+                [{},  { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {}, {}]
               ]
             },
             layout: 'headerLineOnly'
@@ -145,7 +144,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
         descripcion: this.rows[cont].descripcion,
         precio: this.rows[cont].precio,
         tarjeta: this.rows[cont].tarjeta,
-        inicio: this.common.getDate(this.rows[cont].inicio)        
+        inicio: this.common.getLocalDateString(this.rows[cont].inicio)        
       })
       cont++;
     }

@@ -14,6 +14,7 @@ import { EstadoService } from 'app/servicios/inventario/estado.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { EstadoEdicionComponent } from './estado-edicion/estado-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-estado',
@@ -30,9 +31,9 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Estado', property: 'id_estado', visible: false, isModelProperty: true  },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
-    {name: 'Actions', property: 'actions', visible: true},
+    { name: 'ID_Estado', property: 'id_estado', visible: false, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
+    { name: 'Actions', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
@@ -61,7 +62,7 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
   }
 
   listar() {
-    this.estadoService.listar(this.pidu).subscribe(data => {      
+    this.estadoService.listar(this.pidu).subscribe(data => {
       this.estados = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -69,7 +70,7 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((estados: Estado[]) => {        
+      ).subscribe((estados: Estado[]) => {
         this.estados = estados;
         this.database.dataChange.next(estados);
         this.resultsLength = estados.length;
@@ -81,7 +82,7 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
     });
   }
 
-  
+
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -95,18 +96,18 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
         this.listar();
         this.estadoService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
   modify(estado: Estado) {
-    if(!estado.editable){
+    if (!estado.editable) {
       this.snackBar.open('Este registro no se puede modificar', 'AVISO', {
         duration: 2000
       });
-      return;      
+      return;
     }
-    
-    this.dialog.open(EstadoEdicionComponent, { 
+
+    this.dialog.open(EstadoEdicionComponent, {
       data: estado
     }).afterClosed().subscribe(resp => {
       if (resp) {
@@ -117,10 +118,14 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
   }
 
   delete(estado: Estado) {
-    let idEstado = estado.id_estado;
-    this.estadoService.eliminar(idEstado, this.pidu).subscribe(() => {
-      this.listar();
-      this.estadoService.message.next('Registro eliminado correctamente.');      
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        let idEstado = estado.id_estado;
+        this.estadoService.eliminar(idEstado, this.pidu).subscribe(() => {
+          this.listar();
+          this.estadoService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -134,6 +139,6 @@ export class EstadoComponent implements List<Estado>, OnInit, OnDestroy {
 
   ngOnDestroy(): void {
   }
-  
+
 
 }

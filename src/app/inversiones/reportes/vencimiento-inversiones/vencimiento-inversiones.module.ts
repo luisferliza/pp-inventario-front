@@ -12,7 +12,7 @@ import { VencimientoInversionesRoutingModule } from './vencimiento-inversiones.r
 @NgModule({
   declarations: [VencimientoInversionesComponent],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
+    {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
   ],
   imports: [
     CommonModule,
