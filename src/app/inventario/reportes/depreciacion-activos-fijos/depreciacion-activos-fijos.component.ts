@@ -9,6 +9,7 @@ import { ReportesInventarioService } from 'app/servicios/inventario/reportes.ser
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+import { PlantillaDepreciacionActivos } from './depreciacion-activos-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -32,10 +33,12 @@ export class DepreciacionActivosFijosComponent implements OnInit {
   constructor(private reportesService: ReportesInventarioService,
     private categoriaService: CategoriaService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private plantilla: PlantillaDepreciacionActivos) { }
 
   ngOnInit(): void {
     this.getCategorias();
+    this.date.setHours(0);
 
   }
 
@@ -67,72 +70,10 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     return this.valor++;
   }
 
-  downloadPDF() {
-    var reference = this;
+  downloadPDF() {    
+    let categoria = this.getCategoryName(this.id_categoria)
     if (this.rows.length > 0) {
-      let usefullData = this.getSpecificData(false);
-      let docDefinition = {
-        pageMargins: [50, 90, 50, 50],
-        pageSize: 'LETTER',
-        footer: function (currentPage, pageCount) {
-          return { 
-                  text: currentPage.toString() + ' de ' + pageCount + '   ', 
-                  fontSize: 8, 
-                  alignment: 'center',
-                  margin: [0,10,0,20]
-                }
-        },
-        header: function (currentPage, pageCount, pageSize) {
-          return currentPage === 1 ?
-            [
-              {
-                text: `Universidad de San Carlos de Guatemala \r\n Reporte de inventario de Activos Fijos con depreciación acumulada \r\n ${reference.date.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
-                style: 'header',
-                alignment: "center",
-                fontSize: 10,
-                bold: true,
-                margin: [0, 50],
-              }
-            ] :
-            [
-              {
-                text: reference.getCategoryName(reference.id_categoria),
-                alignment: 'left',
-                fontSize: 10,
-                bold: true,
-                margin: [60, 50],
-                decoration: 'underline'
-              }
-            ]
-        },
-        content: [
-          {
-            text: this.getCategoryName(this.id_categoria),
-            style: 'subheader',
-            fontSize: 10,
-            bold: true,
-            decoration: 'underline'
-          },
-          {
-            style: 'tableExample',
-            margin: [10, 8, 10, 50],
-            fontSize: 8,
-            alignment: "center",            
-            table: {              
-              headerRows: 1,
-              widths: ['12%', '16%', '30%', '14%', '14%', '14%'],
-              body: [
-                [{ text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Depre. Acum', style: 'tableHeader' }, { text: 'Valor', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.depreciacion.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.valor.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),
-                [{}, {}, { text: 'Total:', colSpan: 1, bold: true },
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'},
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.depreciacion), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'},
-                { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.valor), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]]
-            },
-            layout: 'headerLineOnly'
-          }
-        ]
-      };
+      let docDefinition = this.plantilla.getDocument(this.getDelimitedData(false), categoria, this.date)
       pdfMake.createPdf(docDefinition).open();
     }
     else {
@@ -146,7 +87,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
   downloadExcel() {
     if (this.rows.length > 0) {
     let ws: WorkSheet;
-    ws = utils.json_to_sheet(this.getSpecificData(true),
+    ws = utils.json_to_sheet(this.getDelimitedData(true),
       { header: [], skipHeader: false });
     // Encabezados personalizados
     if (ws.A1) { // Valida si hay datos
@@ -167,7 +108,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
   }
   }
 
-  getSpecificData(fixed: boolean): any[] {
+  getDelimitedData(fixed: boolean): any[] {
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {

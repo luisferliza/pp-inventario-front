@@ -8,6 +8,7 @@ import { ReportesInventarioService } from 'app/servicios/inventario/reportes.ser
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+import { PlantillaBajasActivosFijos } from './bajas-activos-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -26,11 +27,13 @@ export class BajasActivosFijosComponent implements OnInit {
   rows: InventarioActivosFijos[];
   variable: Variable;
   tipo_bien = "false";
+  membretado: boolean = false;
   //False es bienes activos, true es fungibles
 
   constructor(private reportesService: ReportesInventarioService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private plantilla: PlantillaBajasActivosFijos) { }
 
   ngOnInit(): void {
     this.reportesService.obtenerVariable(this.pidu, 'BAJAS').subscribe(data => {
@@ -94,30 +97,8 @@ export class BajasActivosFijosComponent implements OnInit {
 
 
   downloadPDF() {
-    if (this.rows.length > 0) {
-      let usefullData = this.getSpecificData();
-      let docDefinition = {
-        pageMargins: [80, 100, 80, 30],
-        pageSize: 'LEGAL',
-        content: [
-          {
-            style: 'tableExample',
-            margin: [10, 5, 10, 5],
-            fontSize: 8,
-            alignment: "center",
-            table: {
-              headerRows: 1,
-              widths: ['8%', '12%', '16%', '37%', '16%', '10%'],
-              body: [
-                [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Tarjeta No.', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.orden, p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, p.tarjeta])),
-                [{}, {}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }, {}]
-              ]
-            },
-            layout: 'headerLineOnly'
-          }
-        ]
-      };
+    if (this.rows.length > 0) {      
+      let docDefinition = this.plantilla.getDocument(this.getDelimitedData(), this.membretado);
       pdfMake.createPdf(docDefinition).open();
     }
     else {
@@ -131,7 +112,7 @@ export class BajasActivosFijosComponent implements OnInit {
   downloadExcel() {
     if (this.rows.length > 0) {
       let ws: WorkSheet;
-      ws = utils.json_to_sheet(this.getSpecificData(),
+      ws = utils.json_to_sheet(this.getDelimitedData(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
       if (ws.A1) { // Valida si hay datos
@@ -152,7 +133,7 @@ export class BajasActivosFijosComponent implements OnInit {
     }
   }
 
-  getSpecificData(): any[] {
+  getDelimitedData(): any[] {
     let cont = this.first_row - 1;
     let correlativoTmp = this.correlativo;
     let data = []

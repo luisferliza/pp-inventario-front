@@ -6,6 +6,7 @@ import { ReportesInventarioService } from 'app/servicios/inventario/reportes.ser
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+import { PlantillaResponsableActivos } from './responsable-activos-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -25,7 +26,8 @@ export class ResponsableActivosComponent implements OnInit {
 
   constructor(private reportesService: ReportesInventarioService,
     public common: CommonFunction,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private plantilla: PlantillaResponsableActivos) { }
 
   ngOnInit(): void {
     this.listar(this.tipo_bien);
@@ -54,34 +56,8 @@ export class ResponsableActivosComponent implements OnInit {
 
   downloadPDF() {
     // Set the fonts to use    
-    if (this.rows.length > 0) {
-      let usefullData = this.getSpecificData();      
-      let docDefinition = {
-        content: [
-          {
-            text: 'Reporte interno de inventario - Plan de Prestaciones',
-            style: 'header',
-            alignment: "center",
-            fontSize: 18,
-          },
-          {
-            style: 'tableExample',
-            margin: [8, 30, 8, 8],
-            fontSize: 9,
-            alignment: "center",
-            table: {
-              headerRows: 1,
-              widths: ['13%', '12%', '13%', '30%', '17%', '15%'],
-              body: [
-                [{ text: 'Número Inventario', style: 'tableHeader' }, { text: 'Alta el', style: 'tableHeader' }, { text: 'Valor factura', style: 'tableHeader' }, { text: 'Activo', style: 'tableHeader' }, { text: 'Responsable', style: 'tableHeader' }, { text: 'Ubicación', style: 'tableHeader' }],
-                ...usefullData.map(p => ([p.inventario, p.fecha_compra, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, p.descripcion, p.responsable, p.ubicacion])),
-                [{}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefullData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {}, {}, {}]
-              ]
-            },
-            layout: 'headerLineOnly'
-          }
-        ]
-      };
+    if (this.rows.length > 0) {      
+      let docDefinition = this.plantilla.getDocument(this.getDelimitedData())
       pdfMake.createPdf(docDefinition).open();
     } else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
@@ -93,7 +69,7 @@ export class ResponsableActivosComponent implements OnInit {
   downloadExcel() {
     if (this.rows.length > 0) {
       let ws: WorkSheet;
-      ws = utils.json_to_sheet(this.getSpecificData(),
+      ws = utils.json_to_sheet(this.getDelimitedData(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
       if (ws.A1) { // Valida si hay datos    
@@ -114,7 +90,7 @@ export class ResponsableActivosComponent implements OnInit {
     }
   }
 
-  getSpecificData(): any[] {
+  getDelimitedData(): any[] {
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {

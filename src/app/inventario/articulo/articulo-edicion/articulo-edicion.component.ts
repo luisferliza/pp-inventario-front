@@ -66,7 +66,7 @@ export class ArticuloEdicionComponent implements OnInit {
       descripcion: this.defaults.descripcion || '',      
       residual: this.defaults.residual || 0.05,     
       inventario: this.defaults.inventario || '',      
-      fecha_compra: this.defaults.fecha_compra? this.common.parseDate(this.defaults.fecha_compra) : new Date(),      
+      fecha_compra: this.defaults.fecha_compra? this.common.parseDate(this.defaults.fecha_compra) : null,      
       precio: this.defaults.precio || 0,            
       marca: this.defaults.marca || '',            
       fungible: this.defaults.fungible || false,            

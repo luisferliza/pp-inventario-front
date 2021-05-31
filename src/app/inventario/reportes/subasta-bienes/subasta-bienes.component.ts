@@ -9,6 +9,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import { SubastaBienesDialogComponent } from './subasta-bienes-dialog/subasta-bienes-dialog.component';
+import { PlantillaSubastaBienes } from './subasta-bienes-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -34,7 +35,8 @@ export class SubastaBienesComponent implements OnInit {
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private plantilla: PlantillaSubastaBienes) { }
 
   ngOnInit(): void {    
     this.getCategorias()
@@ -85,56 +87,9 @@ export class SubastaBienesComponent implements OnInit {
   }
 
 
-  downloadPDF(inicio) {
-    // Set the fonts to use    
-
-    let usefulData = this.getSpecificData();
-    let docDefinition = {
-      pageMargins: [80, 30, 80, 30],
-      pageSize: 'LEGAL',
-      pageOrientation: 'landscape',
-      content: [
-        {
-          text: `Universidad de San Carlos de Guatemala \r\n Plan de Prestaciones`,
-          style: 'header',
-          alignment: "left",
-          fontSize: 12,
-          bold: true,
-          margin: [0, 20],
-        },
-        {
-          text: inicio,
-          alignment: 'center',
-          fontSize: 10,
-        },
-        {
-          text: `Cuenta: ${this.getCategoryName()}`,
-          style: 'header',
-          alignment: "left",
-          fontSize: 12,
-          bold: true,
-          margin: [0, 20],
-        },
-        {
-          style: 'tableExample',
-          margin: [5, 10, 5, 10],
-          fontSize: 9,
-          alignment: "center",
-          table: {
-            headerRows: 3,
-            widths: ['6%', '29%', '13%', '11%', '11%', '12%', '3%', '3%', '12%'], 
-            body: [
-              [{ text: 'No. ', style: 'tableHeader', rowSpan: 3}, { text: 'Descripción', style: 'tableHeader', rowSpan: 3 }, { text: 'No. Inventario', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor Q', style: 'tableHeader', rowSpan: 3 }, { text: 'Valor residual', style: 'tableHeader', rowSpan: 3 }, { text: 'Responsable', style: 'tableHeader', colSpan:4 },{},{},{}],
-            [{},{},{},{},{},{text: 'Nombre', rowSpan: 2}, {text: 'Interesado',  colSpan:2 }, {}, {text: 'Firma', rowSpan: 2}],
-            [{},{},{},{},{},{}, {text: 'Si'},{text: 'No'}, {}],            
-            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, p.responsable, '','',''])),              
-            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {},{},{},{}]
-            ]
-          }         
-        }
-         
-      ]
-    };
+  downloadPDF(inicio) {    
+    let categoria = this.getCategoryName();
+    let docDefinition = this.plantilla.getDocument(this.getSpecificData(), inicio, categoria)
     pdfMake.createPdf(docDefinition).open();
   }
 

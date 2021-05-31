@@ -9,6 +9,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import { CompraExternaDialogComponent } from './compra-externa-dialog/compra-externa-dialog.component';
+import { PlantillaCompraExterna } from './compra-externa-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -33,7 +34,8 @@ export class CompraExternaComponent implements OnInit {
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private plantilla: PlantillaCompraExterna) { }
 
   ngOnInit(): void {    
     this.getCategorias()
@@ -84,61 +86,15 @@ export class CompraExternaComponent implements OnInit {
   }
 
 
-  downloadPDF(inicio) {
-    // Set the fonts to use    
-
-    let usefulData = this.getSpecificData();
-    let docDefinition = {
-      pageMargins: [80, 30, 80, 30],
-      pageSize: 'LEGAL',
-      pageOrientation: 'landscape',
-      content: [
-        {
-          text: `Universidad de San Carlos de Guatemala \r\n Plan de Prestaciones`,
-          style: 'header',
-          alignment: "left",
-          fontSize: 12,
-          bold: true,
-          margin: [0, 20],
-        },
-        {
-          text: inicio,
-          alignment: 'center',
-          fontSize: 10,
-        },
-        {
-          text: `Cuenta: ${this.getCategoryName()}`,
-          style: 'header',
-          alignment: "left",
-          fontSize: 12,
-          bold: true,
-          margin: [0, 20],
-        },
-        {
-          style: 'tableExample',
-          margin: [5, 10, 5, 10],
-          fontSize: 9,
-          alignment: "center",
-          table: {
-            headerRows: 3,
-            widths: ['14%', '32%', '19%', '16%', '19%'],
-            body: [
-              [{ text: 'No. ', style: 'tableHeader'}, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor Q', style: 'tableHeader' }, { text: 'Valor residual Q', style: 'tableHeader' }],            
-            ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),              
-            [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]
-            ]
-          }         
-        }
-         
-      ]
-    };
+  downloadPDF(inicio) {    
+    let docDefinition = this.plantilla.getDocument(this.getDelimitedData(), inicio, this.getCategoryName())
     pdfMake.createPdf(docDefinition).open();
   }
 
   downloadExcel() {
     if (this.rows.length > 0) {
       let ws: WorkSheet;
-      ws = utils.json_to_sheet(this.getSpecificData(),
+      ws = utils.json_to_sheet(this.getDelimitedData(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
       if (ws.A1) { // Valida si hay datos
@@ -158,7 +114,7 @@ export class CompraExternaComponent implements OnInit {
     }
   }
 
-  getSpecificData(): any[] {
+  getDelimitedData(): any[] {
 
     let cont = this.first_row - 1;
     let data = []

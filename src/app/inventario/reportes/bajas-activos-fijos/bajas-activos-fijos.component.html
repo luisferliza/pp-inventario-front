@@ -20,6 +20,9 @@
                 Bienes fungibles
               </mat-option>
             </mat-select>            
+            <div style="padding-top: 5%;">
+              <mat-checkbox [checked]="false" color="primary" [(ngModel)]="membretado">¿Impresión Membretada?</mat-checkbox>
+            </div>
             <b><p>No. Orden:</p></b>     
             <mat-form-field class="example-full-width">
               <mat-label>Correlativo inicial</mat-label>

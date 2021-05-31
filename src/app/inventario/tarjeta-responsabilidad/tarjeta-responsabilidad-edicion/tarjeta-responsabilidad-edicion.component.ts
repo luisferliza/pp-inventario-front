@@ -68,7 +68,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   updateArticulos() {
-    this.articuloService.listar(this.pidu).subscribe(data => {
+    this.articuloService.listarActivos(this.pidu).subscribe(data => {
       this.articulos = data;
     })
   }

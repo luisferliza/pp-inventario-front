@@ -9,6 +9,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import { DonacionesDialogComponent } from './donaciones-dialog/donaciones-dialog.component';
+import { PlantillaDonaciones } from './donaciones-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -26,13 +27,15 @@ export class DonacionesComponent implements OnInit {
   id_categoria: number;
   categorias: Categoria[];
   tipo_bien = "false";
+  membretado: boolean = false;
   //False es bienes activos, true es fungibles
 
   constructor(private reportesService: ReportesInventarioService,
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar, 
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    private plantilla: PlantillaDonaciones) { }
 
   ngOnInit(): void {
     this.getCategorias()
@@ -82,58 +85,16 @@ export class DonacionesComponent implements OnInit {
     }
   }
 
-
-  downloadPDF(acta, inicio, fin) {
-    // Set the fonts to use    
-    
-      let usefulData = this.getSpecificData();
-      let docDefinition = {
-        pageMargins: [80, 100, 80, 30],
-        pageSize: 'LEGAL',   
-        content: [
-          {
-            text: `ACTA No. ${acta}`,
-            style: 'header',
-            alignment: "center",
-            fontSize: 12,
-            bold: true,
-            margin: [0, 20],
-          },
-          {
-            text: inicio, 
-            alignment: 'justify', 
-            fontSize: 9,           
-          },
-          {
-            style: 'tableExample',
-            margin: [0, 20, 0, 20],
-            fontSize: 9,
-            alignment: "center",
-            table: {
-              headerRows: 1,
-              widths: ['12%', '55%', '18%', '15%'],
-              body: [
-                [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor residual', style: 'tableHeader' }],
-                [{}, {text:`Cuenta: ${this.getCategoryName()}`, bold:true, alignment: 'left' }, {},{}],
-                ...usefulData.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),
-                [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + usefulData.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]
-              ]
-            }
-          },
-          {
-            text: fin, 
-            alignment: 'justify',
-            fontSize: 9                     
-          },
-        ]
-      };
+  downloadPDF(acta, inicio, fin) {      
+    let categoria = this.getCategoryName();
+      let docDefinition = this.plantilla.getDocument(this.getDelimitedData(), inicio, fin, acta, categoria, this.membretado)
       pdfMake.createPdf(docDefinition).open();    
   }
 
   downloadExcel() {
     if (this.rows.length > 0) {
       let ws: WorkSheet;
-      ws = utils.json_to_sheet(this.getSpecificData(),
+      ws = utils.json_to_sheet(this.getDelimitedData(),
         { header: [], skipHeader: false });
       // Encabezados personalizados
       if (ws.A1) { // Valida si hay datos
@@ -153,8 +114,7 @@ export class DonacionesComponent implements OnInit {
     }
   }
 
-  getSpecificData(): any[] {
-
+  getDelimitedData(): any[] {
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {

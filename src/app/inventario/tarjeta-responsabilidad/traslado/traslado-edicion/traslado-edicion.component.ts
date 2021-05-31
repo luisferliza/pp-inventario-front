@@ -9,6 +9,7 @@ import { DepartamentoService } from 'app/servicios/inventario/departamento.servi
 import { TrasladoService } from 'app/servicios/inventario/traslado.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
 import { CommonFunction } from 'app/inventario/shared/common';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'elastic-traslado-edicion',
@@ -50,6 +51,8 @@ export class TrasladoEdicionComponent implements OnInit {
       fecha_fin: this.defaults.traslado.fecha_fin? this.common.parseDate(this.defaults.traslado.fecha_fin) : null,             
       registro: this.defaults.traslado.usuario? this.defaults.traslado.usuario.registro : null                          
     });
+
+    (this.form.value.fecha_inicio as Date).setHours(0); // Corrige el corrimiento de la zona horaria
     
   }
 

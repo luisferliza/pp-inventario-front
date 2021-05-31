@@ -23,6 +23,10 @@ export class ArticuloService {
     return this.http.get<Articulo>(`${this.url}/articulos/${idArticulo}?pidu=${pidu}`);
   }
 
+  listarActivos(pidu: String) {
+    return this.http.get<Articulo[]>(`${this.url}/articulos/activos?pidu=${pidu}`);
+  } 
+
   registrar(articulo: Articulo, pidu: String) {    
     return this.http.post(`${this.url}/articulos?pidu=${pidu}`, articulo);
   }
