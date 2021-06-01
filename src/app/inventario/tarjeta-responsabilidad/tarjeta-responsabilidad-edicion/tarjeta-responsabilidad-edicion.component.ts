@@ -81,8 +81,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   updateUsuarios() {
-    this.usuarioService.listar(this.pidu).subscribe(data => {
-      console.log(data)
+    this.usuarioService.listar(this.pidu).subscribe(data => {      
       this.usuarios = data;
     })
   }
@@ -99,8 +98,6 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     tarjetaResponsabilidad.receptor = new Usuario();
     tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
 
-    console.log(tarjetaResponsabilidad);
-
     this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
       /* Automaticamente se crea el traslado*/
       if (data) {
@@ -116,9 +113,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
           traslado.tarjeta.id_interno = tarjetaData.id_interno;
 
           traslado.seccion = new Departamento();
-          traslado.seccion.id_departamento = tarjetaData.departamento.id_departamento;
-
-          console.log(traslado)
+          traslado.seccion.id_departamento = tarjetaData.departamento.id_departamento;          
 
           this.trasladoService.registrar(traslado, this.pidu).subscribe(() => {
             this.dialogRef.close(tarjetaResponsabilidad);
