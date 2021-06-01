@@ -18,7 +18,7 @@ export class UsuarioService {
     return this.http.get<Usuario[]>(`${this.url}/usuarios?pidu=${pidu}`);
   }
 
-  listarExterno(pidu: String) {
+  listarExterno() {
     return this.http.get<Usuario[]>(`${this.usuario_url}/gateway/pp-perfiles/usuario`);
   }
 
