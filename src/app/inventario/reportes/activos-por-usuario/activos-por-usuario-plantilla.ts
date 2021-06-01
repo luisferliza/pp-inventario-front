@@ -83,13 +83,13 @@ export class PlantillaActivosPorUsuario {
               decoration: 'underline'                  
             },
             {
-              text: element.nombre,            
+              text: element.nombrepp,            
               alignment: "center",
               fontSize: 8,
               bold: true           
             },
             {
-              text: 'R.P. '+element.registro,            
+              text: 'R.P. '+element.idUsuario,            
               alignment: "center",
               fontSize: 8,
               bold: true                             

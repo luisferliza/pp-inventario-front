@@ -65,6 +65,6 @@ export class CommonFunction {
   public administrador = "Administrador Ejecutivo"
   public presidenteJunta = "Presidente"
   public secretarioJunta = "Secretario"
-  public asistente_administrativo = "Asistente Administrativo"
+  public asistente_administrativo = "Asistente Administrativo-Financiero"
 
 }

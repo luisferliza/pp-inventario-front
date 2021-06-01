@@ -331,18 +331,20 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   changeEndDate() {    
-    let futureDate: Date = this.form.value.fecha_colocacion;
+    let futureDate: Date = new Date(this.form.value.fecha_colocacion.getTime());
     futureDate.setDate(futureDate.getDate() + this.form.value.plazo - 1)
     this.form.controls['vencimiento'].setValue(futureDate);
   }
 
   ChangePayDate() {
     let periodo = this.form.value.periodo_pago;
-    let fecha_pago: Date = this.form.value.fecha_colocacion;
+    let fecha_pago: Date = new Date(this.form.value.fecha_colocacion.getTime()); 
     console.log(fecha_pago)
     if (periodo === "Mensual") {      
       fecha_pago.setMonth(fecha_pago.getMonth() + 1);
-      fecha_pago.setDate(0);
+      console.log(fecha_pago)
+      fecha_pago.setDate(1);
+      console.log(fecha_pago)
     } else if (periodo === "Anual") {      
       fecha_pago.setFullYear(fecha_pago.getFullYear() + 1, fecha_pago.getMonth(), fecha_pago.getDate());      
     } else if (periodo === "Semestral") {      

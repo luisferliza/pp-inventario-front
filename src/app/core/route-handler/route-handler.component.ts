@@ -486,7 +486,7 @@ export class RouteHandlerComponent implements OnInit {
         }
       }),
       new SidenavItem({
-        name: 'Activos Fijos con depreciacion',
+        name: 'Activos Fijos con depreciación',
         route: '/inventario/reportes/depreciacionactivosfijos',
         parent: reportesInventario,
         subItems: [ ],
@@ -677,13 +677,6 @@ export class RouteHandlerComponent implements OnInit {
       new SidenavItem({
         name: 'Tasa Promedio',
         route: '/inversiones/reportes/tasa-promedio',
-        parent: reportesInventario,
-        subItems: [ ],
-        position: 1
-      }),
-      new SidenavItem({
-        name: 'Vencimientos y reinversiones Plan',
-        route: '/inversiones/reportes/vencimientos-reinversiones',
         parent: reportesInventario,
         subItems: [ ],
         position: 1

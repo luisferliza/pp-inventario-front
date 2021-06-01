@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Articulo } from 'app/modelos/inventario/articulo';
 import { Departamento } from 'app/modelos/inventario/departamento';
@@ -36,7 +36,8 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     private articuloService: ArticuloService,
     private usuarioService: UsuarioService,
     private fb: FormBuilder,
-    private common: CommonFunction
+    private common: CommonFunction,
+    private snackBar: MatSnackBar,
   ) { }
 
 
@@ -53,7 +54,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
 
     this.form = this.fb.group({
       id_tarjeta_responsabilidad: this.defaults.id_tarjeta_responsabilidad || 0,
-      registro: this.defaults.receptor ? this.defaults.receptor.registro : null,
+      idUsuario: this.defaults.receptor ? this.defaults.receptor.idUsuario : null,
       id_articulo: this.defaults.articulo ? this.defaults.articulo.id_articulo : null,
       id_departamento: this.defaults.departamento ? this.defaults.departamento.id_departamento : null
     });
@@ -81,6 +82,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
 
   updateUsuarios() {
     this.usuarioService.listar(this.pidu).subscribe(data => {
+      console.log(data)
       this.usuarios = data;
     })
   }
@@ -95,28 +97,38 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
 
     tarjetaResponsabilidad.receptor = new Usuario();
-    tarjetaResponsabilidad.receptor.registro = this.form.value.registro;
+    tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+
+    console.log(tarjetaResponsabilidad);
 
     this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
       /* Automaticamente se crea el traslado*/
-      this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((data) => {        
-        const traslado: Traslado = new Traslado();
-        traslado.fecha_fin = null;
-        traslado.fecha_inicio = this.common.parseDate(data.articulo.fecha_compra).toISOString();
+      if (data) {
+        this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((tarjetaData) => {
+          const traslado: Traslado = new Traslado();
+          traslado.fecha_fin = null;
+          traslado.fecha_inicio = this.common.parseDate(tarjetaData.articulo.fecha_compra).toISOString();
 
-        traslado.usuario = new Usuario();
-        traslado.usuario.registro = data.receptor.registro;
+          traslado.usuario = new Usuario();
+          traslado.usuario.idUsuario = tarjetaData.receptor.idUsuario;
 
-        traslado.tarjeta = new TarjetaResponsabilidad()
-        traslado.tarjeta.id_interno = data.id_interno;
+          traslado.tarjeta = new TarjetaResponsabilidad()
+          traslado.tarjeta.id_interno = tarjetaData.id_interno;
 
-        traslado.seccion = new Departamento();
-        traslado.seccion.id_departamento = data.departamento.id_departamento;
-        
-        this.trasladoService.registrar(traslado, this.pidu).subscribe(()=>{
-          this.dialogRef.close(tarjetaResponsabilidad);  
-        })        
-      })
+          traslado.seccion = new Departamento();
+          traslado.seccion.id_departamento = tarjetaData.departamento.id_departamento;
+
+          console.log(traslado)
+
+          this.trasladoService.registrar(traslado, this.pidu).subscribe(() => {
+            this.dialogRef.close(tarjetaResponsabilidad);
+          })
+        })
+      }else{
+        this.snackBar.open(`Se produjo un error al crear el traslado`, 'AVISO', {
+          duration: 2000
+        });
+      }
     })
   }
 
@@ -130,7 +142,7 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
 
     tarjetaResponsabilidad.receptor = new Usuario();
-    tarjetaResponsabilidad.receptor.registro = this.form.value.registro;
+    tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
 
     tarjetaResponsabilidad.id_interno = this.defaults.id_interno;
     this.tarjetaResponsabilidadService.modificar(tarjetaResponsabilidad, this.pidu).subscribe(() => {

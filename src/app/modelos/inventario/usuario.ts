@@ -1,5 +1,5 @@
 export class Usuario{
-    registro: number;
-    nombre: string;
+    idUsuario: number;
+    nombrepp: string;
     puesto: string;
 }

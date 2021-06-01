@@ -24,8 +24,8 @@
               <p>Seleccione el usuario:</p>
             </b>
             <mat-select required [(ngModel)]="id_usuario" (selectionChange)="update()">
-              <mat-option *ngFor="let usuario of usuarios" [value]="usuario.registro">
-                {{usuario.nombre}}
+              <mat-option *ngFor="let usuario of usuarios" [value]="usuario.idUsuario">
+                {{usuario.nombrepp}}
               </mat-option>
             </mat-select>      
             <b><p>Seleccione las filas a exportar:</p></b>     

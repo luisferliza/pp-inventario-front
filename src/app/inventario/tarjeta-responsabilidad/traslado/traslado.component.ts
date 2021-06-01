@@ -97,23 +97,11 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
     this.closeView.emit(true);
   }
 
-
-
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
-  }
-
-  getDesc(depreciacion: number) {
-    if (depreciacion === 0) {
-      return "Sin depreciacion";
-    } else if (depreciacion === 1) {
-      return "1 Año"
-    } else {
-      return `${depreciacion} años`
-    }
-  }
+  }  
 
   create() {
     this.dialog.open(TrasladoEdicionComponent, {
@@ -162,14 +150,14 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
       content: [
         {
           style: 'tableExample',
-          margin: [6, 30, 2, 8],
-          fontSize: 11,
+          margin: [6, 60, 2, 8],
+          fontSize: 9,
           alignment: "center",
           table: {
             headerRows: 0,
-            widths: ['13%', '18%', '33%', '18%', '18%'],
+            widths: ['15%', '18%', '31%', '18%', '18%'],
             body: [
-              ...this.traslados.map(p => ([this.common.getLocalDateString(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombre, '']))
+              ...this.traslados.map(p => ([this.common.getLocalDateString(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombrepp, '']))
 
             ]
           },
@@ -192,8 +180,8 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
       ws.C1.v = 'Nombre';
     }
     const wb: WorkBook = utils.book_new();
-    utils.book_append_sheet(wb, ws, 'Responsable Activos Fijos');
-    writeFile(wb, 'Responsable Activos Fijos.xlsx');
+    utils.book_append_sheet(wb, ws, 'Traslados');
+    writeFile(wb, 'Traslados.xlsx');
 
   }
 
@@ -203,7 +191,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
       data.push({
         fecha_inicio: this.common.getLocalDateString(p.fecha_inicio),
         seccion: p.seccion.nombre,
-        usuario: p.usuario.nombre
+        usuario: p.usuario.nombrepp
       })
     })
     return data;

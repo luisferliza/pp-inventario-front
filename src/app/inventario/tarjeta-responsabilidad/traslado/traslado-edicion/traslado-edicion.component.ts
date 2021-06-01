@@ -49,7 +49,7 @@ export class TrasladoEdicionComponent implements OnInit {
       departamento: this.defaults.traslado.seccion? this.defaults.traslado.seccion.id_departamento: null,   
       fecha_inicio: this.defaults.traslado.fecha_inicio? this.common.parseDate(this.defaults.traslado.fecha_inicio) : new Date(),      
       fecha_fin: this.defaults.traslado.fecha_fin? this.common.parseDate(this.defaults.traslado.fecha_fin) : null,             
-      registro: this.defaults.traslado.usuario? this.defaults.traslado.usuario.registro : null                          
+      idUsuario: this.defaults.traslado.usuario? this.defaults.traslado.usuario.idUsuario : null                          
     });
 
     (this.form.value.fecha_inicio as Date).setHours(0); // Corrige el corrimiento de la zona horaria
@@ -69,7 +69,7 @@ export class TrasladoEdicionComponent implements OnInit {
     
     
     traslado.usuario = new Usuario();
-    traslado.usuario.registro = this.form.value.registro;       
+    traslado.usuario.idUsuario = this.form.value.idUsuario;       
 
     traslado.tarjeta =  new TarjetaResponsabilidad()
     traslado.tarjeta.id_interno = this.defaults.tarjeta;    
@@ -92,7 +92,7 @@ export class TrasladoEdicionComponent implements OnInit {
     traslado.id_traslado = this.defaults.traslado.id_traslado;       
     
     traslado.usuario = new Usuario();
-    traslado.usuario.registro = this.form.value.registro;       
+    traslado.usuario.idUsuario = this.form.value.idUsuario;       
 
     traslado.tarjeta =  new TarjetaResponsabilidad()
     traslado.tarjeta.id_interno = this.defaults.tarjeta;     

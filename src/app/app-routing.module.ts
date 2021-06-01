@@ -138,12 +138,7 @@ const routes: Routes = [
       {
         path: 'inversiones/reportes/tasa-promedio',
         loadChildren: 'app/inversiones/reportes/tasa-promedio/tasa-promedio.module#TasaPromedioModule'
-      },
-      {
-        path: 'inversiones/reportes/vencimientos-reinversiones',
-        loadChildren: 'app/inversiones/reportes/vencimiento-inversiones/vencimiento-inversiones.module#VencimientoInversionesModule'
-      },
-      
+      },      
       //###########################################################################
       //#endregion
       {

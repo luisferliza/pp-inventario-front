@@ -61,7 +61,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
   getUsuarios() {
     this.usuarioService.listar(this.pidu).subscribe(data => {
       if (data) {
-        this.id_usuario = data[0].registro;
+        this.id_usuario = data[0].idUsuario;
       }
       this.usuarios = data;
       this.listar();
@@ -122,7 +122,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
   getUserInfo(): Usuario {
     for (let index = 0; index < this.usuarios.length; index++) {
       const element = this.usuarios[index];
-      if (element.registro === this.id_usuario) {
+      if (element.idUsuario === this.id_usuario) {
         return element;
       }
 
