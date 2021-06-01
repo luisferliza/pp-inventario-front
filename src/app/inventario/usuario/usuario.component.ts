@@ -29,7 +29,7 @@ export class UsuarioComponent implements OnInit {
   }
 
   updateUsuarios(){
-    this.usuarioService.listar(this.pidu).subscribe(data =>{ // Aca deberia de consumir el micro de usuarios            
+    this.usuarioService.listarExterno().subscribe(data =>{ // Aca deberia de consumir el micro de usuarios            
       this.usuarioService.modificar(data, this.pidu).subscribe(()=>{
         this.snackBar.open('Registros Actualizados', 'AVISO', {
           duration: 2000
