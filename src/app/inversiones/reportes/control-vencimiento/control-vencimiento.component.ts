@@ -35,6 +35,8 @@ export class ControlVencimientoComponent implements OnInit {
     this.fecha_ini.setDate(1);
     this.getFirmante()
     this.listar();
+    this.fecha_fin.setHours(0);
+    this.fecha_ini.setHours(0);
   }  
 
   getFirmante() {

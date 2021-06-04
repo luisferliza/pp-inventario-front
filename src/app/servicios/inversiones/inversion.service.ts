@@ -15,8 +15,8 @@ export class InversionService {
   
   constructor(private http: HttpClient) { }
 
-  listar(pidu: String) {
-    return this.http.get<Inversion[]>(`${this.url}/inversiones?pidu=${pidu}`);
+  listar(pidu: String, vigente: boolean) {
+    return this.http.get<Inversion[]>(`${this.url}/inversiones?pidu=${pidu}&vigente=${vigente}`);
   }
 
   listarPorId(idInversion: number, pidu: String) {

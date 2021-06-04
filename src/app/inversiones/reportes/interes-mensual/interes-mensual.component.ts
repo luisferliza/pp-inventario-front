@@ -39,6 +39,7 @@ export class InteresMensualComponent implements OnInit {
   ngOnInit(): void {    
     this.getBancos();    
     this.getFirmante();
+    this.fecha.setHours(0);
 
   }
 

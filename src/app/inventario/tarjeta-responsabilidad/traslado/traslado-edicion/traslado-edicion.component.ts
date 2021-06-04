@@ -47,7 +47,7 @@ export class TrasladoEdicionComponent implements OnInit {
 
     this.form = this.fb.group({                               
       departamento: this.defaults.traslado.seccion? this.defaults.traslado.seccion.id_departamento: null,   
-      fecha_inicio: this.defaults.traslado.fecha_inicio? this.common.parseDate(this.defaults.traslado.fecha_inicio) : new Date(),      
+      fecha_inicio: this.defaults.traslado.fecha_inicio? this.common.parseDate(this.defaults.traslado.fecha_inicio) : null,      
       fecha_fin: this.defaults.traslado.fecha_fin? this.common.parseDate(this.defaults.traslado.fecha_fin) : null,             
       idUsuario: this.defaults.traslado.usuario? this.defaults.traslado.usuario.idUsuario : null                          
     });

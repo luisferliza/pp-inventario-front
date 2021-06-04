@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { CommonFunction } from "app/inventario/shared/common";
 import { Firmante } from "app/modelos/inversiones/firmante";
 import { Inversion } from "app/modelos/inversiones/inversion";
+import { InversionesPorTipoInversionAprobadas } from "app/modelos/inversiones/InversionesPorTipoInversionAprobadas";
 
 @Injectable({
     providedIn: 'root'
@@ -10,15 +11,16 @@ import { Inversion } from "app/modelos/inversiones/inversion";
 export class PlantillaAutorizacionInversion {
 
     constructor(private common: CommonFunction){}
-    public getDocument(rows: Inversion[], presidente: Firmante, secretario: Firmante, acta: string, sesion: Date) {
+    public getDocument(rows: InversionesPorTipoInversionAprobadas[], presidente: Firmante, secretario: Firmante, acta: string, sesion: Date) {
         let docDefinition = {
             pageMargins: [50, 60, 50, 50],
             pageSize: 'LETTER',
             pageOrientation: 'portrait',
             content: [
                 this.getTitle(),
-                this.getTable(rows),
-                ...this.getGenerationDate(acta,sesion),
+                this.createTableHeader(),
+                ... this.createTableList(rows),
+                ... this.getGenerationDate(acta,sesion),
                 ... this.getFirmantes(presidente, secretario)
             ]
         };
@@ -37,10 +39,10 @@ export class PlantillaAutorizacionInversion {
         }
     }
 
-    private getTable(rows: Inversion[]) {
+    private createTableHeader(){
         return {
             style: 'tableExample',
-            margin: [10, 8, 10, 50],
+            margin: [10, 8, 10, 10],
             fontSize: 8,
             alignment: "center",
             table: {
@@ -52,7 +54,34 @@ export class PlantillaAutorizacionInversion {
                     { text: 'Institución Bancaria', style: 'tableHeader' },
                     { text: 'Documento', style: 'tableHeader' },
                     { text: 'Intervalo de Int.', style: 'tableHeader' },
-                    { text: 'Valor inversión Q', style: 'tableHeader' }],
+                    { text: 'Valor inversión Q', style: 'tableHeader' }],                    
+                ]
+            },
+            layout: 'headerLineOnly'
+        }
+    }
+
+    private createTableList(rows: InversionesPorTipoInversionAprobadas[]){
+        let response = [];
+        rows.forEach(row=>{
+            if(row.inversiones.length>0){
+                response.push(this.getTable(row.inversiones, row.estadoInversion))
+            }            
+        })
+        return response;
+    }
+
+    private getTable(rows: Inversion[], estado: string) {
+        return [{
+            style: 'tableExample',
+            margin: [10, 8, 10, 10],
+            fontSize: 8,
+            alignment: "center",
+            table: {
+                headerRows: 0,
+                widths: ['12.5%', '12.5%', '20%', '15%', '20%', '20%'],
+                body: [
+                    [{text: estado, bold: true, alignment: 'center', colSpan:6 },{},{},{},{},{}],
                     ...rows.map(p => ([
                         p.plazo,
                         p.tasa_interes,
@@ -66,8 +95,9 @@ export class PlantillaAutorizacionInversion {
                     ]
                 ]
             },
-            layout: 'headerLineOnly'
+            layout: 'lightHorizontalLines'
         }
+    ]
     }
 
     private getGenerationDate(acta: string, sesion:Date) {

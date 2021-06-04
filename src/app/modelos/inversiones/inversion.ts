@@ -15,7 +15,8 @@ export class Inversion{
 	plazo: number;
 	cuenta: string;
 	calculo_especial: boolean;
-	reinversion: boolean;
+	aprobado_japp: boolean;
+	vigente: boolean;
 	fecha_acta: string;
 	fecha_pago: string;
 	dias_anuales: number;

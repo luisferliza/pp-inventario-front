@@ -10,7 +10,6 @@ import { FirmanteService } from 'app/servicios/inversiones/firmante.service';
 import { PlantillaAnexo4 } from './anexo4-plantilla';
 import { TipoEntidad } from 'app/modelos/inversiones/tipo-entidad';
 import { TipoEntidadService } from 'app/servicios/inversiones/tipo-entidad.service';
-import { InversionesPorBanco } from 'app/modelos/inversiones/InversionesPorBanco';
 import { TotalInversionesPorBanco } from 'app/modelos/inversiones/totalInversionesPorBanco';
 import { Anexo4DialogComponent } from './anexo4-dialog/anexo4-dialog.component';
 import { InversionesPorTipoBanco } from 'app/modelos/inversiones/inversionesPorTipoBanco';
@@ -46,6 +45,7 @@ export class Anexo4Component implements OnInit {
     this.getFirmantes(this.common.contador);
     this.getFirmantes(this.common.administrador);
     this.getFirmantes(this.common.asistente_administrativo);
+    this.fecha.setHours(0);
   }
 
   getTiposEntidad() {
@@ -80,7 +80,7 @@ export class Anexo4Component implements OnInit {
       document.getElementById('table').click();
     });
   }
-  
+
   downloadExcel() {
     this.reportesService.anexo4(this.pidu, this.fecha).subscribe(data => {
       if (data.length > 0) {
@@ -103,7 +103,7 @@ export class Anexo4Component implements OnInit {
       if (ws.A1) { // Valida si hay datos
         ws.A1.v = 'Institución';
         ws.B1.v = 'Cantidad';
-        ws.C1.v = 'Porcentaje';        
+        ws.C1.v = 'Porcentaje';
       }
       utils.book_append_sheet(wb, ws, element.nombreCategoria);
     });
@@ -115,34 +115,27 @@ export class Anexo4Component implements OnInit {
     return inv.map(p => ([
       p.nombre,
       p.monto,
-      total == 0? 0: p.monto/total
+      total == 0 ? 0 : p.monto / total
     ]))
   }
 
 
   downloadPDF() {
-    if (this.rows.length > 0) {
-      this.dialog.open(Anexo4DialogComponent, { width: '600px' }).afterClosed().subscribe((response) => {
-        if (response) {
-          this.reportesService.anexo4(this.pidu, this.fecha).subscribe(data => {
-            if (data.length > 0) {
-              data.push(...response)
-              let docDefinition = this.plantilla.getDocument(data, this.fecha, this.contador, this.administrador, this.asistente);
-              pdfMake.createPdf(docDefinition).open();
-            }
-            else {
-              this.snackBar.open('No hay datos para exportar', 'AVISO', {
-                duration: 2000
-              });
-            }
-          })
-        }
-      });
-    } else {
-      this.snackBar.open('No hay datos para exportar', 'AVISO', {
-        duration: 2000
-      });
-    }
+    this.dialog.open(Anexo4DialogComponent).afterClosed().subscribe((response) => {
+      if (response) {
+        this.reportesService.anexo4(this.pidu, this.fecha).subscribe(data => {
+          if (data.length > 0) {            
+            let docDefinition = this.plantilla.getDocument( data, response.prestamos,response.prima, response.descuentos, response.anexo,
+                                                            this.fecha, this.contador, this.administrador, this.asistente);
+            pdfMake.createPdf(docDefinition).open();
+          }
+          else {
+            this.snackBar.open('No hay datos para exportar', 'AVISO', {
+              duration: 2000
+            });
+          }
+        })
+      }
+    });
   }
-
 }

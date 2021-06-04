@@ -36,6 +36,8 @@ export class InversionesEmitidasComponent implements OnInit {
     this.fecha_ini.setDate(1);    
     this.getFirmante();
     this.listar();
+    this.fecha_fin.setHours(0);
+    this.fecha_ini.setHours(0);
   }
 
   getMonthDays(month): number{
@@ -46,8 +48,7 @@ export class InversionesEmitidasComponent implements OnInit {
   getFirmante() {
     this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data => {
       if (data.length > 0) {
-        this.contador = data[0];
-        console.log(this.contador)
+        this.contador = data[0];        
       } else {
         this.snackBar.open(`${this.common.contador} No encontrado`, 'AVISO', {
           duration: 2000
@@ -57,9 +58,7 @@ export class InversionesEmitidasComponent implements OnInit {
     });
   }
 
-  listar() {
-    console.log(this.fecha_fin)
-    console.log(this.fecha_ini)
+  listar() {    
     this.reportesService.inversionesEmitidas(this.pidu, this.fecha_ini, this.fecha_fin).subscribe(data => {
       this.rows = data;
       document.getElementById('table').click();

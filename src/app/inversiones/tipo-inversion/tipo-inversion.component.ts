@@ -9,11 +9,12 @@ import { ListDatabase } from 'app/core/list/list-database';
 import { ListDataSource } from 'app/core/list/list-datasource';
 import { List } from 'app/core/list/list.interface';
 import { componentDestroyed } from 'app/core/utils/component-destroyed';
-import { Articulo } from 'app/modelos/inventario/articulo';
-import { ArticuloService } from 'app/servicios/inventario/articulo.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { TipoInversionEdicionComponent } from './tipo-inversion-edicion/tipo-inversion-edicion.component';
+import { TipoInversion } from 'app/modelos/inversiones/tipo-inversion';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
+import { TipoInversionService } from 'app/servicios/inversiones/tipo-inversion.service';
 
 @Component({
   selector: 'elastic-tipo-inversion',
@@ -22,40 +23,39 @@ import { TipoInversionEdicionComponent } from './tipo-inversion-edicion/tipo-inv
   animations: [...ROUTE_TRANSITION],
   host: { '[@routeTransition]': '' }
 })
-export class TipoInversionComponent implements List<Articulo>, OnInit, OnDestroy {
+export class TipoInversionComponent implements List<TipoInversion>, OnInit, OnDestroy {
 
-  subject$: ReplaySubject<Articulo[]> = new ReplaySubject<Articulo[]>(1);
-  data$: Observable<Articulo[]>;
-  articulos: Articulo[];
+  subject$: ReplaySubject<TipoInversion[]> = new ReplaySubject<TipoInversion[]>(1);
+  data$: Observable<TipoInversion[]>;
+  tiposInversion: TipoInversion[];
 
   @Input()
   columns: ListColumn[] = [
-    { name: 'ID_Tipo_Inversion', property: 'p1', visible: false, isModelProperty: true },
-    { name: 'Nombre', property: 'p2', visible: true, isModelProperty: true },
-    { name: 'Descripción', property: 'p3', visible: true, isModelProperty: true },        
+    { name: 'ID_Tipo_Inversion', property: 'id_tipo_inversion', visible: false, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
+    { name: 'Siglas', property: 'siglas', visible: true, isModelProperty: true },    
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
 
 
   pageSize = 10;
   resultsLength: number;
-  dataSource: ListDataSource<Articulo> | null;
-  database: ListDatabase<Articulo>;
+  dataSource: ListDataSource<TipoInversion> | null;
+  database: ListDatabase<TipoInversion>;
   pidu = '10';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private articuloService: ArticuloService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private tipoInversionService: TipoInversionService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
   }
 
   ngOnInit(): void {
-
     this.listar();
-    this.articuloService.message.subscribe(data => {
+    this.tipoInversionService.message.subscribe(data => {
       this.snackBar.open(data, 'AVISO', {
         duration: 2000
       });
@@ -63,27 +63,25 @@ export class TipoInversionComponent implements List<Articulo>, OnInit, OnDestroy
   }
 
   listar() {
-    this.articuloService.listar(this.pidu).subscribe(data => {
-      this.articulos = data;
+    this.tipoInversionService.listar(this.pidu).subscribe(data => {
+      this.tiposInversion = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
-      this.database = new ListDatabase<Articulo>();
+      this.database = new ListDatabase<TipoInversion>();
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((categorias: Articulo[]) => {
-        this.articulos = categorias;
-        this.database.dataChange.next(categorias);
-        this.resultsLength = categorias.length;
+      ).subscribe((tiposInversion: TipoInversion[]) => {
+        this.tiposInversion = tiposInversion;
+        this.database.dataChange.next(tiposInversion);
+        this.resultsLength = tiposInversion.length;
       });
 
-      this.dataSource = new ListDataSource<Articulo>(this.database, this.sort, this.paginator, this.columns);
+      this.dataSource = new ListDataSource<TipoInversion>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
-      
+
     });
   }
-
-
 
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
@@ -91,31 +89,35 @@ export class TipoInversionComponent implements List<Articulo>, OnInit, OnDestroy
     this.dataSource.filter = filterValue;
   }
 
-  crear() {        
-    this.dialog.open(TipoInversionEdicionComponent).afterClosed().subscribe((articulo: Articulo) => {
-      if (articulo) {
+  crear() {
+    this.dialog.open(TipoInversionEdicionComponent).afterClosed().subscribe((tipoInversion: TipoInversion) => {
+      if (tipoInversion) {
         this.listar();
-        this.articuloService.message.next('Registro creado correctamente.');
+        this.tipoInversionService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
-  modificar(estado) {    
+  modificar(tipoInversion: TipoInversion) {
     this.dialog.open(TipoInversionEdicionComponent, {
-      data: estado
+      data: tipoInversion,
+      width: '600px' 
     }).afterClosed().subscribe(resp => {
       if (resp) {
         this.listar();
-        this.articuloService.message.next('Registro modificado correctamente.');
+        this.tipoInversionService.message.next('Registro modificado correctamente.');
       }
-    });    
+    });
   }
 
-  eliminar(articulo: Articulo) {
-    let idArticulo = articulo.id_articulo;
-    this.articuloService.eliminar(idArticulo, this.pidu).subscribe(() => {
-      this.listar();
-      this.articuloService.message.next('Registro eliminado correctamente.');
+  eliminar(tipoInversion: TipoInversion) {
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        this.tipoInversionService.eliminar(tipoInversion.id_tipo_inversion, this.pidu).subscribe(() => {
+          this.listar();
+          this.tipoInversionService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 

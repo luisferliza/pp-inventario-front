@@ -596,6 +596,16 @@ export class RouteHandlerComponent implements OnInit {
         routerLinkActiveOptions: {
           exact: true
         }
+      }),
+      new SidenavItem({
+        name: 'Tipos de Inversión',
+        route: '/inversiones/tiposinversion',
+        parent: gestionDatosInversiones,
+        subItems: [ ],
+        position: 1,
+        routerLinkActiveOptions: {
+          exact: true
+        }
       })
     ];
 
@@ -640,8 +650,8 @@ export class RouteHandlerComponent implements OnInit {
         }
       }),
       new SidenavItem({
-        name: 'Anexo 4',
-        route: '/inversiones/reportes/anexo4',
+        name: 'Anexo 2',
+        route: '/inversiones/reportes/anexo2',
         parent: reportesInventario,
         subItems: [ ],
         position: 1

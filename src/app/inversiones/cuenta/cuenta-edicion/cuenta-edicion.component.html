@@ -29,6 +29,16 @@
       </div>
     </div>
 
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+      <mat-form-field fxFlex>
+        <mat-label>Banco</mat-label>
+        <mat-select formControlName="banco_id">
+          <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
+            {{banco.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </mat-dialog-content>
 
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">

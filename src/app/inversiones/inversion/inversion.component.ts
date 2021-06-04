@@ -12,11 +12,7 @@ import { componentDestroyed } from 'app/core/utils/component-destroyed';
 import { CommonFunction } from 'app/inventario/shared/common';
 import { Articulo } from 'app/modelos/inventario/articulo';
 import { Inversion } from 'app/modelos/inversiones/inversion';
-import { BancoService } from 'app/servicios/inversiones/banco.service';
-import { CuentaService } from 'app/servicios/inversiones/cuenta.service';
 import { InversionService } from 'app/servicios/inversiones/inversion.service';
-import { TipoEntidadService } from 'app/servicios/inversiones/tipo-entidad.service';
-import { TipoInversionService } from 'app/servicios/inversiones/tipo-inversion.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CartaDesinversionAnticipadaDialogComponent } from './carta-desinversion-anticipada-dialog/carta-desinversion-anticipada-dialog.component';
@@ -24,10 +20,7 @@ import { CartaDesinversionDialogComponent } from './carta-desinversion-dialog/ca
 import { CartaInversionDialogComponent } from './carta-inversion-dialog/carta-inversion-dialog.component';
 import { CartaReinversionDialogComponent } from './carta-reinversion-dialog/carta-reinversion-dialog.component';
 import { InversionEdicionComponent } from './inversion-edicion/inversion-edicion.component';
-//import { DocumentCreator } from './cartas/carta-inversion';
-// import { Packer } from "docx";
-// import { writeFileSync} from "fs"; 
-
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'elastic-inversion',
@@ -45,17 +38,17 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Inversion', property: 'id_inversion', visible: false, isModelProperty: true },
-    { name: 'Referencia PP', property: 'referencia_pp', visible: true, isModelProperty: true },
-    { name: 'Monto', property: 'monto', visible: true, isModelProperty: false },
+    { name: 'Referencia PP', property: 'referencia_pp', visible: false, isModelProperty: true },
     { name: 'No. Certificado', property: 'certificado', visible: true, isModelProperty: true },
+    { name: 'Monto', property: 'monto', visible: true, isModelProperty: false },    
     { name: 'Acta JAPP', property: 'acta_japp', visible: true, isModelProperty: true },
     { name: 'Tasa', property: 'tasa_interes', visible: true, isModelProperty: true },
-    { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },    
+    { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },
     { name: 'No. de cuenta', property: 'cuenta', visible: true, isModelProperty: true },
-    { name: 'Días anuales', property: 'dias_anuales', visible: true, isModelProperty: true },    
+    { name: 'Días anuales', property: 'dias_anuales', visible: true, isModelProperty: true },
     { name: 'Periodo de pago', property: 'periodo_pago', visible: true, isModelProperty: true },
     { name: 'Fecha de colocación', property: 'fecha_colocacion', visible: true, isModelProperty: false },
-    { name: 'Fecha de acta', property: 'fecha_acta', visible: false, isModelProperty: false },    
+    { name: 'Fecha de acta', property: 'fecha_acta', visible: false, isModelProperty: false },
     { name: 'Fecha de vencimiento', property: 'vencimiento', visible: true, isModelProperty: false },
     { name: 'Tipo de inversión', property: 'tipo_Inversion', visible: false, isModelProperty: false },
     { name: 'Banco', property: 'banco', visible: true, isModelProperty: false },
@@ -74,6 +67,9 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   dataSource: ListDataSource<Inversion> | null;
   database: ListDatabase<Inversion>;
   pidu = '10';
+  mostarVigente = true;
+  tituloVigente = "Inversiones vigentes"
+  tituloNoVigente = "Inversiones no vigentes"
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -98,7 +94,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   }
 
   listar() {
-    this.inversionService.listar(this.pidu).subscribe(data => {
+    this.inversionService.listar(this.pidu, this.mostarVigente).subscribe(data => {
       this.inversiones = data;
       this.subject$.next(data);
       this.data$ = this.subject$.asObservable();
@@ -112,7 +108,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
         this.resultsLength = inversiones.length;
       });
 
-      this.dataSource = new ListDataSource<Inversion>(this.database, this.sort, this.paginator, this.columns);      
+      this.dataSource = new ListDataSource<Inversion>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
 
     });
@@ -125,8 +121,6 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
-
-  
 
   crear() {
     this.dialog.open(InversionEdicionComponent).afterClosed().subscribe((articulo: Articulo) => {
@@ -152,10 +146,13 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   }
 
   eliminar(inversion: Inversion) {
-    let idArticulo = inversion.id_inversion;
-    this.inversionService.eliminar(idArticulo, this.pidu).subscribe(() => {
-      this.listar();
-      this.inversionService.message.next('Registro eliminado correctamente.');
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        this.inversionService.eliminar(inversion.id_inversion, this.pidu).subscribe(() => {
+          this.listar();
+          this.inversionService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 
@@ -179,7 +176,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   generarCartaReInversion(row) {
     this.dialog.open(CartaReinversionDialogComponent, {
       data: row
-    }) 
+    })
   }
 
   generarCartaDesInversion(row) {
@@ -195,9 +192,9 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   reinvertir(row) {
     this.dialog.open(InversionEdicionComponent, {
       data: {
-              data: row,
-              type: 'reinvertir'
-            }
+        data: row,
+        type: 'reinvertir'
+      }
     }).afterClosed().subscribe(resp => {
       if (resp) {
         this.listar();
@@ -206,7 +203,27 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     });
   }
 
-  
+  updateRecords(){
+    if(this.mostarVigente){
+      this.mostarVigente = false;
+    }else{
+      this.mostarVigente= true;
+    }
+    this.listar();
+  } 
+
+  updateRecordName(){
+    if(this.mostarVigente){
+      return "Mostrar no vigentes"
+    }
+    return "Mostrar vigentes"
+  }
+
+  getTitle(){
+    return this.mostarVigente? this.tituloVigente: this.tituloNoVigente;
+  }
+
+
 
 
 }

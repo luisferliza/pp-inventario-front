@@ -5,12 +5,19 @@
   <div class="container">
 
     <elastic-breadcrumbs [currentPage]="'Inversiones'" [header]="'primary'"></elastic-breadcrumbs>
-
+    
     <elastic-list name="Inversiones" [columns]="columns" (filterChange)="onFilterChange($event)">
       <div class="actions" fxFlexAlign="center">
         <button class="create" (click)="crear()" type="button" mat-mini-fab color="primary">
           <mat-icon>add</mat-icon>
         </button>
+        <button [matMenuTriggerFor]="opciones" type="button" mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #opciones="matMenu">
+          <button mat-menu-item (click)="updateRecords(row)">{{ updateRecordName()}}</button>              
+        </mat-menu>
+
       </div>
 
       <mat-table #table [dataSource]="dataSource" id="table" matSort>
@@ -106,6 +113,8 @@
               <button mat-menu-item (click)="generarCartaDesInversionAnticipada(row)">Carta de desinversión anticipada</button>
             </mat-menu>
 
+            
+
 
           </mat-cell>
         </ng-container>
@@ -118,6 +127,7 @@
       <mat-paginator class="paginator" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
 
     </elastic-list>
+  
 
   </div>  
 

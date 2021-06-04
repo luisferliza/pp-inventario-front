@@ -55,44 +55,10 @@
       <mat-datepicker #vencimiento  ></mat-datepicker> 
     </div>
 
-    
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">              
-      <mat-form-field fxFlex>
-        <mat-placeholder>CC Inversión</mat-placeholder>
-        <input required type="text" (change)="inversionChanged()" formControlName="cuenta_inversion_codigo" matInput>
-      </mat-form-field>      
-      <mat-form-field fxFlex>        
-        <input required type="text" formControlName="cuenta_inversion_nombre" readonly matInput>
-      </mat-form-field>
-      <button type="button" (click)="inversion()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
-      <mat-form-field fxFlex>
-        <mat-placeholder>CC Interés por cobrar</mat-placeholder>
-        <input required type="text" (change)="provisionChanged()" formControlName="cuenta_provision_codigo" matInput>
-      </mat-form-field>      
-      <mat-form-field fxFlex>        
-        <input required type="text" formControlName="cuenta_provision_nombre" readonly matInput>
-      </mat-form-field>
-      <button type="button" (click)="provision()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
-    </div>
-
-    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
-      <mat-form-field fxFlex>
-        <mat-placeholder>CC Interes producto</mat-placeholder>
-        <input required type="text" (change)="interesChanged()" formControlName="cuenta_interes_codigo" matInput>
-      </mat-form-field>      
-      <mat-form-field fxFlex>        
-        <input required type="text" formControlName="cuenta_interes_nombre" readonly matInput>
-      </mat-form-field>
-      <button type="button" (click)="interes()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
-    </div>
-
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-label>Banco</mat-label>
-        <mat-select required formControlName="banco_id" >
+        <mat-select required formControlName="banco_id" (selectionChange)="bancoChanged()" >
           <mat-option *ngFor="let banco of bancos" [value]="banco.id_banco">
             {{banco.nombre}}
           </mat-option>
@@ -131,18 +97,53 @@
       </mat-form-field>
     </div>
 
+    
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">              
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Inversión</mat-placeholder>
+        <input required type="text" (change)="inversionChanged()" formControlName="cuenta_inversion_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_inversion_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="inversion()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Interés por cobrar</mat-placeholder>
+        <input required type="text" (change)="provisionChanged()" formControlName="cuenta_provision_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_provision_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="provision()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
+      <mat-form-field fxFlex>
+        <mat-placeholder>CC Interes producto</mat-placeholder>
+        <input required type="text" (change)="interesChanged()" formControlName="cuenta_interes_codigo" matInput>
+      </mat-form-field>      
+      <mat-form-field fxFlex>        
+        <input required type="text" formControlName="cuenta_interes_nombre" readonly matInput>
+      </mat-form-field>
+      <button type="button" (click)="interes()" mat-icon-button [matMenuTriggerFor]="cuentas"><mat-icon>search</mat-icon></button>
+    </div>
+
+    
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">      
       <mat-form-field fxFlex>
         <mat-label>Estado de inversión</mat-label>
-        <mat-select required formControlName="estado_inversion">
+        <mat-select required formControlName="estado_inversion" (selectionChange)=stateChange()>
           <mat-option *ngFor="let estado of estados" [value]="estado.id_estado">
             {{estado.nombre}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div style="padding-top: 3%; padding-right: 4.75%;">
-        <mat-checkbox [checked]="true" color="primary" formControlName="reinversion">¿Reinversión?</mat-checkbox>
+      <div style="padding-top: 3%; padding-right: 2%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="aprobado_japp">¿Aprobado JAPP?</mat-checkbox>
       </div>              
     </div>
 
@@ -158,29 +159,20 @@
 
     <!---->
     <mat-menu #cuentas="matMenu">
-      <button *ngIf="createCategory(0)" mat-menu-item [matMenuTriggerFor]="cat1">{{getCategoryName(0)}}</button>
-      <button *ngIf="createCategory(1)" mat-menu-item [matMenuTriggerFor]="cat2">{{getCategoryName(1)}}</button>
-      <button *ngIf="createCategory(2)" mat-menu-item [matMenuTriggerFor]="cat3">{{getCategoryName(2)}}</button>
-      <button *ngIf="createCategory(3)" mat-menu-item [matMenuTriggerFor]="cat4">{{getCategoryName(3)}}</button>
-      <button *ngIf="createCategory(4)" mat-menu-item [matMenuTriggerFor]="cat5">{{getCategoryName(4)}}</button>
-      <button *ngIf="createCategory(5)" mat-menu-item [matMenuTriggerFor]="cat6">{{getCategoryName(5)}}</button>
-      <button *ngIf="createCategory(6)" mat-menu-item [matMenuTriggerFor]="cat7">{{getCategoryName(6)}}</button>
-      <button *ngIf="createCategory(7)" mat-menu-item [matMenuTriggerFor]="cat8">{{getCategoryName(7)}}</button>
-      <button *ngIf="createCategory(8)" mat-menu-item [matMenuTriggerFor]="cat9">{{getCategoryName(8)}}</button>
-      <button *ngIf="createCategory(9)" mat-menu-item [matMenuTriggerFor]="cat10">{{getCategoryName(9)}}</button>      
+      <button mat-menu-item [matMenuTriggerFor]="inversion_mat">Cta. de Inversión</button>
+      <button mat-menu-item [matMenuTriggerFor]="provision_mat">Cta. Interes por cobrar</button>
+      <button mat-menu-item [matMenuTriggerFor]="producto_mat">Cta. de Interes producto</button>      
     </mat-menu>
     
-    <mat-menu #cat1="matMenu"><button *ngFor="let cuenta of getCuentas(0)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }}</button></mat-menu>
-    <mat-menu #cat2="matMenu"><button *ngFor="let cuenta of getCuentas(1)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }}</button></mat-menu>
-    <mat-menu #cat3="matMenu"><button *ngFor="let cuenta of getCuentas(2)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat4="matMenu"><button *ngFor="let cuenta of getCuentas(3)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat5="matMenu"><button *ngFor="let cuenta of getCuentas(4)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat6="matMenu"><button *ngFor="let cuenta of getCuentas(5)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat7="matMenu"><button *ngFor="let cuenta of getCuentas(6)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat8="matMenu"><button *ngFor="let cuenta of getCuentas(7)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat9="matMenu"><button *ngFor="let cuenta of getCuentas(8)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>
-    <mat-menu #cat10="matMenu"><button *ngFor="let cuenta of getCuentas(9)" type="button" mat-menu-item (click)="setCuenta(cuenta.numero)"> {{ cuenta.nombre }} </button></mat-menu>       
-    <!---->
+    <mat-menu #inversion_mat="matMenu">
+      <button *ngFor="let cuenta of cta_inversion" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }}</button>
+    </mat-menu>
+    <mat-menu #provision_mat="matMenu">
+      <button *ngFor="let cuenta of cta_provision" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }}</button>
+    </mat-menu>
+    <mat-menu #producto_mat="matMenu">
+      <button *ngFor="let cuenta of cta_interes_producto" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }} </button>
+    </mat-menu>     
      
   </mat-dialog-content>
 

@@ -14,6 +14,7 @@ import { BancoService } from 'app/servicios/inversiones/banco.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { BancoEdicionComponent } from './banco-edicion/banco-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'elastic-banco',
@@ -32,7 +33,8 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
   columns: ListColumn[] = [
     { name: 'ID_Banco', property: 'id_banco', visible: false, isModelProperty: true },
     { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
-    { name: 'Contacto', property: 'contacto', visible: true, isModelProperty: true },    
+    { name: 'No. Anexo', property: 'anexo', visible: true, isModelProperty: true },
+    { name: 'Contacto', property: 'contacto', visible: true, isModelProperty: true },
     { name: 'Dirección', property: 'direccion', visible: true, isModelProperty: true },
     { name: 'Teléfono', property: 'telefono', visible: true, isModelProperty: true },
     { name: 'Nombre Gerente', property: 'nombre_gerente', visible: true, isModelProperty: true },
@@ -76,7 +78,7 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((bancos: Banco[]) => {        
+      ).subscribe((bancos: Banco[]) => {
         this.Bancos = bancos;
         this.database.dataChange.next(bancos);
         this.resultsLength = bancos.length;
@@ -84,7 +86,7 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
 
       this.dataSource = new ListDataSource<Banco>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
-      
+
     });
   }
 
@@ -96,16 +98,16 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
-  crear() {        
+  crear() {
     this.dialog.open(BancoEdicionComponent).afterClosed().subscribe((Banco: Banco) => {
       if (Banco) {
         this.listar();
         this.BancoService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
-  modificar(estado) {    
+  modificar(estado) {
     this.dialog.open(BancoEdicionComponent, {
       data: estado
     }).afterClosed().subscribe(resp => {
@@ -113,14 +115,17 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
         this.listar();
         this.BancoService.message.next('Registro modificado correctamente.');
       }
-    });    
+    });
   }
 
   eliminar(Banco: Banco) {
-    let idBanco = Banco.id_banco;
-    this.BancoService.eliminar(idBanco, this.pidu).subscribe(() => {
-      this.listar();
-      this.BancoService.message.next('Registro eliminado correctamente.');
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        this.BancoService.eliminar(Banco.id_banco, this.pidu).subscribe(() => {
+          this.listar();
+          this.BancoService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
 

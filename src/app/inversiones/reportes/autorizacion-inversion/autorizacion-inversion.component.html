@@ -12,9 +12,18 @@
         <mat-card fxFlex.gt-md="300px">
           <mat-card-title>Autorización de inversion</mat-card-title>
           <p>
-            Se mostrarán únicamente las inversiones con estado "Aprobado"
+            Se mostrarán únicamente las inversiones marcadas como "Aprobado JAPP"
           </p>
-          <mat-card-content fxLayout="column">                        
+          <b>
+            <p>Seleccione el estado:</p>
+          </b>
+          <mat-select required [(ngModel)]="estado_actual" (selectionChange)="update()">
+            <mat-option *ngFor="let estado of estados" [value]="estado.nombre">
+              {{estado.nombre}}
+            </mat-option>
+          </mat-select>
+          <br><br>
+          <mat-card-content fxLayout="column">
             <button mat-raised-button color="primary" (click)="openDialog()">Generar PDF</button>
             <br>
             <button mat-raised-button color="accent" (click)="downloadExcel()">Generar Excel</button>
@@ -28,21 +37,21 @@
           <thead>
             <tr>
               <th>Dias Plazo</th>
-              <th>Tasa Nominal</th> 
+              <th>Tasa Nominal</th>
               <th>Institución bancaria</th>
               <th>Documento</th>
               <th>Intervalo de int.</th>
-              <th>Valor inversión Q.</th>              
+              <th>Valor inversión Q.</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let row of rows">              
-              <td>{{ row.plazo }}</td>
-              <td>{{ row.tasa_interes }}%</td>
-              <td>{{ row.banco.nombre }}</td>
-              <td>{{ row.tipo_Inversion.nombre }}</td>
-              <td>{{ row.periodo_pago }}</td>
-              <td>Q{{ row.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>              
+            <tr *ngFor="let item of visible_rows">
+              <td>{{ item.plazo }}</td>
+              <td>{{ item.tasa_interes }}%</td>
+              <td>{{ item.banco.nombre }}</td>
+              <td>{{ item.tipo_Inversion.nombre }}</td>
+              <td>{{ item.periodo_pago }}</td>
+              <td>Q{{ item.monto.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
             </tr>
           </tbody>
         </table>

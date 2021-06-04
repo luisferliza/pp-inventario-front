@@ -61,10 +61,26 @@ export class CommonFunction {
 
 
   // Puestos generales
-  public contador = "Contador General";
-  public administrador = "Administrador Ejecutivo"
-  public presidenteJunta = "Presidente"
-  public secretarioJunta = "Secretario"
-  public asistente_administrativo = "Asistente Administrativo-Financiero"
+  public readonly contador = "Contador General";
+  public readonly administrador = "Administrador Ejecutivo"
+  public readonly presidenteJunta = "Presidente"
+  public readonly secretarioJunta = "Secretario"
+  public readonly asistente_administrativo = "Asistente Administrativo-Financiero"
+
+  // Tipos de Cuenta
+  public readonly CTA_INVERSION = 'Cta. de Inversión'
+  public readonly CTA_INT_COBRAR ='Cta. de Intereses por cobrar'
+  public readonly CTA_INT_PRODUCTO = 'Cta. de Interes producto'
+
+  // Estados de inversion
+  public readonly ESTADO_INVERSION = 'Inversion';
+  public readonly ESTADO_REINVERSION = 'Reinversion';
+  public readonly ESTADO_REINVERSION_PARCIAL = 'Reinversion Parcial';
+  public readonly ESTADO_VENCIMIENTO = 'Vencimiento';
+  public readonly ESTADO_DESINVERSION = 'Desinversión';
+
+  // Bancos Especiales
+  public readonly MINISTERIO_FINANZAS = 'MINISTERIO DE FINANZAS PÚBLICAS';
+  public readonly BANCOS_ESTATALES = 'BANCOS ESTATALES';
 
 }

@@ -1,4 +1,5 @@
 import { TipoCuenta } from "./tipo-cuenta";
+import { Banco } from "./banco";
 
 export class Cuenta{
     //Cuenta no terminada
@@ -6,5 +7,6 @@ export class Cuenta{
 	numero: string;
 	nombre: string;
     activa: Boolean;
-    tipo_cuenta: TipoCuenta;
+    tipoCuenta: TipoCuenta;
+    banco: Banco;
 } 

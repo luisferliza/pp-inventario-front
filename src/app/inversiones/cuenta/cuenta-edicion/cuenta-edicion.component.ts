@@ -5,6 +5,8 @@ import { Cuenta } from 'app/modelos/inversiones/cuenta';
 import { TipoCuenta } from 'app/modelos/inversiones/tipo-cuenta';
 import { CuentaService } from 'app/servicios/inversiones/cuenta.service';
 import { TipoCuentaService } from 'app/servicios/inversiones/tipo-cuenta.service';
+import { BancoService } from 'app/servicios/inversiones/banco.service';
+import { Banco } from 'app/modelos/inversiones/banco';
 
 @Component({
   selector: 'elastic-cuenta-edicion',
@@ -17,20 +19,21 @@ export class CuentaEdicionComponent implements OnInit {
   mode: 'create' | 'update' = 'create';
   pidu = '10';
   tipos: TipoCuenta[];
-
-  
+  bancos: Banco[] = [];  
   
 
   constructor(private dialogRef: MatDialogRef<CuentaEdicionComponent>,
     @Inject(MAT_DIALOG_DATA) private defaults: Cuenta,
     private cuentaService: CuentaService,
     private tipoCuentaService: TipoCuentaService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private bancoService: BancoService) { }
 
 
   ngOnInit() {    
     
     this.updateTiposEntidad();
+    this.updateBancos();
 
     if (this.defaults) {
       this.mode = 'update';
@@ -41,8 +44,9 @@ export class CuentaEdicionComponent implements OnInit {
     this.form = this.fb.group({      
       nombre:  this.defaults.nombre || '',
       numero: this.defaults.numero || '',      
-      activa: this.defaults.activa || false,            
-      tipo_cuenta_id: this.defaults.tipo_cuenta? this.defaults.tipo_cuenta.id_tipo_cuenta : null,         
+      activa: this.defaults.activa || true,            
+      tipo_cuenta_id: this.defaults.tipoCuenta? this.defaults.tipoCuenta.id_tipo_cuenta : null,         
+      banco_id: this.defaults.banco ? this.defaults.banco.id_banco : null
     });
   }
   
@@ -61,10 +65,13 @@ export class CuentaEdicionComponent implements OnInit {
   create() {
     const cuenta: Cuenta = this.form.value;
 
-    cuenta.tipo_cuenta= new TipoCuenta();
-    cuenta.tipo_cuenta.id_tipo_cuenta = this.form.value.tipo_cuenta_id;
+    cuenta.tipoCuenta= new TipoCuenta();
+    cuenta.tipoCuenta.id_tipo_cuenta = this.form.value.tipo_cuenta_id;
 
-    console.log(cuenta);
+    if(this.form.value.banco_id){
+      cuenta.banco = new Banco();
+      cuenta.banco.id_banco = this.form.value.banco_id;
+    }    
     
     this.cuentaService.registrar(cuenta, this.pidu).subscribe(()=>{
       this.dialogRef.close(cuenta);
@@ -76,9 +83,14 @@ export class CuentaEdicionComponent implements OnInit {
     const cuenta: Cuenta = this.form.value;
     cuenta.id_cuenta = this.defaults.id_cuenta;
 
-    cuenta.tipo_cuenta= new TipoCuenta();
-    cuenta.tipo_cuenta.id_tipo_cuenta = this.form.value.tipo_cuenta_id;
+    cuenta.tipoCuenta= new TipoCuenta();
+    cuenta.tipoCuenta.id_tipo_cuenta = this.form.value.tipo_cuenta_id;
     
+    if(this.form.value.banco_id){
+      cuenta.banco = new Banco();
+      cuenta.banco.id_banco = this.form.value.banco_id;
+    }    
+
     this.cuentaService.modificar(cuenta, this.pidu).subscribe(()=>{
       this.dialogRef.close(cuenta);
     })
@@ -95,6 +107,12 @@ export class CuentaEdicionComponent implements OnInit {
   updateTiposEntidad() {
     this.tipoCuentaService.listar(this.pidu).subscribe(data => {      
       this.tipos = data;
+    })
+  }
+
+  updateBancos() {
+    this.bancoService.listar(this.pidu).subscribe(data => {
+      this.bancos = data;
     })
   }
 

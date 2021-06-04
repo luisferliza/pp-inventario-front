@@ -1,12 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { INVENTARIO_HOST, INVERSIONES_HOST } from "app/inventario/shared/var.constants";
-import { Firmante } from "app/modelos/inversiones/firmante";
+import { INVERSIONES_HOST } from "app/inventario/shared/var.constants";
 import { InversionesPorBanco } from "app/modelos/inversiones/InversionesPorBanco";
 import { Inversion } from "app/modelos/inversiones/inversion";
 import { TasaDTO } from "app/modelos/inversiones/TasaDTO";
 import { InversionesPorTipoBanco } from "app/modelos/inversiones/inversionesPorTipoBanco";
 import { TotalInversionesPorBanco } from "app/modelos/inversiones/totalInversionesPorBanco";
+import { InversionesPorTipoInversionAprobadas } from "app/modelos/inversiones/InversionesPorTipoInversionAprobadas";
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +46,7 @@ export class ReportesInversionesService {
   }
 
   autorizacionInversion(pidu: String) {
-    return this.http.get<Inversion[]>(`${this.url}/reportes/autorizacioninversion?pidu=${pidu}`);
+    return this.http.get<InversionesPorTipoInversionAprobadas[]>(`${this.url}/reportes/autorizacioninversion?pidu=${pidu}`);
   }
 
   tasaMaxima(pidu: String, anio: number) {

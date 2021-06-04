@@ -102,6 +102,10 @@ const routes: Routes = [
         path: 'inversiones/firmantes',
         loadChildren: 'app/inversiones/firmante/firmante.module#FirmanteModule'
       },  
+      {
+        path: 'inversiones/tiposinversion',
+        loadChildren: 'app/inversiones/tipo-inversion/tipo-inversion.module#TipoInversionModule'
+      },  
       // Reportes
       {
         path: 'inversiones/reportes/interes-mensual',
@@ -116,7 +120,7 @@ const routes: Routes = [
         loadChildren: 'app/inversiones/reportes/control-vencimiento/control-vencimiento.module#ControlVencimientoModule'
       },
       {
-        path: 'inversiones/reportes/anexo4',
+        path: 'inversiones/reportes/anexo2',
         loadChildren: 'app/inversiones/reportes/anexo4/anexo4.module#Anexo4Module'
       },
       {
@@ -138,7 +142,7 @@ const routes: Routes = [
       {
         path: 'inversiones/reportes/tasa-promedio',
         loadChildren: 'app/inversiones/reportes/tasa-promedio/tasa-promedio.module#TasaPromedioModule'
-      },      
+      },            
       //###########################################################################
       //#endregion
       {

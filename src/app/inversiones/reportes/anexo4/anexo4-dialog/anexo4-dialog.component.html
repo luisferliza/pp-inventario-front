@@ -5,12 +5,31 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="100px">
       <mat-form-field fxFlex>
-        <mat-placeholder>Total de préstamos a trabajadores</mat-placeholder>
-        <input required type="number" formControlName="prestamos_trabajadores" matInput>
+        <mat-placeholder>Préstamos (Fox)</mat-placeholder>
+        <input required type="number" formControlName="prestamos_fox" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <mat-placeholder>Total de préstamos hipotecarios</mat-placeholder>
-        <input required type="number" formControlName="prestamos_hipotecarios" matInput>
+        <mat-placeholder>Préstamos Inmediatos</mat-placeholder>
+        <input required type="number" formControlName="prestamos_inmediatos" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Préstamos</mat-placeholder>
+        <input required type="number" formControlName="prestamos" matInput>
+      </mat-form-field>
+    </div>   
+
+    <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="100px">
+      <mat-form-field fxFlex>
+        <mat-placeholder>Prima a amortizar</mat-placeholder>
+        <input required type="number" formControlName="prima" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Descuentos</mat-placeholder>
+        <input required type="number" formControlName="descuentos" matInput>
+      </mat-form-field>
+      <mat-form-field fxFlex>
+        <mat-placeholder>Anexo No.</mat-placeholder>
+        <input required type="number" formControlName="anexo" matInput>
       </mat-form-field>
     </div>   
 

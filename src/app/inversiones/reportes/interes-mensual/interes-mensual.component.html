@@ -24,7 +24,7 @@
               <p>Seleccione la fecha:</p>
             </b>
             <mat-form-field>
-              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha" (dateChange)="update()">
+              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Fecha de cálculo de interés" [(ngModel)]="fecha" (dateChange)="update()">
               <mat-datepicker-toggle matSuffix [for]="formDatepickerRef"></mat-datepicker-toggle>              
             </mat-form-field>
             <mat-datepicker #formDatepickerRef  ></mat-datepicker>            

@@ -40,6 +40,7 @@ export class BancoEdicionComponent implements OnInit {
     this.form = this.fb.group({      
       nombre:  this.defaults.nombre || '',
       contacto: this.defaults.contacto || '',      
+      anexo: this.defaults.anexo || 1,      
       direccion: this.defaults.direccion || '',      
       telefono: this.defaults.telefono || '',
       nombre_gerente: this.defaults.nombre_gerente || '',      

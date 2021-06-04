@@ -35,13 +35,14 @@ export class InversionesVencenComponent implements OnInit {
     this.fecha_ini.setDate(1);    
     this.getFirmante();
     this.listar();
+    this.fecha_fin.setHours(0);
+    this.fecha_ini.setHours(0);
   }
 
   getFirmante() {
     this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data => {
       if (data.length > 0) {
-        this.contador = data[0];
-        console.log(this.contador)
+        this.contador = data[0];        
       } else {
         this.snackBar.open(`${this.common.contador} No encontrado`, 'AVISO', {
           duration: 2000

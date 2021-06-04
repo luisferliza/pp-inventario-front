@@ -19,8 +19,8 @@ export class CuentaService {
     return this.http.get<Cuenta[]>(`${this.url}/cuentas?pidu=${pidu}`);
   }
   
-  listarActivas(pidu: String) {
-    return this.http.get<Cuenta[]>(`${this.url}/cuentas/activas?pidu=${pidu}`);
+  listarActivas(pidu: String, tipo_cuenta: string) {
+    return this.http.get<Cuenta[]>(`${this.url}/cuentas/activas?pidu=${pidu}&tipo_cuenta=${tipo_cuenta}`);
   }
 
   listarPorId(idCuenta: number, pidu: String) {

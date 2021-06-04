@@ -40,6 +40,7 @@ export class IntegracionPlazoComponent implements OnInit {
   ngOnInit(): void {
     this.getBancos();
     this.getFirmante();
+    this.fecha.setHours(0);
   }
 
   getBancos() {

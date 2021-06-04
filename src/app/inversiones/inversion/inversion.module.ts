@@ -14,6 +14,8 @@ import { CartaReinversionDialogComponent } from './carta-reinversion-dialog/cart
 import { CartaDesinversionDialogComponent } from './carta-desinversion-dialog/carta-desinversion-dialog.component';
 import { CartaDesinversionAnticipadaDialogComponent } from './carta-desinversion-anticipada-dialog/carta-desinversion-anticipada-dialog.component';
 import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfiguration';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
+import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
 
 @NgModule({
   declarations: [InversionComponent, InversionEdicionComponent, CartaInversionDialogComponent, CartaReinversionDialogComponent, CartaDesinversionDialogComponent, CartaDesinversionAnticipadaDialogComponent],
@@ -43,6 +45,7 @@ import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfigurat
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,    
+    DeleteDialogModule,
 
     // Core
     ListModule,    
@@ -53,7 +56,8 @@ import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfigurat
     CartaInversionDialogComponent,
     CartaReinversionDialogComponent, 
     CartaDesinversionDialogComponent,     
-    CartaDesinversionAnticipadaDialogComponent
+    CartaDesinversionAnticipadaDialogComponent,
+    DeleteDialogComponent
   ]
 })
 export class InversionModule { }

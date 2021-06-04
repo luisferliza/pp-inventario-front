@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MatPaginatorIntl } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -9,9 +9,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FirmanteComponent } from './firmante.component';
 import { FirmanteEdicionComponent } from './firmante-edicion/firmante-edicion.component';
 import { FirmanteRoutingModule } from './firmante.routing';
+import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfiguration';
 
 @NgModule({
   declarations: [FirmanteComponent, FirmanteEdicionComponent],
+  providers: [    
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -29,7 +33,7 @@ import { FirmanteRoutingModule } from './firmante.routing';
     FirmanteRoutingModule,    
     ReactiveFormsModule,    
     MatRadioModule,
-    MatSelectModule,
+    MatSelectModule,    
 
     // Core
     ListModule,    

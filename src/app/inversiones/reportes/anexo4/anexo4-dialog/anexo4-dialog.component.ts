@@ -19,37 +19,41 @@ export class Anexo4DialogComponent implements OnInit {
   ngOnInit() {
 
     this.form = this.fb.group({
-      prestamos_trabajadores: 0,
-      prestamos_hipotecarios: 0,
+      prestamos_fox: 0,
+      prestamos_inmediatos: 0,
+      prestamos: 0,
+      prima: 0,
+      descuentos: 0,
+      anexo: 0,
     });
   }
 
 
   save() {
-    let response = []
-    response.push(
-      {
-        nombreCategoria: "PRESTAMOS A TRABAJADORES",
-        bancos: [
-          {
-            nombre: "PRESTAMOS A TRABAJADORES",
-            monto: this.form.value.prestamos_trabajadores
-          }
-        ],
-        totalCategoria: this.form.value.prestamos_trabajadores
-      },
-      {
-        nombreCategoria: "PRESTAMOS HIPOTECARIOS",
-        bancos: [
-          {
-            nombre: "PRESTAMOS HIPOTECARIOS",
-            monto: this.form.value.prestamos_hipotecarios
-          }
-        ],
-        totalCategoria: this.form.value.prestamos_hipotecarios
-      },
-    )
-    
+    let response = {
+      prima: this.form.value.prima,
+      descuentos: this.form.value.descuentos,
+      anexo: this.form.value.anexo,
+      prestamos: {}
+    }
+    response.prestamos = {
+      nombreCategoria: "PRESTAMOS",
+      bancos: [
+        {
+          nombre: "PRESTAMOS (fox)",
+          monto: this.form.value.prestamos_fox
+        },
+        {
+          nombre: "PRESTAMOS INMEDIATOS",
+          monto: this.form.value.prestamos_inmediatos
+        },
+        {
+          nombre: "PRESTAMOS",
+          monto: this.form.value.prestamos
+        }
+      ],
+      totalCategoria: this.form.value.prestamos_fox + this.form.value.prestamos_inmediatos + this.form.value.prestamos
+    }
     this.dialogRef.close(response);
   }
 

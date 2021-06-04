@@ -10,13 +10,13 @@
     <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
       <div class="sticky">
         <mat-card fxFlex.gt-md="300px">
-          <mat-card-title>Control de vencimiento de inversiones</mat-card-title>
+          <mat-card-title>Anexo 2</mat-card-title>
           <mat-card-content fxLayout="column">            
             <b>
               <p>Seleccione la fecha de inicio:</p>
             </b>
             <mat-form-field>
-              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha" (dateChange)="update()">
+              <input matInput [matDatepicker]="formDatepickerRef" placeholder="Ingrese la fecha deseada" [(ngModel)]="fecha" (dateChange)="listar()">
               <mat-datepicker-toggle matSuffix [for]="formDatepickerRef"></mat-datepicker-toggle>              
             </mat-form-field>
             <mat-datepicker #formDatepickerRef  ></mat-datepicker>            

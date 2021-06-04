@@ -14,6 +14,7 @@ import { CuentaService } from 'app/servicios/inversiones/cuenta.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { CuentaEdicionComponent } from './cuenta-edicion/cuenta-edicion.component';
+import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 
 @Component({
   selector: 'elastic-cuenta',
@@ -32,12 +33,11 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
   columns: ListColumn[] = [
     { name: 'ID_Cuenta', property: 'id_cuenta', visible: false, isModelProperty: true },
     { name: 'Número', property: 'numero', visible: true, isModelProperty: true },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
     { name: 'Estado', property: 'activa', visible: true, isModelProperty: false },
-    { name: 'Tipo de Cuenta', property: 'tipo_Cuenta', visible: true, isModelProperty: false },    
+    { name: 'Tipo de Cuenta', property: 'tipoCuenta', visible: true, isModelProperty: false },
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
-
 
   pageSize = 10;
   resultsLength: number;
@@ -48,7 +48,9 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private cuentaService: CuentaService, private snackBar: MatSnackBar, private dialog: MatDialog) { }
+  constructor(private cuentaService: CuentaService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog) { }
 
   get visibleColumns() {
     return this.columns.filter(column => column.visible).map(column => column.property);
@@ -73,7 +75,7 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
       this.data$.pipe(
         takeUntil(componentDestroyed(this)),
         filter(Boolean)
-      ).subscribe((cuentas: Cuenta[]) => {        
+      ).subscribe((cuentas: Cuenta[]) => {
         this.cuentas = cuentas;
         this.database.dataChange.next(cuentas);
         this.resultsLength = cuentas.length;
@@ -81,7 +83,7 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
 
       this.dataSource = new ListDataSource<Cuenta>(this.database, this.sort, this.paginator, this.columns);
       document.getElementById('table').click();
-      
+
     });
   }
 
@@ -93,16 +95,16 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
     this.dataSource.filter = filterValue;
   }
 
-  crear() {        
+  crear() {
     this.dialog.open(CuentaEdicionComponent).afterClosed().subscribe((cuenta: Cuenta) => {
       if (cuenta) {
         this.listar();
         this.cuentaService.message.next('Registro creado correctamente.');
       }
-    });    
+    });
   }
 
-  modificar(estado) {    
+  modificar(estado) {
     this.dialog.open(CuentaEdicionComponent, {
       data: estado
     }).afterClosed().subscribe(resp => {
@@ -110,16 +112,21 @@ export class CuentaComponent implements List<Cuenta>, OnInit, OnDestroy {
         this.listar();
         this.cuentaService.message.next('Registro modificado correctamente.');
       }
-    });    
+    });
   }
 
   eliminar(cuenta: Cuenta) {
-    let idCuenta = cuenta.id_cuenta;
-    this.cuentaService.eliminar(idCuenta, this.pidu).subscribe(() => {
-      this.listar();
-      this.cuentaService.message.next('Registro eliminado correctamente.');
+    this.dialog.open(DeleteDialogComponent).afterClosed().subscribe(resp => {
+      if (resp) {
+        this.cuentaService.eliminar(cuenta.id_cuenta, this.pidu).subscribe(() => {
+          this.listar();
+          this.cuentaService.message.next('Registro eliminado correctamente.');
+        });
+      }
     });
   }
+
+
 
 
   onFilterChange(value) {
