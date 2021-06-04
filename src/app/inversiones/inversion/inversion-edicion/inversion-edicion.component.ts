@@ -21,7 +21,7 @@ import { CommonFunction } from 'app/inventario/shared/common';
   styleUrls: ['./inversion-edicion.component.scss']
 })
 export class InversionEdicionComponent implements OnInit {
-
+ 
 
   form: FormGroup;
   mode: 'create' | 'update' | 'reinvertir' = 'create';

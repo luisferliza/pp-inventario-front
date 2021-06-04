@@ -21,6 +21,10 @@ import { CartaInversionDialogComponent } from './carta-inversion-dialog/carta-in
 import { CartaReinversionDialogComponent } from './carta-reinversion-dialog/carta-reinversion-dialog.component';
 import { InversionEdicionComponent } from './inversion-edicion/inversion-edicion.component';
 import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
+import { EstadoInversion } from 'app/modelos/inversiones/estadoinversion';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { EstadoInversionService } from 'app/servicios/inversiones/estadoinversion.service';
+import { DesinversionDialogComponent } from './desinversion-dialog/desinversion-dialog.component';
 
 @Component({
   selector: 'elastic-inversion',
@@ -34,13 +38,14 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   subject$: ReplaySubject<Inversion[]> = new ReplaySubject<Inversion[]>(1);
   data$: Observable<Inversion[]>;
   inversiones: Inversion[];
+  estados: EstadoInversion[];
 
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Inversion', property: 'id_inversion', visible: false, isModelProperty: true },
     { name: 'Referencia PP', property: 'referencia_pp', visible: false, isModelProperty: true },
     { name: 'No. Certificado', property: 'certificado', visible: true, isModelProperty: true },
-    { name: 'Monto', property: 'monto', visible: true, isModelProperty: false },    
+    { name: 'Monto', property: 'monto', visible: true, isModelProperty: false },
     { name: 'Acta JAPP', property: 'acta_japp', visible: true, isModelProperty: true },
     { name: 'Tasa', property: 'tasa_interes', visible: true, isModelProperty: true },
     { name: 'Plazo (Días)', property: 'plazo', visible: true, isModelProperty: true },
@@ -77,6 +82,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   constructor(private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private inversionService: InversionService,
+    private estadoInversionService: EstadoInversionService,
     public common: CommonFunction) { }
 
   get visibleColumns() {
@@ -86,6 +92,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.listar();
+    this.updateEstados();
     this.inversionService.message.subscribe(data => {
       this.snackBar.open(data, 'AVISO', {
         duration: 2000
@@ -112,6 +119,12 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
       document.getElementById('table').click();
 
     });
+  }
+
+  updateEstados() {
+    this.estadoInversionService.listar(this.pidu).subscribe(data => {
+      this.estados = data;
+    })
   }
 
 
@@ -203,24 +216,78 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     });
   }
 
-  updateRecords(){
-    if(this.mostarVigente){
+  desinvertir(row: Inversion) {
+    let estado_desinversion = this.getIdEstado(this.common.ESTADO_DESINVERSION);
+    if (estado_desinversion != null) {
+      this.dialog.open(DesinversionDialogComponent, {
+        data: 'Desinversión',
+        width: '600px'
+      }).afterClosed().subscribe((response) => {
+        if (response) {
+          row.observacion = row.observacion.concat(response.observacion);
+          row.estado = estado_desinversion;
+          row.vigente = false;
+          this.inversionService.modificar(row, this.pidu).subscribe(() => {
+            this.inversionService.message.next('Desinversión realizada correctamente');      
+            this.listar(); // Se recargan los datos
+          })
+        }
+      });
+    } else {
+      this.inversionService.message.next('Error al realizar la desinversion. Contacte al administrador de BD.');
+    }
+  }
+
+  vencimiento(row) {
+    let estado_desinversion = this.getIdEstado(this.common.ESTADO_VENCIMIENTO);
+    if (estado_desinversion != null) {
+      this.dialog.open(DesinversionDialogComponent, {
+        data: 'Vencimiento',
+        width: '600px'
+      }).afterClosed().subscribe((response) => {
+        if (response) {
+          row.observacion = row.observacion.concat(response.observacion);
+          row.estado = estado_desinversion;
+          row.vigente = false;
+          this.inversionService.modificar(row, this.pidu).subscribe(() => {
+            this.inversionService.message.next('Vencimiento realizado correctamente');      
+            this.listar(); // Se recargan los datos
+          })
+        }
+      });
+    } else {
+      this.inversionService.message.next('Error al confirmar el vencimiento. Contacte al administrador de BD.');
+    }
+  }
+
+  getIdEstado(nombre: string): EstadoInversion {
+    for (let index = 0; index < this.estados.length; index++) {
+      const element = this.estados[index];
+      if (element.nombre.toLocaleUpperCase() === nombre.toLocaleUpperCase()) {
+        return element;
+      }
+    }
+    return null;
+  }
+
+  updateRecords() {
+    if (this.mostarVigente) {
       this.mostarVigente = false;
-    }else{
-      this.mostarVigente= true;
+    } else {
+      this.mostarVigente = true;
     }
     this.listar();
-  } 
+  }
 
-  updateRecordName(){
-    if(this.mostarVigente){
+  updateRecordName() {
+    if (this.mostarVigente) {
       return "Mostrar no vigentes"
     }
     return "Mostrar vigentes"
   }
 
-  getTitle(){
-    return this.mostarVigente? this.tituloVigente: this.tituloNoVigente;
+  getTitle() {
+    return this.mostarVigente ? this.tituloVigente : this.tituloNoVigente;
   }
 
 

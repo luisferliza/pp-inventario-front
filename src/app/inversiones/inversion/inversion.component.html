@@ -95,15 +95,15 @@
               <button [matMenuTriggerFor]="cartas" mat-menu-item>
                 <span>Cartas</span>
               </button>
+              <button *ngIf="mostarVigente" [matMenuTriggerFor]="acciones" mat-menu-item>
+                <span>Acciones</span>
+              </button>
               <button (click)="modificar(row)" mat-menu-item>
                 <span>Modificar</span>
               </button>
               <button (click)="eliminar(row)" mat-menu-item>
                 <span>Eliminar</span>
-              </button>
-              <button (click)="reinvertir(row)" mat-menu-item>
-                <span>Reinvertir</span>
-              </button>
+              </button>              
             </mat-menu>
 
             <mat-menu #cartas="matMenu">
@@ -112,8 +112,12 @@
               <button mat-menu-item (click)="generarCartaDesInversion(row)">Carta de desinversión</button>
               <button mat-menu-item (click)="generarCartaDesInversionAnticipada(row)">Carta de desinversión anticipada</button>
             </mat-menu>
-
             
+            <mat-menu #acciones="matMenu">
+              <button mat-menu-item (click)="reinvertir(row)">Reinvertir</button>
+              <button mat-menu-item (click)="desinvertir(row)">Desinvertir</button>
+              <button mat-menu-item (click)="vencimiento(row)">Vencimiento</button>              
+            </mat-menu>
 
 
           </mat-cell>
