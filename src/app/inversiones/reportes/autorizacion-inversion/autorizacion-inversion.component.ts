@@ -40,10 +40,12 @@ export class AutorizacionInversionComponent implements OnInit {
     private plantilla: PlantillaAutorizacionInversion) { }
 
   ngOnInit(): void {
-    this.listar();
-    this.getFirmantes(this.common.presidenteJunta);
-    this.getFirmantes(this.common.secretarioJunta);
+    this.listar();        
     this.getEstados();
+    this.getFirmantes(this.common.presidenteJunta);    
+    this.getFirmantes(this.common.secretarioJunta);
+    this.update();
+    
   }
 
   listar() {
@@ -53,8 +55,8 @@ export class AutorizacionInversionComponent implements OnInit {
     });
   }
 
-  update() {    
-    for (let index = 0; index < this.rows.length; index++) {
+  update() {      
+    for (let index = 0; this.rows && index < this.rows.length; index++) {
       const element = this.rows[index];      
       if (element.estadoInversion == this.estado_actual) {
         this.visible_rows = element.inversiones;

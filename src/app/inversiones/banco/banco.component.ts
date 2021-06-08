@@ -32,11 +32,11 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Banco', property: 'id_banco', visible: false, isModelProperty: true },
-    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },
-    { name: 'No. Anexo', property: 'anexo', visible: true, isModelProperty: true },
+    { name: 'Nombre', property: 'nombre', visible: true, isModelProperty: true },    
     { name: 'Contacto', property: 'contacto', visible: true, isModelProperty: true },
     { name: 'Dirección', property: 'direccion', visible: true, isModelProperty: true },
     { name: 'Teléfono', property: 'telefono', visible: true, isModelProperty: true },
+    { name: 'No. Anexo', property: 'anexo', visible: false, isModelProperty: true },
     { name: 'Nombre Gerente', property: 'nombre_gerente', visible: true, isModelProperty: true },
     { name: 'Título Gerente', property: 'titulo_gerente', visible: true, isModelProperty: true },
     { name: 'Tipo de entidad', property: 'tipo_Entidad', visible: true, isModelProperty: false },

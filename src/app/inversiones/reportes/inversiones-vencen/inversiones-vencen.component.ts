@@ -116,7 +116,7 @@ export class InversionesVencenComponent implements OnInit {
       p.periodo_pago,
       this.common.getLocalDateString(this.common.parseDate(p.vencimiento)),
       this.common.getFechaPagoString(p.vencimiento), 
-      p.monto.toLocaleString(this.common.localNumber, this.common.numberOptions)
+      p.monto
       ]))
       
   }
