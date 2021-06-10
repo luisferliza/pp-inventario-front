@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Articulo } from 'app/modelos/inventario/articulo';
 import { Departamento } from 'app/modelos/inventario/departamento';
 import { TarjetaResponsabilidad } from 'app/modelos/inventario/tarjeta-responsabilidad';
@@ -13,6 +12,8 @@ import { TarjetaResponsabilidadService } from 'app/servicios/inventario/tarjeta-
 import { TrasladoService } from 'app/servicios/inventario/traslado.service';
 import { UsuarioService } from 'app/servicios/inventario/usuario.service';
 import { CommonFunction } from 'app/inventario/shared/common';
+import { Observable } from 'rxjs';
+import { startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'elastic-tarjeta-responsabilidad-edicion',
@@ -27,6 +28,8 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   articulos: Articulo[];
   departamentos: Departamento[];
   usuarios: Usuario[];
+  filteredOptions: Observable<Articulo[]>;
+  articulo_selecionado: Articulo = null;
 
   constructor(private dialogRef: MatDialogRef<TarjetaResponsabilidadEdicionComponent>,
     @Inject(MAT_DIALOG_DATA) private defaults: TarjetaResponsabilidad,
@@ -58,6 +61,21 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
       id_articulo: this.defaults.articulo ? this.defaults.articulo.id_articulo : null,
       id_departamento: this.defaults.departamento ? this.defaults.departamento.id_departamento : null
     });
+
+    this.filteredOptions = this.form.valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+  }
+
+  alertOption(articulo: Articulo) {
+    this.articulo_selecionado = articulo;
+  }
+
+  removeArticulo() {
+    if (this.articulo_selecionado && this.form.value.id_articulo != this.articulo_selecionado.id_articulo) {
+      this.articulo_selecionado = null;
+    }
   }
 
   save() {
@@ -81,50 +99,58 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   updateUsuarios() {
-    this.usuarioService.listar(this.pidu).subscribe(data => {      
+    this.usuarioService.listar(this.pidu).subscribe(data => {
       this.usuarios = data;
     })
   }
 
   create() {
-    const tarjetaResponsabilidad: TarjetaResponsabilidad = this.form.value;
+    if (this.articulo_selecionado != null) {
+      const tarjetaResponsabilidad: TarjetaResponsabilidad = this.form.value;
 
-    tarjetaResponsabilidad.articulo = new Articulo();
-    tarjetaResponsabilidad.articulo.id_articulo = this.form.value.id_articulo;
+      tarjetaResponsabilidad.articulo = this.articulo_selecionado
 
-    tarjetaResponsabilidad.departamento = new Departamento();
-    tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
+      tarjetaResponsabilidad.departamento = new Departamento();
+      tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
 
-    tarjetaResponsabilidad.receptor = new Usuario();
-    tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+      tarjetaResponsabilidad.receptor = new Usuario();
+      tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
 
-    this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
-      /* Automaticamente se crea el traslado*/
-      if (data) {
-        this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((tarjetaData) => {
-          const traslado: Traslado = new Traslado();
-          traslado.fecha_fin = null;
-          traslado.fecha_inicio = this.common.parseDate(tarjetaData.articulo.fecha_compra).toISOString();
-
-          traslado.usuario = new Usuario();
-          traslado.usuario.idUsuario = tarjetaData.receptor.idUsuario;
-
-          traslado.tarjeta = new TarjetaResponsabilidad()
-          traslado.tarjeta.id_interno = tarjetaData.id_interno;
-
-          traslado.seccion = new Departamento();
-          traslado.seccion.id_departamento = tarjetaData.departamento.id_departamento;          
-
-          this.trasladoService.registrar(traslado, this.pidu).subscribe(() => {
-            this.dialogRef.close(tarjetaResponsabilidad);
+      console.log(tarjetaResponsabilidad)
+      
+      this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
+        // Automaticamente se crea el traslado
+        if (data) {
+          this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((tarjetaData) => {
+            const traslado: Traslado = new Traslado();
+            traslado.fecha_fin = null;
+            traslado.fecha_inicio = this.common.parseDate(tarjetaData.articulo.fecha_compra).toISOString();
+  
+            traslado.usuario = new Usuario();
+            traslado.usuario.idUsuario = tarjetaData.receptor.idUsuario;
+  
+            traslado.tarjeta = new TarjetaResponsabilidad()
+            traslado.tarjeta.id_interno = tarjetaData.id_interno;
+  
+            traslado.seccion = new Departamento();
+            traslado.seccion.id_departamento = tarjetaData.departamento.id_departamento;          
+  
+            this.trasladoService.registrar(traslado, this.pidu).subscribe(() => {
+              this.dialogRef.close(tarjetaResponsabilidad);
+            })
           })
-        })
-      }else{
-        this.snackBar.open(`Se produjo un error al crear el traslado`, 'AVISO', {
-          duration: 2000
-        });
-      }
-    })
+        }else{
+          this.snackBar.open(`Se produjo un error al crear el traslado`, 'AVISO', {
+            duration: 2000
+          });
+        }      
+      })
+      
+    } else {
+      this.snackBar.open(`No se ha seleccionado el artículo`, 'AVISO', {
+        duration: 2000
+      });
+    }
   }
 
   update() {
@@ -151,6 +177,20 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
 
   isUpdateMode() {
     return this.mode === 'update';
+  }
+
+  private _filter(value: any): Articulo[] {
+    console.log(value)
+    if (!this.articulos) {
+      return [];
+    }
+    let filterValue;
+    if (typeof value.id_articulo === "string") {
+      filterValue = value.id_articulo.toLowerCase()
+    } else {
+      filterValue = value.id_articulo.inventario.toLowerCase();
+    }
+    return this.articulos.filter(element => element.inventario.toLowerCase().includes(filterValue));
   }
 
 

@@ -16,7 +16,7 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>      
-        <input matInput [matDatepicker]="fecha_compra" placeholder="Fecha de compra" formControlName="fecha_compra">
+        <input required matInput [matDatepicker]="fecha_compra" placeholder="Fecha de compra" formControlName="fecha_compra">
         <mat-datepicker-toggle matSuffix [for]="fecha_compra"></mat-datepicker-toggle>              
       </mat-form-field>
       <mat-datepicker #fecha_compra></mat-datepicker>        

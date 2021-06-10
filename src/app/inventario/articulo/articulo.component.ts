@@ -33,17 +33,17 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_Estado', property: 'id_articulo', visible: false, isModelProperty: true },
-    { name: 'No. inventario', property: 'inventario', visible: true, isModelProperty: true },
-    { name: 'Descripción', property: 'descripcion', visible: true, isModelProperty: true },
+    { name: 'No. inventario', property: 'inventario', visible: true, isModelProperty: true }, 
+    { name: 'Descripción', property: 'descripcion', visible: true, isModelProperty: false },   
     { name: 'Precio', property: 'precio', visible: true, isModelProperty: false },
-    { name: 'Marca', property: 'marca', visible: true, isModelProperty: true },
+    { name: 'Marca', property: 'marca', visible: false, isModelProperty: true },
     { name: 'Tipo de bien', property: 'fungible', visible: false },
     { name: 'Fecha de compra', property: 'fecha_compra', visible: true },
-    { name: 'Categoría', property: 'categoria', visible: false },
+    { name: 'Categoría', property: 'categoria', visible: true },
     { name: 'Tipo de artículo', property: 'tipo_articulo', visible: false },
-    { name: 'Estado', property: 'estado', visible: false },
+    { name: 'Estado', property: 'estado', visible: true },
     { name: 'Proveedor', property: 'proveedor', visible: false },
-    { name: 'Departamento', property: 'departamento', visible: false },
+    { name: 'Departamento', property: 'departamento', visible: false },    
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];
 

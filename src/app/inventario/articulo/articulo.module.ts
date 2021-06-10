@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorIntl, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MatNativeDateModule, MatDatepickerModule } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorIntl, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MatNativeDateModule, MatDatepickerModule, DateAdapter } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -12,13 +12,15 @@ import { ArticuloEdicionComponent } from './articulo-edicion/articulo-edicion.co
 import { CustomPaginator } from '../shared/CustomPaginatorConfiguration';
 import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
+import { CustomDateAdapter } from '../shared/CustomDateAdapter';
 
 
 @NgModule({
   declarations: [ArticuloComponent, ArticuloEdicionComponent],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
-    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} ,
+    {provide: DateAdapter, useClass: CustomDateAdapter }
   ],
   imports: [
     CommonModule,

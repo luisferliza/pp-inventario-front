@@ -23,11 +23,19 @@
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
         <mat-label>Artículo</mat-label>
-        <mat-select required formControlName="id_articulo">
-          <mat-option *ngFor="let articulo of articulos" [value]="articulo.id_articulo">
-            {{articulo.inventario}}
-          </mat-option>
-        </mat-select>
+        <input type="text"
+           placeholder="Pick one"
+           aria-label="No. Inventario"
+           matInput
+           formControlName="id_articulo"
+           [matAutocomplete]="auto"
+           (change)="removeArticulo()">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.inventario" (click)="alertOption(option)">
+        {{option.inventario}}
+      </mat-option>
+    </mat-autocomplete>
+
       </mat-form-field>
 
       <mat-form-field fxFlex>

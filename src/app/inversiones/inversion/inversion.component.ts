@@ -270,7 +270,7 @@ export class InversionComponent implements List<Inversion>, OnInit, OnDestroy {
     return null;
   }
 
-  updateRecords() {
+  updateRecords() { 
     if (this.mostarVigente) {
       this.mostarVigente = false;
     } else {
