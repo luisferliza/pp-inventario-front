@@ -29,8 +29,11 @@
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
         <mat-placeholder>Descripción</mat-placeholder>
-        <textarea type="text" formControlName="descripcion" maxlength="500" matInput></textarea>
-      </mat-form-field>      
+        <textarea type="text" formControlName="descripcion" maxlength="800" matInput></textarea>
+      </mat-form-field>   
+      <div style="padding-top: 8%;">
+        <mat-checkbox [checked]="true" color="primary" formControlName="fungible">¿Bien fungible?</mat-checkbox>
+        </div>   
     </div>
 
 
@@ -84,10 +87,18 @@
           </mat-option>
         </mat-select>
       </mat-form-field> 
-      <div style="padding-top: 5%;">
-      <mat-checkbox [checked]="true" color="primary" formControlName="fungible">¿Bien fungible?</mat-checkbox>
-      </div>
+      <mat-form-field fxFlex>
+        <mat-label>Condición</mat-label>
+        <mat-select required formControlName="id_condicion">
+          <mat-option *ngFor="let condicion of condiciones" [value]="condicion.id_condicion">
+            {{condicion.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> 
+      
     </div>
+
+    
 
     <div *ngIf="!activo" fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">      
       <mat-form-field fxFlex>

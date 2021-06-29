@@ -56,11 +56,15 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
     }
 
     this.form = this.fb.group({
-      id_tarjeta_responsabilidad: this.defaults.id_tarjeta_responsabilidad || 0,
+      idTarjetaResponsabilidad: this.defaults.idTarjetaResponsabilidad || 0,
       idUsuario: this.defaults.receptor ? this.defaults.receptor.idUsuario : null,
-      id_articulo: this.defaults.articulo ? this.defaults.articulo.id_articulo : null,
+      id_articulo: this.defaults.articulo ? this.defaults.articulo.inventario : null,
       id_departamento: this.defaults.departamento ? this.defaults.departamento.id_departamento : null
     });
+
+    if (this.defaults.articulo) {
+      this.articulo_selecionado = this.defaults.articulo;
+    }
 
     this.filteredOptions = this.form.valueChanges.pipe(
       startWith(''),
@@ -69,11 +73,12 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   alertOption(articulo: Articulo) {
+    console.log(articulo)
     this.articulo_selecionado = articulo;
   }
 
   removeArticulo() {
-    if (this.articulo_selecionado && this.form.value.id_articulo != this.articulo_selecionado.id_articulo) {
+    if (this.articulo_selecionado && this.form.value.id_articulo != this.articulo_selecionado.inventario) {
       this.articulo_selecionado = null;
     }
   }
@@ -113,14 +118,18 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
       tarjetaResponsabilidad.departamento = new Departamento();
       tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
 
-      tarjetaResponsabilidad.receptor = new Usuario();
-      tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+      if (this.form.value.idUsuario != null) {
+        tarjetaResponsabilidad.receptor = new Usuario();
+        tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+      } else {
+        tarjetaResponsabilidad.receptor = null;
+      }
 
-      console.log(tarjetaResponsabilidad)
-      
       this.tarjetaResponsabilidadService.registrar(tarjetaResponsabilidad, this.pidu).subscribe((data) => {
+        this.dialogRef.close(tarjetaResponsabilidad);
         // Automaticamente se crea el traslado
-        if (data) {
+        /*
+        if (data && this.form.value.idUsuario != null) {
           this.tarjetaResponsabilidadService.listarPorId(data.id_interno, this.pidu).subscribe((tarjetaData) => {
             const traslado: Traslado = new Traslado();
             traslado.fecha_fin = null;
@@ -144,8 +153,9 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
             duration: 2000
           });
         }      
+        */
       })
-      
+
     } else {
       this.snackBar.open(`No se ha seleccionado el artículo`, 'AVISO', {
         duration: 2000
@@ -154,21 +164,34 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   update() {
-    const tarjetaResponsabilidad: TarjetaResponsabilidad = this.form.value;
+    if (this.articulo_selecionado != null) {
+      const tarjetaResponsabilidad: TarjetaResponsabilidad = this.form.value;
 
-    tarjetaResponsabilidad.articulo = new Articulo();
-    tarjetaResponsabilidad.articulo.id_articulo = this.form.value.id_articulo;
+      tarjetaResponsabilidad.articulo = this.articulo_selecionado;      
 
-    tarjetaResponsabilidad.departamento = new Departamento();
-    tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
+      tarjetaResponsabilidad.departamento = new Departamento();
+      tarjetaResponsabilidad.departamento.id_departamento = this.form.value.id_departamento;
 
-    tarjetaResponsabilidad.receptor = new Usuario();
-    tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+      if (this.form.value.idUsuario != null) {
+        tarjetaResponsabilidad.receptor = new Usuario();
+        tarjetaResponsabilidad.receptor.idUsuario = this.form.value.idUsuario;
+      } else {
+        tarjetaResponsabilidad.receptor = null;
+      }
+      tarjetaResponsabilidad.id_interno = this.defaults.id_interno;
+      this.tarjetaResponsabilidadService.modificar(tarjetaResponsabilidad, this.pidu).subscribe(() => {
+        this.dialogRef.close(tarjetaResponsabilidad);
+      })
 
-    tarjetaResponsabilidad.id_interno = this.defaults.id_interno;
-    this.tarjetaResponsabilidadService.modificar(tarjetaResponsabilidad, this.pidu).subscribe(() => {
-      this.dialogRef.close(tarjetaResponsabilidad);
-    })
+    } else {
+      this.snackBar.open(`No se ha seleccionado el artículo`, 'AVISO', {
+        duration: 2000
+      });
+    }
+  }
+
+  clearUser(){
+    this.form.controls['idUsuario'].setValue(null);
   }
 
   isCreateMode() {
@@ -180,18 +203,21 @@ export class TarjetaResponsabilidadEdicionComponent implements OnInit {
   }
 
   private _filter(value: any): Articulo[] {
-    console.log(value)
-    if (!this.articulos) {
+    if (!this.articulos || value.id_articulo == null) {
       return [];
     }
     let filterValue;
     if (typeof value.id_articulo === "string") {
       filterValue = value.id_articulo.toLowerCase()
-    } else {
+    } else if (value.id_articulo.inventario) {
       filterValue = value.id_articulo.inventario.toLowerCase();
+    } else {
+      return;
     }
     return this.articulos.filter(element => element.inventario.toLowerCase().includes(filterValue));
   }
+
+
 
 
 

@@ -65,12 +65,12 @@ export class PlantillaInversionesEmitidas {
     private getTable(rows: Inversion[]) {
         return {
             style: 'tableExample',
-            margin: [10, 8, 10, 50],
+            margin: [10, 8, 10, 15],
             fontSize: 8,
             alignment: "center",
             table: {
               headerRows: 1,
-              widths: ['16%', '10%', '10%', '10%', '6%', '6%', '10%', '10%', '10%', '12%'],
+              widths: ['17%', '15%', '10%', '9%', '5%', '5%', '9%', '9%', '9%', '12%'],
               body: [
                 [{ text: 'Institución', style: 'tableHeader' },
                 { text: 'Cuenta', style: 'tableHeader' },
@@ -125,7 +125,7 @@ export class PlantillaInversionesEmitidas {
             alignment: "center",
             fontSize: 9,
             bold: true,
-            margin: [0, 60, 420, 0],
+            margin: [0, 40, 420, 0],
         }
     }
 }

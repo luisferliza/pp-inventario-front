@@ -33,7 +33,7 @@ export class EstadoEdicionComponent implements OnInit {
 
     this.form = this.fb.group({      
       nombre: this.defaults.nombre || '',
-      editable: this.defaults.editable || true,                  
+      editable: this.defaults.editable || false,                  
     });
   }
 

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MatPaginatorIntl } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDatepickerModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MAT_DATE_LOCALE, MatPaginatorIntl, DateAdapter } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -10,12 +10,14 @@ import { Anexo4Component } from './anexo4.component';
 import { Anexo4RoutingModule } from './anexo4.routing';
 import { Anexo4DialogComponent } from './anexo4-dialog/anexo4-dialog.component';
 import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfiguration';
+import { CustomDateAdapter } from 'app/inventario/shared/CustomDateAdapter';
 
 @NgModule({
   declarations: [Anexo4Component, Anexo4DialogComponent],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
-    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} ,
+    {provide: DateAdapter, useClass: CustomDateAdapter }
   ],entryComponents:[
     Anexo4DialogComponent
   ],

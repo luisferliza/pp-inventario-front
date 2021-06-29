@@ -102,7 +102,7 @@ export class InversionCreator {
             `de pago de intereses y la identificación de las personas que suscriben con sus respectivos cargos y ` +
             `sellos del banco.`,
           alignment: "justify",
-          margin: [10, 20, 10, 0],
+          margin: [10, 20, 10, 0], 
           fontSize: 10,
         },
         {
@@ -186,11 +186,11 @@ export class InversionCreator {
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora `+
     `del Plan de Prestaciones, en sesi&oacute;n del ${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acord&oacute; invertir en ese `+
     `banco el valor de Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, a partir del d&iacute;a ${fecha_colocacion.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`+
-    `, en ${tipo_Inversion} a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fja de inter&eacute;s anual del `+
+    `, en ${tipo_Inversion} a nombre del PLAN DE PRESTACIONES, USAC, a una tasa fija de inter&eacute;s anual del `+
     `${tasa_interes}%, con pago ${periodo_pago.toLowerCase()} y plazo de ${plazo} d&iacute;as `+
     `que vencer&aacute; el d&iacute;a ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}.</p>
-    <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certifcado incluya lo relativo a la `+
-    `desinversi&oacute;n anticipada, forma de pago de intereses y la identifcaci&oacute;n de las personas que suscriben con `+
+    <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Asimismo, se requiere que el certificado incluya lo relativo a la `+
+    `desinversi&oacute;n anticipada, forma de pago de intereses y la identificaci&oacute;n de las personas que suscriben con `+
     `sus respectivos cargos y sellos del banco.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Para el efecto, se env&iacute;a el cheque No. ${cheque} `+
     `de la cuenta ${cuenta} por un valor de Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}.</p>

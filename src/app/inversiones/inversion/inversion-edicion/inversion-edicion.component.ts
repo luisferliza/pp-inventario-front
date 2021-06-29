@@ -39,12 +39,12 @@ export class InversionEdicionComponent implements OnInit {
   cta_completo: Cuenta[];
   defaults: Inversion;
   periodos = [
-    'Mensual',
-    'Anual',
-    'Semestral',
-    'Trimestral',
-    'Cuatrimestral',
-    'A término'
+    'MENSUAL',
+    'ANUAL',
+    'SEMESTRAL',
+    'TRIMESTRAL',
+    'CUATRIMESTRAL',
+    'A TÉRMINO'
   ];
 
   constructor(private dialogRef: MatDialogRef<InversionEdicionComponent>,
@@ -80,14 +80,14 @@ export class InversionEdicionComponent implements OnInit {
       fecha_colocacion: this.defaults.fecha_colocacion ? this.common.parseDate(this.defaults.fecha_colocacion) : null,
       certificado: this.defaults.certificado || '',
       acta_japp: this.defaults.acta_japp || '',
-      periodo_pago: this.defaults.periodo_pago || 'Mensual',
+      periodo_pago: this.defaults.periodo_pago || 'MENSUAL',
       observacion: this.defaults.observacion || '',
       tasa_interes: this.defaults.tasa_interes || 0,
       plazo: this.defaults.plazo || 365,
       cuenta: this.defaults.cuenta || '',
       calculo_especial: this.defaults.calculo_especial || false,
       aprobado_japp: this.defaults.aprobado_japp || false,
-      vigente: this.defaults.vigente || true,
+      vigente: this.defaults.vigente,
       fecha_acta: this.defaults.fecha_acta ? this.common.parseDate(this.defaults.fecha_acta) : null,
       dias_anuales: this.defaults.dias_anuales || 365,
       vencimiento: this.defaults.vencimiento ? this.common.parseDate(this.defaults.vencimiento) : null,
@@ -208,8 +208,8 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   updateBancos() {
-    this.bancoService.listar(this.pidu).subscribe(data => {
-      this.bancos = data;
+    this.bancoService.listarActivas(this.pidu).subscribe(data => {
+      this.bancos = data;      
     })
   }
 
@@ -337,7 +337,7 @@ export class InversionEdicionComponent implements OnInit {
   }
 
   bancoChanged() {
-    let id_banco: number = this.form.value.banco_id;
+    let id_banco: number = this.form.value.banco_id;    
     let cuenta = this.buscarCuentaPorBanco(id_banco, this.cta_inversion);
     this.tipo_cuenta = CUENTA_ENUM.INVERSION;
     this.AsignarCuentaACategoria(cuenta)
@@ -350,9 +350,9 @@ export class InversionEdicionComponent implements OnInit {
 
   }
 
-  buscarCuentaPorBanco(id_banco: number, cuentas: Cuenta[]) {
+  buscarCuentaPorBanco(id_banco: number, cuentas: Cuenta[]) {    
     for (let index = 0; index < cuentas.length; index++) {
-      if (cuentas[index].banco.id_banco === id_banco) {
+      if (cuentas[index].banco && cuentas[index].banco.id_banco === id_banco) {
         return cuentas[index];
       }
     }
@@ -373,18 +373,18 @@ export class InversionEdicionComponent implements OnInit {
   ChangePayDate() {
     let periodo = this.form.value.periodo_pago;
     let fecha_pago: Date = new Date(this.form.value.fecha_colocacion.getTime());    
-    if (periodo === "Mensual") {
+    if (periodo === "MENSUAL") {
       fecha_pago.setMonth(fecha_pago.getMonth() + 1);      
       fecha_pago.setDate(1);      
-    } else if (periodo === "Anual") {
+    } else if (periodo === "ANUAL") {
       fecha_pago.setFullYear(fecha_pago.getFullYear() + 1, fecha_pago.getMonth(), fecha_pago.getDate());
-    } else if (periodo === "Semestral") {
+    } else if (periodo === "SEMESTRAL") {
       fecha_pago.setMonth(fecha_pago.getMonth() + 6, fecha_pago.getDate());
-    } else if (periodo === "Trimestral") {
+    } else if (periodo === "TRIMESTRAL") {
       fecha_pago.setMonth(fecha_pago.getMonth() + 3, fecha_pago.getDate());
-    } else if (periodo === "Cuatrimestral") {
+    } else if (periodo === "CUATRIMESTRAL") {
       fecha_pago.setMonth(fecha_pago.getMonth() + 4, fecha_pago.getDate());
-    } else if (periodo === "A término") {
+    } else if (periodo === "A TÉRMINO") {
       fecha_pago.setDate(fecha_pago.getDate() + 1)
     } else {
       alert('PERIODO DE PAGO DESCONOCIDO')

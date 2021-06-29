@@ -60,11 +60,19 @@ export class PlantillaCompraExterna {
             alignment: "center",
             table: {
               headerRows: 3,
-              widths: ['14%', '32%', '19%', '16%', '19%'],
+              widths: ['10%', '40%', '18%', '16%', '16%'],
               body: [
-                [{ text: 'No. ', style: 'tableHeader'}, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor', style: 'tableHeader' }, { text: 'Valor residual', style: 'tableHeader' }],            
-              ...rows.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, {text: "Q"+p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, {text: "Q"+p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}])),              
-              [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, { text: 'Q ' + rows.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}]
+                [{ text: 'No. ', style: 'tableHeader'}, 
+                { text: 'DESCRIPCIÓN CORRECTA DEL BIEN', style: 'tableHeader' }, 
+                { text: 'INVENTARIO NO.', style: 'tableHeader' }, 
+                { text: 'VALOR DE VENTA Q.', style: 'tableHeader' }, 
+                { text: 'CONDICIÓN', style: 'tableHeader' }],            
+              ...rows.map(p => ([p.contador, 
+                                { text: p.descripcion, alignment: 'justify' }, 
+                                p.inventario, 
+                                { text: "Q"+p.residual.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right'}, 
+                                p.condicion])),              
+              [{}, {}, { text: 'Total:', bold: true }, { text: 'Q ' + rows.reduce((sum, p) => sum + (p.residual), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true , alignment: 'right'}, {}]
               ]
             }         
           };

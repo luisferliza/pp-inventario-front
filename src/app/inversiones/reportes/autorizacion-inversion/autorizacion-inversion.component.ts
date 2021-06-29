@@ -61,8 +61,7 @@ export class AutorizacionInversionComponent implements OnInit {
       if (element.estadoInversion == this.estado_actual) {
         this.visible_rows = element.inversiones;
       }
-
-    }
+    }    
   }
 
   getFirmantes(firmante: string) {
@@ -86,6 +85,7 @@ export class AutorizacionInversionComponent implements OnInit {
       this.estados = data;
       this.estado_actual = data[0].nombre;
       this.update();
+      document.getElementById('table').click();
     })
   }
 

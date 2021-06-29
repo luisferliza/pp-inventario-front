@@ -14,6 +14,10 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { CommonFunction } from '../shared/common';
 import { TarjetaResponsabilidadEdicionComponent } from './tarjeta-responsabilidad-edicion/tarjeta-responsabilidad-edicion.component';
 import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'elastic-tarjeta-responsabilidad',
@@ -31,7 +35,7 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
   @Input()
   columns: ListColumn[] = [
     { name: 'ID_interno', property: 'id_interno', visible: false, isModelProperty: true },
-    { name: 'No. Tarjeta', property: 'id_tarjeta_responsabilidad', visible: true, isModelProperty: true },
+    { name: 'No. Tarjeta', property: 'idTarjetaResponsabilidad', visible: true, isModelProperty: true },
     { name: 'Fecha de creación', property: 'fecha_creacion', visible: true, isModelProperty: false },
     { name: 'Inventario', property: 'inventario', visible: true, isModelProperty: false },
     { name: 'Descripcion', property: 'descripcion', visible: false, isModelProperty: false },
@@ -150,5 +154,46 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
   ngOnDestroy(): void {
   }
 
+  
+  downloadPDF(tarjeta: TarjetaResponsabilidad) {
+    // Set the fonts to use            
+    let docDefinition = {
+      pageMargins: [10, 80, 10, 0],
+      content: [
+        {
+          style: 'tableExample',
+          margin: [20, 40, 0, 8],
+          fontSize: 8,
+          alignment: "center",
+          table: {
+            headerRows: 0,
+            widths: ['10%', '10%', '50%', '10%', '10%', '10%'],
+            body: [
+              [tarjeta.idTarjetaResponsabilidad, tarjeta.articulo.inventario,{ text: tarjeta.articulo.descripcion, alignment: 'justify'}, tarjeta.articulo.precio, tarjeta.receptor? tarjeta.receptor.nombrepp: '']              
+            ]
+          },
+          layout: 'headerLineOnly'
+        }
+      ]
+    };
+    pdfMake.createPdf(docDefinition).open();
+  }
+
+  downloadExcel(tarjeta: TarjetaResponsabilidad) {
+    let ws: WorkSheet;
+    ws = utils.json_to_sheet([[tarjeta.idTarjetaResponsabilidad, tarjeta.articulo.inventario, tarjeta.articulo.descripcion, tarjeta.articulo.precio, tarjeta.receptor.nombrepp]],
+      { header: [], skipHeader: false });
+    // Encabezados personalizados    
+    if (ws.A1) { // Valida si hay datos    
+      ws.A1.v = 'Fecha';
+      ws.B1.v = 'No. Y clave de control';
+      ws.C1.v = 'Descripción';
+      ws.D1.v = 'Valor Neto';
+      ws.E1.v = 'Nombre';
+    }
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Tarjeta');
+    writeFile(wb, 'Tarjeta.xlsx');
+  }
 
 }

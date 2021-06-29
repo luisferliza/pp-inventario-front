@@ -7,11 +7,11 @@
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
       <mat-form-field fxFlex>
         <mat-placeholder>No. Tarjeta</mat-placeholder>
-        <input required type="number" formControlName="id_tarjeta_responsabilidad" matInput>
+        <input required type="number" formControlName="idTarjetaResponsabilidad" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
         <mat-label>Receptor</mat-label>
-        <mat-select required formControlName="idUsuario">
+        <mat-select formControlName="idUsuario">
           <mat-option *ngFor="let usuario of usuarios" [value]="usuario.idUsuario">
             {{usuario.nombrepp}}
           </mat-option>
@@ -31,7 +31,7 @@
            [matAutocomplete]="auto"
            (change)="removeArticulo()">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.inventario" (click)="alertOption(option)">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option.inventario" (onSelectionChange)="alertOption(option)" (click)="alertOption(option)">
         {{option.inventario}}
       </mat-option>
     </mat-autocomplete>
@@ -51,8 +51,9 @@
     
   </mat-dialog-content>
   <mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+    <button mat-button type="button" color="warn" (click)="clearUser()">Borrar receptor</button>
     <button *ngIf="isCreateMode()" mat-button [disabled]="!form.valid">Crear tarjeta</button>
-    <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Modificar tarjeta</button>
+    <button *ngIf="isUpdateMode()" mat-button [disabled]="!form.valid">Modificar tarjeta</button>    
   </mat-dialog-actions>
 </form>
 

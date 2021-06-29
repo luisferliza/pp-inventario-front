@@ -409,6 +409,13 @@ export class RouteHandlerComponent implements OnInit {
         position: 1
       }),
       new SidenavItem({
+        name: 'Condiciones',
+        route: '/inventario/condiciones',
+        parent: gestionDatosInventario,
+        subItems: [ ],
+        position: 1
+      }),
+      new SidenavItem({
         name: 'Departamentos',
         route: '/inventario/departamentos',
         parent: gestionDatosInventario,

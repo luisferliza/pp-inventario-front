@@ -28,6 +28,7 @@ export class IntegracionPlazoComponent implements OnInit {
   id_banco: number;
   fecha = new Date();
   contador: Firmante;
+  administrador: Firmante;
   //False es bienes activos, true es fungibles
 
   constructor(private reportesService: ReportesInversionesService,
@@ -39,24 +40,30 @@ export class IntegracionPlazoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getBancos();
-    this.getFirmante();
+    this.getFirmante(this.common.contador);
+    this.getFirmante(this.common.administrador);
     this.fecha.setHours(0);
   }
 
   getBancos() {
-    this.bancoService.listar(this.pidu).subscribe(data => {
+    this.bancoService.listarActivas(this.pidu).subscribe(data => {
       this.bancos = data;
       this.id_banco = data[0].id_banco;
       this.listar(this.id_banco)
     })
   }
 
-  getFirmante() {
-    this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data => {
+  getFirmante(firmante) {
+    this.firmanteService.obtenerFirmante(this.pidu, firmante).subscribe(data => {
       if (data.length > 0) {
-        this.contador = data[0];
+        if (firmante === this.common.contador) {
+          this.contador = data[0];
+        } else {
+          this.administrador = data[0];
+        }
+
       } else {
-        this.snackBar.open(`${this.common.contador} No encontrado`, 'AVISO', {
+        this.snackBar.open(`${firmante} No encontrado`, 'AVISO', {
           duration: 2000
         });
         this.contador = new Firmante();
@@ -93,22 +100,24 @@ export class IntegracionPlazoComponent implements OnInit {
   createDataArray(data: InversionesPorBanco[]) {
     const wb: WorkBook = utils.book_new();
     data.forEach(element => {
-      let ws: WorkSheet;
-      ws = utils.json_to_sheet(this.getInversioninfo(element.inversiones), { header: [], skipHeader: false });
-      // Encabezados personalizados
-      if (ws.A1) { // Valida si hay datos
-        ws.A1.v = 'Tipo Docto.';
-        ws.B1.v = 'No. registro';
-        ws.C1.v = 'Cuenta';
-        ws.D1.v = 'Fecha de emisión';
-        ws.E1.v = 'Tasa (%)';
-        ws.F1.v = 'Días Plazo';
-        ws.G1.v = 'Forma de pago de intereses';
-        ws.H1.v = 'Fecha vencimiento';
-        ws.I1.v = 'Fecha pago';
-        ws.J1.v = 'Valor nominal';
+      if (element.inversiones.length != 0) {
+        let ws: WorkSheet;
+        ws = utils.json_to_sheet(this.getInversioninfo(element.inversiones), { header: [], skipHeader: false });
+        // Encabezados personalizados
+        if (ws.A1) { // Valida si hay datos
+          ws.A1.v = 'Tipo Docto.';
+          ws.B1.v = 'No. registro';
+          ws.C1.v = 'Cuenta';
+          ws.D1.v = 'Fecha de emisión';
+          ws.E1.v = 'Tasa (%)';
+          ws.F1.v = 'Días Plazo';
+          ws.G1.v = 'Forma de pago de intereses';
+          ws.H1.v = 'Fecha vencimiento';
+          ws.I1.v = 'Fecha pago';
+          ws.J1.v = 'Valor nominal';
+        }
+        utils.book_append_sheet(wb, ws, element.banco.substring(0, 30));
       }
-      utils.book_append_sheet(wb, ws, element.banco);
     });
     return wb;
   }
@@ -132,7 +141,7 @@ export class IntegracionPlazoComponent implements OnInit {
   downloadPDF() {
     this.reportesService.integracioPlazoFijoCompleto(this.pidu, this.fecha).subscribe(data => {
       if (data.length > 0) {
-        let docDefinition = this.plantilla.createPDF(data, this.fecha, this.contador);
+        let docDefinition = this.plantilla.createPDF(data, this.fecha, this.contador, this.administrador);
         pdfMake.createPdf(docDefinition).open();
       }
       else {

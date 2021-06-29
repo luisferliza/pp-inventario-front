@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatPaginatorIntl } from '@angular/material';
+import { MatButtonModule, MatCheckboxModule, MatDialogModule, MatIconModule, MatInputModule, MatMenuModule, MatPaginatorModule, MatRadioModule, MatSelectModule, MatSnackBarModule, MatSortModule, MatTableModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MAT_DATE_LOCALE, MatPaginatorIntl, DateAdapter } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListModule } from 'app/core/list/list.module';
 import { PageHeaderModule } from 'app/core/page-header/page-header.module';
@@ -17,12 +17,14 @@ import { CustomPaginator } from 'app/inventario/shared/CustomPaginatorConfigurat
 import { DeleteDialogComponent } from 'app/servicios/common/delete-dialog/delete-dialog.component';
 import { DeleteDialogModule } from 'app/servicios/common/delete-dialog/delete-dialog.module';
 import { DesinversionDialogComponent } from './desinversion-dialog/desinversion-dialog.component';
+import { CustomDateAdapter } from 'app/inventario/shared/CustomDateAdapter';
 
 @NgModule({
   declarations: [InversionComponent, InversionEdicionComponent, CartaInversionDialogComponent, CartaReinversionDialogComponent, CartaDesinversionDialogComponent, CartaDesinversionAnticipadaDialogComponent, DesinversionDialogComponent],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'es-GT'},
-    {provide: MatPaginatorIntl, useValue: CustomPaginator()} 
+    {provide: MatPaginatorIntl, useValue: CustomPaginator()} ,
+    {provide: DateAdapter, useClass: CustomDateAdapter }
   ],
   imports: [
     CommonModule,

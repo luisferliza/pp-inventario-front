@@ -50,9 +50,7 @@ export class TrasladoEdicionComponent implements OnInit {
       fecha_inicio: this.defaults.traslado.fecha_inicio? this.common.parseDate(this.defaults.traslado.fecha_inicio) : null,      
       fecha_fin: this.defaults.traslado.fecha_fin? this.common.parseDate(this.defaults.traslado.fecha_fin) : null,             
       idUsuario: this.defaults.traslado.usuario? this.defaults.traslado.usuario.idUsuario : null                          
-    });
-
-    (this.form.value.fecha_inicio as Date).setHours(0); // Corrige el corrimiento de la zona horaria
+    });    
     
   }
 

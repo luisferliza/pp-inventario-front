@@ -47,10 +47,10 @@ export class PlantillaAutorizacionInversion {
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['12.5%', '12.5%', '20%', '15%', '20%', '20%'],
+                widths: ['12%', '17%', '20%', '11%', '20%', '20%'],
                 body: [
                     [{ text: 'Dias Plazo', style: 'tableHeader' },
-                    { text: 'Tasa Nominal', style: 'tableHeader' },
+                    { text: 'Tasa Nominal (%)', style: 'tableHeader' },
                     { text: 'Institución Bancaria', style: 'tableHeader' },
                     { text: 'Documento', style: 'tableHeader' },
                     { text: 'Intervalo de Int.', style: 'tableHeader' },
@@ -135,7 +135,7 @@ export class PlantillaAutorizacionInversion {
                 alignment: "center",
                 fontSize: 9,
                 bold: true,
-                margin: [280, 0, 20, 15],
+                margin: [280, -20, 20, 15],
             }
         ]
     }

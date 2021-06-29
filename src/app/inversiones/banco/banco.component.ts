@@ -37,6 +37,7 @@ export class BancoComponent implements List<Banco>, OnInit, OnDestroy {
     { name: 'Dirección', property: 'direccion', visible: true, isModelProperty: true },
     { name: 'Teléfono', property: 'telefono', visible: true, isModelProperty: true },
     { name: 'No. Anexo', property: 'anexo', visible: false, isModelProperty: true },
+    { name: '¿Activo?', property: 'activa', visible: true, isModelProperty: false },
     { name: 'Nombre Gerente', property: 'nombre_gerente', visible: true, isModelProperty: true },
     { name: 'Título Gerente', property: 'titulo_gerente', visible: true, isModelProperty: true },
     { name: 'Tipo de entidad', property: 'tipo_Entidad', visible: true, isModelProperty: false },

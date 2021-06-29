@@ -115,7 +115,6 @@ export class CompraExternaComponent implements OnInit {
   }
 
   getDelimitedData(): any[] {
-
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {
@@ -124,7 +123,8 @@ export class CompraExternaComponent implements OnInit {
         descripcion: this.rows[cont].descripcion,
         inventario: this.rows[cont].inventario,
         precio: this.rows[cont].precio,
-        residual: this.rows[cont].residual
+        residual: this.rows[cont].residual,
+        condicion: this.rows[cont].condicion
       })
       cont++;
     }

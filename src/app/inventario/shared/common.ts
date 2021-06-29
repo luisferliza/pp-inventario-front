@@ -80,7 +80,7 @@ export class CommonFunction {
   public readonly ESTADO_DESINVERSION = 'Desinversión';
 
   // Bancos Especiales
-  public readonly MINISTERIO_FINANZAS = 'MINISTERIO DE FINANZAS PÚBLICAS';
+  public readonly MINISTERIO_FINANZAS = 'MINISTERIO DE FINANZAS';
   public readonly BANCOS_ESTATALES = 'BANCOS ESTATALES';
 
 }

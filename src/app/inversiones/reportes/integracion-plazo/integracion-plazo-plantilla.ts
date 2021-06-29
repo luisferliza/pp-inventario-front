@@ -14,14 +14,14 @@ export class PlantillaIntegracionPlazo {
     appendTablesToPdf(tablas: any[]){
         let reference = this;
         let docDefinition = {
-            pageMargins: [50, 90, 50, 50],
-            pageSize: 'LETTER',
-            pageOrientation: 'landscape',
+            pageMargins: [30, 50, 30, 50],
+            pageSize: 'LETTER',            
             header: this.getHeader(),
             footer: function (currentPage, pageCount) { return reference.getFooter(currentPage, pageCount) },
             content: [
               ...tablas
-            ]
+            ],
+            columnGap: 0
           };
           return docDefinition;
     }
@@ -44,7 +44,7 @@ export class PlantillaIntegracionPlazo {
             text: 'Página ' + currentPage.toString() + ' de ' + pageCount + '   ',
             fontSize: 8,
             alignment: 'center',
-            margin: [0, 10, 0, 20]
+            margin: [0, 0, 0, 20]
         }
     }
 
@@ -76,7 +76,7 @@ export class PlantillaIntegracionPlazo {
                 margin: [0, 5, 0, 0],
             },
             {
-                text: `EXPRESADO EN QUETZALES`,
+                text: `(EXPRESADO EN QUETZALES)`,
                 style: 'subheader',
                 alignment: "center",
                 fontSize: 10,
@@ -92,14 +92,14 @@ export class PlantillaIntegracionPlazo {
     getTable(element: InversionesPorBanco) {
         return {
             style: 'tableExample',
-            margin: [10, 8, 10, 50],
-            fontSize: 8,
+            margin: [10, 10, 0, 40],
+            fontSize: 7,
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['10%', '10%', '10%', '10%', '8%', '8%', '10%', '10%', '10%', '14%'],
+                widths: ['5%', '10%', '18%', '10.5%', '4%', '5%', '10.5%', '10.5%', '10.5%', '16%'],
                 body: [
-                    [{ text: 'Tipo Docto. ', style: 'tableHeader' },
+                    [{ text: 'Tipo Docto.', style: 'tableHeader' },
                     { text: 'No. certificado', style: 'tableHeader' },
                     { text: 'Cuenta', style: 'tableHeader' },
                     { text: 'Fecha de emisión', style: 'tableHeader' },
@@ -129,43 +129,44 @@ export class PlantillaIntegracionPlazo {
         // fin de metodo 
     }
 
-    createPDF(data: InversionesPorBanco[], date: Date, contador: Firmante) {
+    createPDF(data: InversionesPorBanco[], date: Date, contador: Firmante, administrador: Firmante) {
         let tablas = [];
         for (let index = 0; index < data.length; index++) {
             const element = data[index];
-            tablas.push(
-                ... this.getTitleByTable(date, element),
-                this.getTable(element),
-                this.getGenerationDate(),
-                this.getFirmantes(contador),
-                {
-                    text: '',
-                    pageBreak: "after" // or after
-                }
-            )
+            if(element.inversiones.length != 0 ){
+                tablas.push(
+                    ... this.getTitleByTable(date, element),
+                    this.getTable(element),                
+                    this.getFirmantes(contador, administrador),
+                    {
+                        text: '',
+                        pageBreak: "after" // or after
+                    }
+                )
+            }
         }
         tablas.pop();
         return this.appendTablesToPdf(tablas);
     }    
 
-    private getGenerationDate() {
-        return {
-            text: `Guatemala, ${new Date().toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
-            alignment: "left",
-            fontSize: 9,
-            bold: true,
-            margin: [10, 15, 0, 15],
-        }
-    }
-
-    private getFirmantes(contador: Firmante) {
-        return {
-            text: `${contador.nombre}\r\n${contador.despliegue}`,
-            style: 'subheader',
-            alignment: "center",
-            fontSize: 9,
-            bold: true,
-            margin: [0, 60, 420, 0],
-        }
+    private getFirmantes(contador: Firmante, administrador: Firmante) {
+        return [
+            {
+                text: `${contador.nombre}\r\n${contador.despliegue}`,
+                style: 'subheader',
+                alignment: "center",
+                fontSize: 9,
+                bold: true,
+                margin: [0, 30, 250, 0],
+            },
+            {
+                text: `Vo. Bo. ${administrador.nombre}\r\n${administrador.despliegue}`,
+                style: 'subheader',
+                alignment: "center",
+                fontSize: 9,
+                bold: true,
+                margin: [250, -20, 0, 0],
+            }
+        ]
     }
 }

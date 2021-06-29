@@ -58,6 +58,11 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
           <mat-cell *matCellDef="let row"> {{row.estado.nombre}} </mat-cell>
         </ng-container>        
+
+        <ng-container matColumnDef="condicion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Condición </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{row.condicion.nombre}} </mat-cell>
+        </ng-container>        
     
         <ng-container matColumnDef="proveedor">
           <mat-header-cell *matHeaderCellDef mat-sort-header> Proveedor </mat-header-cell>

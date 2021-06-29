@@ -57,30 +57,33 @@ export class PlantillaTasaPromedio {
     private getTable(rows: Inversion[]) {
         return {
             style: 'tableExample',
-            margin: [7, 8, 7, 50],
-            fontSize: 9,
+            margin: [7, 8, 7, 20],
+            fontSize: 8,
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['12.75%', '6.5%', '6.5%', '6.75%', '6.75%', '6.5%', '6.5%', '6.5%', '6.5%', '7.5%', '6.5%', '7.25%', '7%', '6.5%'],
+                widths: ['19.25%', '6%', '6%', '6.25%', '6.25%', '6%', '6%', '6%', '6%', '7%', '6%', '6.75%', '6.5%', '6%'],
                 body: [
                     this.getHeaders(),
                     ...rows.map(element => ([
                         element[0],
-                        `${element[1]}%`,
-                        `${element[2]}%`,
-                        `${element[3]}%`,
-                        `${element[4]}%`,
-                        `${element[5]}%`,
-                        `${element[6]}%`,
-                        `${element[7]}%`,
-                        `${element[8]}%`,
-                        `${element[9]}%`,
-                        `${element[10]}%`,
-                        `${element[11]}%`,
-                        `${element[12]}%`,
-                        this.getAvg(element) + "%"
+                        `${element[1].toFixed(2)}%`,
+                        `${element[2].toFixed(2)}%`,
+                        `${element[3].toFixed(2)}%`,
+                        `${element[4].toFixed(2)}%`,
+                        `${element[5].toFixed(2)}%`,
+                        `${element[6].toFixed(2)}%`,
+                        `${element[7].toFixed(2)}%`,
+                        `${element[8].toFixed(2)}%`,
+                        `${element[9].toFixed(2)}%`,
+                        `${element[10].toFixed(2)}%`,
+                        `${element[11].toFixed(2)}%`,
+                        `${element[12].toFixed(2)}%`,
+                        `${element[13].toFixed(2)}%`                        
                     ])),
+                    [{},{},{},{},{},{},{},{},{},{},{ text: 'Promedio General Anual:', colSpan: 3, bold: true, alignment: 'right' },{},{},
+                    { text:  (rows.reduce((sum, p) => sum + (p[13]), 0)/rows.length).toFixed(2) + "%", bold: true, alignment: 'center' }]
+                    
                 ]
             },
             layout: 'lightHorizontalLines'

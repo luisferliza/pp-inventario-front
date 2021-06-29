@@ -21,7 +21,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class InteresMensualComponent implements OnInit {
 
-  pidu = '10';  
+  pidu = '10';
   rows: Inversion[];
   bancos: Banco[];
   id_banco: number;
@@ -36,22 +36,22 @@ export class InteresMensualComponent implements OnInit {
     private firmanteService: FirmanteService,
     private plantilla: PlantillaInteresMensual) { }
 
-  ngOnInit(): void {    
-    this.getBancos();    
+  ngOnInit(): void {
+    this.getBancos();
     this.getFirmante();
     this.fecha.setHours(0);
 
   }
 
   getBancos() {
-    this.bancoService.listar(this.pidu).subscribe(data => {      
+    this.bancoService.listarActivas(this.pidu).subscribe(data => {
       this.bancos = data;
       this.id_banco = data[0].id_banco;
       this.listar(this.id_banco)
     })
   }
 
-  
+
   getFirmante() {
     this.firmanteService.obtenerFirmante(this.pidu, this.common.contador).subscribe(data => {
       if (data.length > 0) {
@@ -65,16 +65,16 @@ export class InteresMensualComponent implements OnInit {
     });
   }
 
-  listar(id_categoria) {        
-    this.reportesService.interesMensual(this.pidu, this.fecha, id_categoria).subscribe(data => {     
-      this.rows = data;     
+  listar(id_categoria) {
+    this.reportesService.interesMensual(this.pidu, this.fecha, id_categoria).subscribe(data => {
+      this.rows = data;
       document.getElementById('table').click();
     });
   }
 
   update() {
     this.listar(this.id_banco);
-  }  
+  }
 
   downloadExcel() {
     this.reportesService.interesMensualCompleto(this.pidu, this.fecha).subscribe(data => {
@@ -89,11 +89,12 @@ export class InteresMensualComponent implements OnInit {
     })
   }
 
-  createDataArray(data: InversionesPorBanco[]) {    
+  createDataArray(data: InversionesPorBanco[]) {
     const wb: WorkBook = utils.book_new();
-      data.forEach(element => {
+    data.forEach(element => {
+      if (element.inversiones.length != 0) {
         let ws: WorkSheet;
-        ws = utils.json_to_sheet(this.getInversioninfo(element.inversiones),{ header: [], skipHeader: false });
+        ws = utils.json_to_sheet(this.getInversioninfo(element.inversiones), { header: [], skipHeader: false });
         // Encabezados personalizados
         if (ws.A1) { // Valida si hay datos
           ws.A1.v = 'Tipo Docto.';
@@ -102,11 +103,11 @@ export class InteresMensualComponent implements OnInit {
           ws.D1.v = 'Fecha de emisión';
           ws.E1.v = 'Tasa (%)';
           ws.F1.v = 'Días corridos';
-          ws.G1.v = 'Intereses';          
+          ws.G1.v = 'Intereses';
         }
-      
-      utils.book_append_sheet(wb, ws, element.banco);
-      });
+        utils.book_append_sheet(wb, ws, element.banco.substring(0, 30));
+      }
+    });
     return wb;
   }
 
@@ -137,7 +138,7 @@ export class InteresMensualComponent implements OnInit {
       }
     })
   }
-  
+
 
 
 }

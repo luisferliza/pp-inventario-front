@@ -35,7 +35,7 @@ export class CartaReinversionDialogComponent implements OnInit {
     let fechaReinversion = this.common.parseDate(this.defaults.vencimiento)
     fechaReinversion.setDate(fechaReinversion.getDate() + 1); // La reinversion se realiza un dia despues del vencimiento
     let vencimientoReinversion = this.common.parseDate(this.defaults.vencimiento)
-    vencimientoReinversion.setDate(vencimientoReinversion.getDate()+1+this.defaults.plazo)
+    vencimientoReinversion.setDate(vencimientoReinversion.getDate() + this.defaults.plazo)
 
     this.form = this.fb.group({
       periodo_pago: this.defaults.periodo_pago,
@@ -138,7 +138,7 @@ export class CartaReinversionDialogComponent implements OnInit {
 
   changeDate() {    
     let futureDate = this.common.parseDate(this.form.value.fecha_reinversion);
-    futureDate.setDate(futureDate.getDate() + this.form.value.plazo)        
+    futureDate.setDate(futureDate.getDate() + this.form.value.plazo - 1)        
     this.form.controls['vencimiento_reinversion'].setValue(futureDate);
   }  
 

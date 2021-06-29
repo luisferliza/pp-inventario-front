@@ -4,7 +4,7 @@ import { Usuario } from "./usuario";
 
 export class TarjetaResponsabilidad{
     id_interno: number;
-    id_tarjeta_responsabilidad: number;    
+    idTarjetaResponsabilidad: number;    
     receptor: Usuario;
     articulo: Articulo;
     departamento: Departamento;

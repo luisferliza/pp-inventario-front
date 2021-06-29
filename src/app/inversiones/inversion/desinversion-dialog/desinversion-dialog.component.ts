@@ -19,8 +19,7 @@ export class DesinversionDialogComponent implements OnInit {
     private common: CommonFunction) { }
 
 
-  ngOnInit() {        
-    console.log(this.title);
+  ngOnInit() {            
     this.form = this.fb.group({
       observacion: ''
     });

@@ -24,6 +24,10 @@ const routes: Routes = [
         loadChildren: 'app/inventario/categoria/categoria.module#CategoriaModule'
       },
       {
+        path: 'inventario/condiciones',
+        loadChildren: 'app/inventario/condicion/condicion.module#CondicionModule'
+      },
+      {
         path: 'inventario/departamentos',
         loadChildren: 'app/inventario/departamento/departamento.module#DepartamentoModule'
       },

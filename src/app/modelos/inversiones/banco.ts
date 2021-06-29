@@ -10,6 +10,7 @@ export class Banco{
 	nombre_gerente:string;	
 	titulo_gerente:string;	
     tipo_Entidad: TipoEntidad;
+	activa: boolean;
 
 	public toString = () : string => {
         return this.nombre;

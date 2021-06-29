@@ -19,6 +19,10 @@ export class BancoService {
     return this.http.get<Banco[]>(`${this.url}/bancos?pidu=${pidu}`);
   }
 
+  listarActivas(pidu: String) {
+    return this.http.get<Banco[]>(`${this.url}/bancos/activas?pidu=${pidu}`);
+  }
+
   listarPorId(idBanco: number, pidu: String) {
     return this.http.get<Banco>(`${this.url}/bancos/${idBanco}?pidu=${pidu}`);
   }

@@ -57,17 +57,17 @@ export class PlantillaActivosPorUsuario {
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['19%', '29%', '19%', '14%', '19%'],
+                widths: ['14%', '19%', '19%', '29%', '19%'],
                 body: [
-                    [{ text: 'No. Inventario', style: 'tableHeader' }, 
-                     { text: 'Descripción', style: 'tableHeader' }, 
-                     { text: 'V/Adquisición', style: 'tableHeader' }, 
-                     { text: 'Tarjeta No.', style: 'tableHeader' }, 
-                     { text: 'Fecha Asignación', style: 'tableHeader' }],
-                    ...rows.map(p => ([p.inventario, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, p.tarjeta, p.inicio])),
-                    [{}, { text: 'Total:', colSpan: 1, bold: true }, 
-                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' },
-                     {}, {}]
+                    [
+                    { text: 'Tarjeta No.', style: 'tableHeader' }, 
+                    { text: 'Fecha Asignación', style: 'tableHeader' },
+                    { text: 'No. Inventario', style: 'tableHeader' }, 
+                    { text: 'Descripción', style: 'tableHeader' }, 
+                    { text: 'Valor Neto', style: 'tableHeader' }],
+                    ...rows.map(p => ([p.tarjeta , p.inicio, p.inventario, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
+                    [{},{},{}, { text: 'Total:', bold: true, alignment: 'right' }, 
+                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]
                 ]
             },
             layout: 'headerLineOnly'

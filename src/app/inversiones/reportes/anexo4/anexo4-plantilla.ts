@@ -31,6 +31,7 @@ export class PlantillaAnexo4 {
                 this.getTableHeader(),
                 ...this.createTableList(rows),
                 this.getPrestamosTable(prestamos),
+                this.getTotalTable(),
                 this.getGenerationDate(),
                 this.getFirmantes(contador, administrador, asistente)
             ]
@@ -202,7 +203,24 @@ export class PlantillaAnexo4 {
                         this.getPorcentaje(row.totalCategoria, p.monto) + "%",
                         { text: "Q" + p.monto.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' },
                         {}, {}
-                    ])),
+                    ]))
+                ]
+            },
+            layout: 'headerLineOnly'
+        }
+    }
+
+
+    private getTotalTable() {
+        return {
+            style: 'tableExample',
+            margin: [10, 8, 10, 10],
+            fontSize: 9,
+            alignment: "center",
+            table: {
+                headerRows: 0,
+                widths: ['40%', '10%', '20%', '20%', '10%'],
+                body: [                    
                     [{ text: `TOTAL INVERSIONES PLAN`, bold: true, alignment: 'center' },
                     {},{},
                     { text: "Q" + this.total.toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true,alignment: 'right' },
@@ -262,7 +280,7 @@ export class PlantillaAnexo4 {
                 alignment: "center",
                 fontSize: 9,
                 bold: true,
-                margin: [280, 0, 20, 15],
+                margin: [280, -20, 20, 15],
             }
         ]
     }

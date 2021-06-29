@@ -93,7 +93,7 @@ export class ReInversionCreator {
                     text: `\u200B\t\tAtentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
                         `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
                         `No. ${certificado}, Cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, ` +
-                        `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+                        `más intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
                         `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha de vencimiento del certificado.`,
                     alignment: "justify",
                     margin: [10, 20, 10, 0],
@@ -192,7 +192,7 @@ export class ReInversionCreator {
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
             `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó reinvertir en ese banco el valor del certificado ` +
             `No. ${certificado}, Cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, ` +
-            `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
+            `más intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +
             `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha de vencimiento del certificado.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Por lo anterior, solicitamos se sirvan efectuar la reinversión con fecha ` +
             `${fecha_reinversion.toLocaleDateString(this.common.localDate, this.common.dateOptions)} por valor de Q${(monto + interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} ` +

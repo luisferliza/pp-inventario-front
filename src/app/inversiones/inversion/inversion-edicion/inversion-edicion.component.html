@@ -18,14 +18,14 @@
       </mat-form-field>  
       <mat-form-field fxFlex>
         <mat-placeholder>Referencia PP</mat-placeholder>
-        <input required type="text" formControlName="referencia_pp" matInput>
+        <input type="text" formControlName="referencia_pp" matInput>
       </mat-form-field>  
     </div>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>
         <mat-placeholder>No. de Cuenta</mat-placeholder>
-        <input required type="text" formControlName="cuenta" matInput>
+        <input type="text" formControlName="cuenta" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
         <mat-placeholder>Valor de inversión</mat-placeholder>
@@ -66,7 +66,7 @@
       </mat-form-field>  
       <mat-form-field fxFlex>
         <mat-placeholder>Acta JAPP</mat-placeholder>
-        <input required type="text" formControlName="acta_japp" matInput>
+        <input type="text" formControlName="acta_japp" matInput>
       </mat-form-field>
 
       <mat-form-field fxFlex>      
@@ -165,13 +165,13 @@
     </mat-menu>
     
     <mat-menu #inversion_mat="matMenu">
-      <button *ngFor="let cuenta of cta_inversion" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }}</button>
+      <button *ngFor="let cuenta of cta_inversion" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.id_cuenta + " - " + cuenta.nombre }}</button>
     </mat-menu>
     <mat-menu #provision_mat="matMenu">
-      <button *ngFor="let cuenta of cta_provision" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }}</button>
+      <button *ngFor="let cuenta of cta_provision" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.id_cuenta + " - " + cuenta.nombre }}</button>
     </mat-menu>
     <mat-menu #producto_mat="matMenu">
-      <button *ngFor="let cuenta of cta_interes_producto" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.nombre }} </button>
+      <button *ngFor="let cuenta of cta_interes_producto" type="button" mat-menu-item (click)="AsignarCuentaACategoria(cuenta)"> {{ cuenta.id_cuenta + " - " + cuenta.nombre }} </button>
     </mat-menu>     
      
   </mat-dialog-content>

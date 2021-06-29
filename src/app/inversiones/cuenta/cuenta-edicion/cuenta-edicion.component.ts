@@ -44,7 +44,7 @@ export class CuentaEdicionComponent implements OnInit {
     this.form = this.fb.group({      
       nombre:  this.defaults.nombre || '',
       numero: this.defaults.numero || '',      
-      activa: this.defaults.activa || true,            
+      activa: this.defaults.activa,            
       tipo_cuenta_id: this.defaults.tipoCuenta? this.defaults.tipoCuenta.id_tipo_cuenta : null,         
       banco_id: this.defaults.banco ? this.defaults.banco.id_banco : null
     });
@@ -111,7 +111,7 @@ export class CuentaEdicionComponent implements OnInit {
   }
 
   updateBancos() {
-    this.bancoService.listar(this.pidu).subscribe(data => {
+    this.bancoService.listarActivas(this.pidu).subscribe(data => {
       this.bancos = data;
     })
   }

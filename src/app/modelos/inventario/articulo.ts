@@ -3,6 +3,7 @@ import { Departamento } from "./departamento";
 import { Estado } from "./estado";
 import { Proveedor } from "./proveedor";
 import { TipoArticulo } from "./tipo-articulo";
+import { Condicion } from "./condicion";
 
 export class Articulo{
     id_articulo: number;	
@@ -13,6 +14,7 @@ export class Articulo{
 	marca: string;
 	fungible: boolean;	
 	categoria: Categoria;
+	condicion: Condicion;
 	tipo_articulo: TipoArticulo;
 	estado: Estado;	
 	proveedor: Proveedor;

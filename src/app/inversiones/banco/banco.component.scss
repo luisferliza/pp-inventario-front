@@ -13,3 +13,7 @@
 .clickable {
   cursor: pointer;
 }
+
+mat-header-cell, mat-cell {
+  justify-content: center;
+}

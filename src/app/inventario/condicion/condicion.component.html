@@ -4,16 +4,14 @@
 
   <div class="container">
 
-    <elastic-breadcrumbs [currentPage]="'Bancos'" [header]="'primary'"></elastic-breadcrumbs>
+    <elastic-breadcrumbs [currentPage]="'Condiciones'" [header]="'primary'"></elastic-breadcrumbs>
 
-    <elastic-list name="Bancos" [columns]="columns" (filterChange)="onFilterChange($event)">
+    <elastic-list name="Condiciones" [columns]="columns" (filterChange)="onFilterChange($event)">
       <div class="actions" fxFlexAlign="center">
-        <button class="create" (click)="crear()" type="button" mat-mini-fab color="primary">
+        <button class="create" (click)="create()" type="button" mat-mini-fab color="primary">
           <mat-icon>add</mat-icon>
         </button>
       </div>
-
-      
 
       <mat-table #table [dataSource]="dataSource"  id="table" matSort>        
 
@@ -25,15 +23,6 @@
           </ng-container>
         </ng-container>
         
-        <ng-container matColumnDef="tipo_Entidad">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de entidad </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{ row.tipo_Entidad.nombre}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="activa">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{ row.activa? "Activo" : "Inactivo" }} </mat-cell>
-      </ng-container>
 
         <!-- actions Column -->
         <ng-container matColumnDef="actions">
@@ -44,10 +33,10 @@
             </button>
 
             <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
-              <button (click)="modificar(row)" mat-menu-item>
+              <button (click)="modify(row)" mat-menu-item>
                 <span>Modificar</span>
               </button>
-              <button (click)="eliminar(row)" mat-menu-item>
+              <button (click)="delete(row)" mat-menu-item>
                 <span>Borrar</span>
               </button>
             </mat-menu>
@@ -55,7 +44,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="visibleColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: visibleColumns;" (click)="modificar(row)" class="clickable">
+        <mat-row *matRowDef="let row; columns: visibleColumns;" (click)="modify(row)" class="clickable">
         </mat-row>
       </mat-table>
 

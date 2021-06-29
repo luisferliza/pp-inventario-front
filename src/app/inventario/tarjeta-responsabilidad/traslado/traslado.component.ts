@@ -209,5 +209,7 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
   ngOnDestroy(): void {
   }
 
+  
+
 }
 

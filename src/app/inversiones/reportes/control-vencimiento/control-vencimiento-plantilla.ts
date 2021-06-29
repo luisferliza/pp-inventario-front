@@ -13,8 +13,9 @@ export class PlantillaControlVencimiento {
 
     public getDocument(rows: Inversion[], contador: Firmante, fecha_ini: Date, fecha_fin: Date) {
         let docDefinition = {
-            pageMargins: [50, 60, 50, 50],
+            pageMargins: [50, 90, 50, 50],
             pageSize: 'LETTER',
+            header: this.getHeader(),
             pageOrientation: 'landscape',
             content: [
                 this.getTitle(fecha_ini, fecha_fin),
@@ -25,6 +26,17 @@ export class PlantillaControlVencimiento {
         };
 
         return docDefinition;
+    }
+
+    private getHeader() {
+        return {
+                text: `UNIVERSIDAD DE SAN CARLOS DE GUATEMALA \r\n PLAN DE PRESTACIONES`,
+                style: 'header',
+                alignment: "left",
+                fontSize: 10,
+                bold: true,
+                margin: [50, 50, 50, 50],
+            }        
     }
 
     private getTitle(fecha_ini: Date, fecha_fin: Date) {
@@ -48,16 +60,16 @@ export class PlantillaControlVencimiento {
     private getTable(rows: Inversion[]) {
         return {
             style: 'tableExample',
-            margin: [10, 8, 10, 50],
+            margin: [10, 8, 10, 20],
             fontSize: 8,
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['16%', '10%', '6%', '10%', '10%', '12%', '8%', '6%', '10%', '12%'],
+                widths: ['16%', '15%', '5%', '9%', '9%', '12%', '5%', '5%', '12%', '12%'],
                 body: [
                     [{ text: 'Institución', style: 'tableHeader' },
                     { text: 'Certificado', style: 'tableHeader' },
-                    { text: 'Plazo (dias)', style: 'tableHeader' },
+                    { text: 'Plazo (días)', style: 'tableHeader' },
                     { text: 'Fecha de vencimiento', style: 'tableHeader' },
                     { text: 'Fecha de pago', style: 'tableHeader' },
                     { text: 'Valor Q', style: 'tableHeader' },
@@ -112,7 +124,7 @@ export class PlantillaControlVencimiento {
                 alignment: "center",
                 fontSize: 9,
                 bold: true,
-                margin: [0, 60, 420, 0],
+                margin: [0, 40, 420, 0],
             }
         ]
     }

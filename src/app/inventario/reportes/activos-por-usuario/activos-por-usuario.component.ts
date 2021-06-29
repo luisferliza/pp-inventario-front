@@ -35,7 +35,7 @@ export class ActivosPorUsuarioComponent implements OnInit {
     private plantilla: PlantillaActivosPorUsuario) { }
 
   ngOnInit(): void {
-    this.getUsuarios();
+    this.getUsuarios();    
   }
 
   listar() {
@@ -87,11 +87,11 @@ export class ActivosPorUsuarioComponent implements OnInit {
         { header: [], skipHeader: false });
       // Encabezados personalizados
       if (ws.A1) { // Valida si hay datos        
-        ws.A1.v = 'No. Inventario';
-        ws.B1.v = 'Descripción';
-        ws.C1.v = 'Precio';
-        ws.D1.v = 'Tarjeta No.';
-        ws.E1.v = 'Fecha Asignación';
+        ws.A1.v = 'Tarjeta No';
+        ws.B1.v = 'Fecha Asignación';
+        ws.C1.v = 'No. Inventario';
+        ws.D1.v = 'Descripción';
+        ws.E1.v = 'Precio';
       }
       const wb: WorkBook = utils.book_new();
       utils.book_append_sheet(wb, ws, 'Activos por usuario');
@@ -108,11 +108,11 @@ export class ActivosPorUsuarioComponent implements OnInit {
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {
       data.push({
+        tarjeta: this.rows[cont].tarjeta,
+        inicio: this.common.getLocalDateString(this.rows[cont].inicio),
         inventario: this.rows[cont].inventario,
         descripcion: this.rows[cont].descripcion,
-        precio: this.rows[cont].precio,
-        tarjeta: this.rows[cont].tarjeta,
-        inicio: this.common.getLocalDateString(this.rows[cont].inicio)
+        precio: this.rows[cont].precio        
       })
       cont++;
     }

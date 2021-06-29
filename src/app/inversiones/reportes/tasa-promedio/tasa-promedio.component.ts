@@ -41,7 +41,7 @@ export class TasaPromedioComponent implements OnInit {
   }
 
   getBancos() {
-    this.bancoService.listar(this.pidu).subscribe(data => {
+    this.bancoService.listarActivas(this.pidu).subscribe(data => {
       this.bancos = data;
       this.getTasasDTO();
     })
@@ -84,16 +84,32 @@ export class TasaPromedioComponent implements OnInit {
         }
         this.rows.push(bancoTmp);
       })
+      let tmp = []
+      this.rows.forEach(row =>{
+        let avg = this.getAvg(row);
+        if(avg != 0){
+          row.push(avg)
+          tmp.push(row)   // Filtra las filas que no son 0
+        }         
+      })
+      this.rows = tmp;
       document.getElementById('table').click();
     })
   }
 
+  getAvg(element) {
+    let total = element.slice(1).reduce((sum, p) => sum + (p == 0 ? 0 : 1), 0);
+    if (total === 0) {
+        return 0
+    }
+    return (element.slice(1).reduce((sum, p) => sum + (p), 0) / total)
+}
 
   downloadPDF() {
     if (this.rows.length > 0) {      
-      let docDefinition = this.plantilla.getDocument(this.rows, this.anio, this.contador);
+      let docDefinition = this.plantilla.getDocument(this.rows, this.anio, this.contador);      
       pdfMake.createPdf(docDefinition).open();
-      this.getTasasDTO();
+      this.getTasasDTO(); // En la generacion del PDF se modifican los datos
     }
     else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
@@ -122,18 +138,16 @@ export class TasaPromedioComponent implements OnInit {
           ws.K1.v = 'Octubre';
           ws.L1.v = 'Noviembre';
           ws.M1.v = 'Diciembre';                
+          ws.N1.v = 'Promedio';       
         }
       
-      utils.book_append_sheet(wb, ws, 'Tasa Maxima');
-      writeFile(wb, 'Integración a plazo.xlsx');
+      utils.book_append_sheet(wb, ws, 'Tasa Promedio');
+      writeFile(wb, 'Tasa Promedio.xlsx');
     } else {
       this.snackBar.open('No hay datos para exportar', 'AVISO', {
         duration: 2000
       });
     }
   }
-
-
-
-
 }
+

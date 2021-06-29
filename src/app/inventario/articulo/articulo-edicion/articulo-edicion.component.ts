@@ -14,6 +14,8 @@ import { EstadoService } from 'app/servicios/inventario/estado.service';
 import { ArticuloService } from 'app/servicios/inventario/articulo.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { CommonFunction } from 'app/inventario/shared/common';
+import { Condicion } from 'app/modelos/inventario/condicion';
+import { CondicionService } from 'app/servicios/inventario/condicion.service';
 
 
 
@@ -29,6 +31,7 @@ export class ArticuloEdicionComponent implements OnInit {
   estados: Estado[] = [];
   proveedores: Proveedor[];
   tiposArticulo: TipoArticulo[];  
+  condiciones: Condicion[];
   activo: boolean = true;
 
   
@@ -44,6 +47,7 @@ export class ArticuloEdicionComponent implements OnInit {
     private estadoService: EstadoService,
     private proveedorService: ProveedorService,
     private tipoArticuloService: TipoArticuloService,
+    private condicionesService: CondicionService,
     private fb: FormBuilder,
     private common: CommonFunction) { }
 
@@ -54,6 +58,7 @@ export class ArticuloEdicionComponent implements OnInit {
     this.updateEstados();
     this.updateProveedores();
     this.updateTiposArticulo();
+    this.updateCondiciones();
 
     if (this.defaults) {
       this.mode = 'update';
@@ -69,7 +74,8 @@ export class ArticuloEdicionComponent implements OnInit {
       fecha_compra: this.defaults.fecha_compra? this.common.parseDate(this.defaults.fecha_compra) : null,      
       precio: this.defaults.precio || 0,            
       marca: this.defaults.marca || '',            
-      fungible: this.defaults.fungible || false,            
+      fungible: this.defaults.fungible || false,  
+      id_condicion: this.defaults.condicion? this.defaults.condicion.id_condicion : null,                      
       id_categoria: this.defaults.categoria? this.defaults.categoria.id_categoria : null,            
       id_departamento: this.defaults.departamento? this.defaults.departamento.id_departamento : null,            
       id_tipo_articulo: this.defaults.tipo_articulo? this.defaults.tipo_articulo.id_tipo_articulo : null,            
@@ -123,6 +129,11 @@ export class ArticuloEdicionComponent implements OnInit {
     articulo.departamento = new Departamento();
     articulo.departamento.id_departamento = this.form.value.id_departamento;   
 
+    articulo.condicion = new Condicion();
+    articulo.condicion.id_condicion = this.form.value.id_condicion;
+
+    console.log(articulo)
+
     articulo.fecha_compra = this.form.value.fecha_compra.toISOString() // Convierte la fecha
         
     this.articuloService.registrar(articulo, this.pidu).subscribe(()=>{
@@ -148,6 +159,9 @@ export class ArticuloEdicionComponent implements OnInit {
     
     articulo.departamento = new Departamento();
     articulo.departamento.id_departamento = this.form.value.id_departamento;   
+
+    articulo.condicion = new Condicion();
+    articulo.condicion.id_condicion = this.form.value.id_condicion;
     
     articulo.fecha_compra = this.form.value.fecha_compra.toISOString() // Convierte la fecha
 
@@ -191,6 +205,12 @@ export class ArticuloEdicionComponent implements OnInit {
   updateTiposArticulo() {
     this.tipoArticuloService.listar(this.pidu).subscribe(data => {
       this.tiposArticulo = data;
+    })
+  }
+
+  updateCondiciones(){
+    this.condicionesService.listar(this.pidu).subscribe(data => {
+      this.condiciones = data;
     })
   }
 

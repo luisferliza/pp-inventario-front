@@ -5,4 +5,5 @@ export class SubastaBienes {
     precio: number;        
     residual: number;
     responsable: string;
+    condicion: string;
 }

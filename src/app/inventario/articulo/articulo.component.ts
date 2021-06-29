@@ -43,6 +43,7 @@ export class ArticuloComponent implements List<Articulo>, OnInit, OnDestroy {
     { name: 'Tipo de artículo', property: 'tipo_articulo', visible: false },
     { name: 'Estado', property: 'estado', visible: true },
     { name: 'Proveedor', property: 'proveedor', visible: false },
+    { name: 'Condicion', property: 'condicion', visible: false },
     { name: 'Departamento', property: 'departamento', visible: false },    
     { name: 'Acciones', property: 'actions', visible: true },
   ] as ListColumn[];

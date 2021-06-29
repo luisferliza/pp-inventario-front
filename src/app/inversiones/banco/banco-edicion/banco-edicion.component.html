@@ -45,9 +45,15 @@
         </mat-form-field> 
         <mat-form-field fxFlex>
           <mat-placeholder>No. Anexo</mat-placeholder>
-          <input type="number" formControlName="anexo" matInput>
+          <input required type="number" formControlName="anexo" matInput>
       </mat-form-field>       
       </div>
+
+      <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
+        <div style="padding-top: 5%;">
+          <mat-checkbox [checked]="true" color="primary" formControlName="activa">¿Activa?</mat-checkbox>
+        </div>    
+      </div>      
     
     </mat-dialog-content>
 

@@ -88,7 +88,7 @@ export class DesinversionAnticipadaCreator {
           text: `\u200B\t\tAtentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
             `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó desinvertir en ese banco el valor del ` +
             `certificado ${certificado}, cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, `+
-            `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
+            `más intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
             `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha en que se realizará la desinversión.`,
           alignment: "justify",
           margin: [10, 20, 10, 0],
@@ -174,7 +174,7 @@ export class DesinversionAnticipadaCreator {
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Atentamente hacemos de su conocimiento que la Junta Administradora del Plan de Prestaciones, en sesión del ` +
     `${fecha_acta.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, Acta No. ${acta_japp}, acordó desinvertir en ese banco el valor del ` +
     `certificado ${certificado}, cuenta ${cuenta} por Q${monto.toLocaleString(this.common.localNumber, this.common.numberOptions)}, `+
-    `mas intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
+    `más intereses de ${dias_interes} días por Q${interes.toLocaleString(this.common.localNumber, this.common.numberOptions)} `+
     `al ${vencimiento.toLocaleDateString(this.common.localDate, this.common.dateOptions)}, fecha en que se realizará la desinversión.</p>
     <p style="text-align: justify;">&nbsp; &nbsp; &nbsp;Por lo anterior solicitamos sirvan emitir cheque a nombre de PLAN DE PRESTACIONES USAC, `+
     `por un valor de Q${(monto+interes).toLocaleString(this.common.localNumber, this.common.numberOptions)} para `+

@@ -42,7 +42,7 @@ export class ReportesInventarioService {
   }
 
   activosPorUsuario(pidu: String, fungible:string, usuario:number) {
-    return this.http.get<ActivosPorUsuario[]>(`${this.url}/reportes/activosporusuario?pidu=${pidu}&fungible=${fungible}&id_usuario=${usuario}`);
+    return this.http.get<ActivosPorUsuario[]>(`${this.url}/reportes/activosporusuario?pidu=${pidu}&id_usuario=${usuario}`);
   }  
 
   subastaBienesSinAgrupar(pidu: String, fungible:string, categoria:number) {
