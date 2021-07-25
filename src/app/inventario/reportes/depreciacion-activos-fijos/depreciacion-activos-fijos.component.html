@@ -21,6 +21,17 @@
               </mat-option>
             </mat-select>
             <b>
+              <p>Seleccione la depreciación:</p>
+            </b>
+            <mat-select required [(ngModel)]="acumulada" (selectionChange)="update()">
+              <mat-option [value]="true">
+                Acumulada
+              </mat-option>
+              <mat-option [value]="false" selected>
+                Mensual
+              </mat-option>
+            </mat-select>
+            <b>
               <p>Seleccione la fecha:</p>
             </b>
             <mat-form-field>
@@ -58,9 +69,10 @@
               <th>Número</th>
               <th>Descripción</th>
               <th>Valor de adquisición</th>
-              <th>Depre Acum.</th>
-              <th>Valor</th>              
-            </tr>
+              <th *ngIf="!acumulada">Depre.</th>
+              <th *ngIf="acumulada">Depre Acum.</th>
+              <th *ngIf="acumulada">Valor</th>              
+            </tr>            
           </thead>
           <tbody>
             <tr *ngFor="let row of rows">
@@ -70,9 +82,8 @@
               <td>{{ row.descripcion }}</td>
               <td> Q{{ row.precio.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
               <td> Q{{ row.depreciacion.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
-              <td> Q{{ row.valor.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>
-              
-            </tr>
+              <td *ngIf="acumulada"> Q{{ row.valor.toLocaleString(this.common.localNumber, this.common.numberOptions ) }}</td>              
+            </tr>            
           </tbody>
         </table>
       </div>

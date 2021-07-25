@@ -7,6 +7,8 @@ import { TasaDTO } from "app/modelos/inversiones/TasaDTO";
 import { InversionesPorTipoBanco } from "app/modelos/inversiones/inversionesPorTipoBanco";
 import { TotalInversionesPorBanco } from "app/modelos/inversiones/totalInversionesPorBanco";
 import { InversionesPorTipoInversionAprobadas } from "app/modelos/inversiones/InversionesPorTipoInversionAprobadas";
+import { Variable } from "app/modelos/inventario/reportes/variable";
+
 
 @Injectable({
   providedIn: 'root'
@@ -49,12 +51,12 @@ export class ReportesInversionesService {
     return this.http.get<InversionesPorTipoInversionAprobadas[]>(`${this.url}/reportes/autorizacioninversion?pidu=${pidu}`);
   }
 
-  tasaMaxima(pidu: String, anio: number) {
-    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasamaxima?pidu=${pidu}&anio=${anio}`);
+  tasaMaxima(pidu: String, anio: number, vigente: string) {
+    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasamaxima?pidu=${pidu}&anio=${anio}&vigente=${vigente}`);
   }
 
-  tasaPromedio(pidu: String, anio: number) {
-    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasapromedio?pidu=${pidu}&anio=${anio}`);
+  tasaPromedio(pidu: String, anio: number, vigente: string) {
+    return this.http.get<TasaDTO[]>(`${this.url}/reportes/tasapromedio?pidu=${pidu}&anio=${anio}&vigente=${vigente}`);
   }
 
   inversionesVencen(pidu: String, fecha_ini: Date, fecha_fin: Date) {
@@ -67,6 +69,14 @@ export class ReportesInversionesService {
 
   calculoInteres(pidu: String, fecha: Date, inversion: Inversion) {
     return this.http.put<Inversion>(`${this.url}/reportes/calculointeres?pidu=${pidu}&fecha=${fecha.toISOString()}`, inversion);
+  }
+
+  obtenerVariables(pidu: String) {
+    return this.http.get<Variable[]>(`${this.url}/variables?pidu=${pidu}`);
+  }
+
+  modificarVariables(pidu: string, variables: Variable[]){
+    return this.http.put(`${this.url}/variables?pidu=${pidu}`, variables);
   }
 
   

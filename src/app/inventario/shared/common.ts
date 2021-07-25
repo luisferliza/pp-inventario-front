@@ -73,14 +73,15 @@ export class CommonFunction {
   public readonly CTA_INT_PRODUCTO = 'Cta. de Interes producto'
 
   // Estados de inversion
-  public readonly ESTADO_INVERSION = 'Inversion';
-  public readonly ESTADO_REINVERSION = 'Reinversion';
-  public readonly ESTADO_REINVERSION_PARCIAL = 'Reinversion Parcial';
-  public readonly ESTADO_VENCIMIENTO = 'Vencimiento';
-  public readonly ESTADO_DESINVERSION = 'Desinversión';
+  public readonly ESTADO_INVERSION = 'INVERSIÓN';
+  public readonly ESTADO_REINVERSION = 'REINVERSIÓN';
+  public readonly ESTADO_REINVERSION_PARCIAL = 'REINVERSIÓN PARCIAL';
+  public readonly ESTADO_VENCIMIENTO = 'VENCIMIENTO';
+  public readonly ESTADO_DESINVERSION = 'DESINVERSIÓN';
 
   // Bancos Especiales
   public readonly MINISTERIO_FINANZAS = 'MINISTERIO DE FINANZAS';
+  public readonly BANCO_GUATEMALA = 'BANCO DE GUATEMALA';
   public readonly BANCOS_ESTATALES = 'BANCOS ESTATALES';
 
 }

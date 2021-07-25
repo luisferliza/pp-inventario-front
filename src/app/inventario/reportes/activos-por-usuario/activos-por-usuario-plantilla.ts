@@ -65,9 +65,9 @@ export class PlantillaActivosPorUsuario {
                     { text: 'No. Inventario', style: 'tableHeader' }, 
                     { text: 'Descripción', style: 'tableHeader' }, 
                     { text: 'Valor Neto', style: 'tableHeader' }],
-                    ...rows.map(p => ([p.tarjeta , p.inicio, p.inventario, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
+                    ...rows.map(p => ([p.tarjeta , p.inicio, p.inventario, { text: p.descripcion, alignment: 'justify' }, { text: "Q" + p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
                     [{},{},{}, { text: 'Total:', bold: true, alignment: 'right' }, 
-                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]
+                    { text: 'Q' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]
                 ]
             },
             layout: 'headerLineOnly'

@@ -15,7 +15,18 @@
             <b>
               <p>Seleccione el año:</p>
             </b>
-            <input matInput  type="number" placeholder="año" [(ngModel)]="anio">            
+            <input matInput  type="number" placeholder="año" [(ngModel)]="anio">                        
+            <b>
+              <p>Seleccione el tipo de información:</p>
+            </b>
+            <mat-select required [(ngModel)]="vigentes" (selectionChange)="getTasasDTO()">
+              <mat-option [value]="true">
+                Inversiones vigentes
+              </mat-option>
+              <mat-option [value]="false" selected>
+                Inversiones colocadas
+              </mat-option>
+            </mat-select>
             <br>
             <button mat-raised-button color="warn" (click)="getTasasDTO()">Actualizar tabla</button>
             <br>

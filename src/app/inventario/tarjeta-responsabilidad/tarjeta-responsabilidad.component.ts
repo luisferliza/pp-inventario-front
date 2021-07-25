@@ -162,14 +162,15 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
       content: [
         {
           style: 'tableExample',
-          margin: [20, 40, 0, 8],
+          //margin: [20, 70, 0, 8],
+          margin: [20, 200, 0, 8],
           fontSize: 8,
           alignment: "center",
           table: {
             headerRows: 0,
-            widths: ['10%', '10%', '50%', '10%', '10%', '10%'],
+            widths: ['13%', '15%', '36%', '12%', '12%', '12%'],
             body: [
-              [tarjeta.idTarjetaResponsabilidad, tarjeta.articulo.inventario,{ text: tarjeta.articulo.descripcion, alignment: 'justify'}, tarjeta.articulo.precio, tarjeta.receptor? tarjeta.receptor.nombrepp: '']              
+              [this.common.getLocalDateString(tarjeta.articulo.fecha_compra), tarjeta.articulo.inventario,{ text: tarjeta.articulo.descripcion, alignment: 'justify'}, tarjeta.articulo.precio, tarjeta.receptor? tarjeta.receptor.nombrepp: '']              
             ]
           },
           layout: 'headerLineOnly'
@@ -181,7 +182,7 @@ export class TarjetaResponsabilidadComponent implements List<TarjetaResponsabili
 
   downloadExcel(tarjeta: TarjetaResponsabilidad) {
     let ws: WorkSheet;
-    ws = utils.json_to_sheet([[tarjeta.idTarjetaResponsabilidad, tarjeta.articulo.inventario, tarjeta.articulo.descripcion, tarjeta.articulo.precio, tarjeta.receptor.nombrepp]],
+    ws = utils.json_to_sheet([[this.common.getLocalDateString(tarjeta.articulo.fecha_compra), tarjeta.articulo.inventario, tarjeta.articulo.descripcion, tarjeta.articulo.precio, tarjeta.receptor.nombrepp]],
       { header: [], skipHeader: false });
     // Encabezados personalizados    
     if (ws.A1) { // Valida si hay datos    

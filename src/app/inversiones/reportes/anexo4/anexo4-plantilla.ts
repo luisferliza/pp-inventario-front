@@ -142,6 +142,8 @@ export class PlantillaAnexo4 {
                 continue;
             } else if (element.nombre.toLocaleUpperCase() === this.common.MINISTERIO_FINANZAS) {                
                 response.push(...this.createMinisterioFinanzasRow(element, totalCategoria));
+            } else if (element.nombre.toLocaleUpperCase() === this.common.BANCO_GUATEMALA) {                
+                response.push(...this.createBancoGuatemalaRow(element, totalCategoria));
             } else {
                 response.push([
                     { text: element.nombre.toUpperCase()+` /${element.anexo}`, alignment: 'left' },
@@ -169,7 +171,18 @@ export class PlantillaAnexo4 {
                 { text: "\r\nQ" + this.prima.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' },
                 {}, {}
             ])
-        }
+        }       
+        return response;
+    }
+
+    private createBancoGuatemalaRow(element: TotalInversionesPorBanco, totalCategoria: number) {
+        let response = []
+        response.push([ 
+            { text: element.nombre.toUpperCase()+` /${element.anexo}`, alignment: 'left' },
+            this.getPorcentaje(totalCategoria, element.monto) + "%",
+            { text: "Q" + element.monto.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' },
+            {}, {}
+        ])        
         if (this.descuentos != 0) {
             response.push([
                 { text: '  Descuentos', alignment: 'left', fontSize:8 },
@@ -252,27 +265,19 @@ export class PlantillaAnexo4 {
             alignment: "left",
             fontSize: 9,
             bold: true,
-            margin: [10, 25, 0, 15],
+            margin: [10, 5, 0, 15],
         }
     }
 
     private getFirmantes(contador: Firmante, administrador: Firmante, asistente: Firmante) {
         return [
             {
-                text: `${administrador.nombre}\r\n${administrador.despliegue}`,
-                style: 'subheader',
-                alignment: "center",
-                fontSize: 9,
-                bold: true,
-                margin: [20, 60, 280, 20],
-            },
-            {
                 text: `${contador.nombre}\r\n${contador.despliegue}`,
                 style: 'subheader',
                 alignment: "center",
                 fontSize: 9,
                 bold: true,
-                margin: [20, 60, 280, 0],
+                margin: [20, 40, 280, 0],
             },
             {
                 text: `${asistente.nombre}\r\n${asistente.despliegue}`,
@@ -280,7 +285,15 @@ export class PlantillaAnexo4 {
                 alignment: "center",
                 fontSize: 9,
                 bold: true,
-                margin: [280, -20, 20, 15],
+                margin: [280, -20, 20, 35],
+            },
+            {
+                text: `${administrador.nombre}\r\n${administrador.despliegue}`,
+                style: 'subheader',
+                alignment: "center",
+                fontSize: 9,
+                bold: true,
+                margin: [20, 20, 280, 15],
             }
         ]
     }

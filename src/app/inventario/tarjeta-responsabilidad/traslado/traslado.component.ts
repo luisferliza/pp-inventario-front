@@ -147,15 +147,16 @@ export class TrasladoComponent implements List<Traslado>, OnInit, OnDestroy {
   downloadPDF() {
     // Set the fonts to use            
     let docDefinition = {
-      content: [
+      pageMargins: [10, 10, 10, 0],
+      content: [        
         {
           style: 'tableExample',
-          margin: [6, 60, 2, 8],
+          margin: [0, 50, 0, 8],
           fontSize: 9,
           alignment: "center",
           table: {
             headerRows: 0,
-            widths: ['15%', '18%', '31%', '18%', '18%'],
+            widths: ['15%', '20%', '30%', '17.5%', '17.5%'],
             body: [
               ...this.traslados.map(p => ([this.common.getLocalDateString(p.fecha_inicio), '', p.seccion.nombre, p.usuario.nombrepp, '']))
 

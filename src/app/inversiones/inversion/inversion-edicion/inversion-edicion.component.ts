@@ -149,7 +149,7 @@ export class InversionEdicionComponent implements OnInit {
 
     //Conversion de fechas
     inversion.fecha_colocacion = this.form.value.fecha_colocacion.toISOString() // Convierte la fecha
-    inversion.fecha_acta = this.form.value.fecha_acta.toISOString() // Convierte la fecha
+    inversion.fecha_acta = this.form.value.fecha_acta? this.form.value.fecha_acta.toISOString(): null // Convierte la fecha
     inversion.vencimiento = this.form.value.vencimiento.toISOString() // Convierte la fecha
     inversion.fecha_pago = this.form.value.fecha_pago.toISOString() // Convierte la fecha
 
@@ -396,7 +396,7 @@ export class InversionEdicionComponent implements OnInit {
     for (let index = 0; index < this.estados.length; index++) {
       const element = this.estados[index];
       if (element.id_estado === this.form.value.estado_inversion) {
-        switch (element.nombre) {
+        switch (element.nombre.toLocaleUpperCase()) {
           case this.common.ESTADO_INVERSION:
             this.form.controls['vigente'].setValue(true);            
             break;
@@ -412,6 +412,11 @@ export class InversionEdicionComponent implements OnInit {
           case this.common.ESTADO_VENCIMIENTO:
             this.form.controls['vigente'].setValue(false);
             break;
+          default:
+            console.log('ESTADO DESCONOCIDO');
+            this.form.controls['vigente'].setValue(false);
+            break;
+
         }
       }
 

@@ -40,8 +40,8 @@
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="24px">
       <mat-form-field fxFlex>      
-        <input matInput [matDatepicker]="fecha_colocacion" placeholder="Fecha de colocación" formControlName="fecha_colocacion" (dateChange)="changeDate()">
-        <mat-datepicker-toggle matSuffix [for]="fecha_colocacion"></mat-datepicker-toggle>              
+        <input required matInput [matDatepicker]="fecha_colocacion" placeholder="Fecha de colocación" formControlName="fecha_colocacion" (dateChange)="changeDate()">
+        <mat-datepicker-toggle  matSuffix [for]="fecha_colocacion"></mat-datepicker-toggle>              
       </mat-form-field>
       <mat-datepicker #fecha_colocacion  ></mat-datepicker> 
       <mat-form-field fxFlex>
@@ -49,7 +49,7 @@
         <input required type="number" formControlName="plazo" (change)="changeDate()" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>      
-        <input matInput [matDatepicker]="vencimiento" placeholder="Fecha Vencimiento" formControlName="vencimiento">
+        <input required matInput [matDatepicker]="vencimiento" placeholder="Fecha Vencimiento" formControlName="vencimiento">
         <mat-datepicker-toggle matSuffix [for]="vencimiento"></mat-datepicker-toggle>              
       </mat-form-field>
       <mat-datepicker #vencimiento  ></mat-datepicker> 
@@ -87,7 +87,7 @@
       </mat-form-field>
 
       <mat-form-field fxFlex>      
-        <input matInput [matDatepicker]="fecha_pago" placeholder="Primera fecha pago" formControlName="fecha_pago">
+        <input matInput required [matDatepicker]="fecha_pago" placeholder="Primera fecha pago" formControlName="fecha_pago">
         <mat-datepicker-toggle matSuffix [for]="fecha_pago"></mat-datepicker-toggle>              
       </mat-form-field>
       <mat-datepicker #fecha_pago></mat-datepicker>  

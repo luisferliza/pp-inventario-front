@@ -11,14 +11,14 @@ export class PlantillaTasaMaxima {
 
     constructor(private common: CommonFunction) { }
 
-    public getDocument(rows: Inversion[], anio:number, contador: Firmante) {
+    public getDocument(rows: Inversion[], anio:number, contador: Firmante, titulo: string) {
         let docDefinition = {
             pageMargins: [50, 90, 50, 50],
             pageSize: 'FOLIO',
             pageOrientation: 'landscape',
             header: this.getHeader(),
             content: [
-                this.getTitle(anio),
+                this.getTitle(anio, titulo),
                 this.getTable(rows),
                 this.getGenerationDate(),
                 this.getFirmantes(contador)
@@ -42,9 +42,9 @@ export class PlantillaTasaMaxima {
         ]
     }
 
-    private getTitle(anio) {
+    private getTitle(anio, titulo) {
         return {
-            text: `TASA MÁXIMA POR BANCO EN ${anio}`,
+            text: `${titulo} en ${anio}`,
             style: 'header',
             alignment: "center",
             fontSize: 10,
@@ -54,8 +54,8 @@ export class PlantillaTasaMaxima {
         }
     }
 
-    private getTable(rows: Inversion[]) {
-        return {
+    private getTable(rows: Inversion[]) {        
+        return {            
             style: 'tableExample',
             margin: [7, 8, 7, 20],
             fontSize: 8,
@@ -81,13 +81,38 @@ export class PlantillaTasaMaxima {
                         `${element[12].toFixed(2)}%`,
                         `${element[13].toFixed(2)}%`                        
                     ])),
-                    [{},{},{},{},{},{},{},{},{},{},{ text: 'Promedio General Anual:', colSpan: 3, bold: true, alignment: 'right' },{},{},
-                    { text:  (rows.reduce((sum, p) => sum + (p[13]), 0)/rows.length).toFixed(2) + "%", bold: true, alignment: 'center' }]
-                    
+                    [{ text: 'PROMEDIO:', bold: true, alignment: 'center' }, 
+                     { text: `${this.getPromedio(rows, 1)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 2)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 3)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 4)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 5)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 6)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 7)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 8)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 9)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 10)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 11)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 12)}%`, bold: true, alignment: 'center'},
+                     { text: `${this.getPromedio(rows, 13)}%`, bold: true, alignment: 'center'}]                    
                 ]
             },
             layout: 'lightHorizontalLines'
         }
+    }
+
+    getPromedio(mat: Inversion[], column: number){
+        let totalElementos: number = 0;
+        let sumatoria = 0;
+        for (let index = 0; index < mat.length; index++) {
+            const element = mat[index];
+            if(element[column]==0){
+                continue;
+            }
+            totalElementos++;
+            sumatoria += element[column];                        
+        }
+        return totalElementos==0?0:(sumatoria/totalElementos).toFixed(2);
     }
 
     getHeaders() {
@@ -106,15 +131,6 @@ export class PlantillaTasaMaxima {
         { text: 'Diciembre', style: 'tableHeader' },
         { text: 'Promedio', style: 'tableHeader' },
         ]
-    }
-
-    // Evita la division por 0
-    getAvg(element) {
-        let total = element.slice(1).reduce((sum, p) => sum + (p == 0 ? 0 : 1), 0);
-        if (total === 0) {
-            return 0
-        }
-        return (element.slice(1).reduce((sum, p) => sum + (p), 0) / total).toFixed(2)
     }
 
     private getGenerationDate() {

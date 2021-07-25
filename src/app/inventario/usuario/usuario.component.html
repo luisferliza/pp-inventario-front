@@ -1,41 +1,58 @@
-<div class="simple-table">
-
-  <elastic-page-header [height]="'158px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true"></elastic-page-header>
+<div class="all-in-one-table">
+  <elastic-page-header [height]="'180px'" background="url(/assets/img/demo/headers/pattern-3.png)" [reverse]="true">
+  </elastic-page-header>
 
   <div class="container">
 
     <elastic-breadcrumbs [currentPage]="'Usuarios'" [header]="'primary'"></elastic-breadcrumbs>
+          
 
-    <div fxLayout="column" fxLayout.gt-md="row" fxLayoutGap="16px" fxLayoutAlign="start start">
-      <div class="sticky">
-        <mat-card fxFlex.gt-md="300px">
-          <mat-card-title>Usuarios</mat-card-title>
-          <mat-card-content fxLayout="column">   
-            <p>Los usuarios se consumen de un servicio externo, los siguientes usuarios están registrados en el sistema, pero pueden actualizarse con los demás presionando el siguiente botón</p>                                 
-            <br>
-            <button mat-raised-button color="primary" (click)="updateUsuarios()">Actualizar Usuarios</button>            
-          </mat-card-content>
-        </mat-card>
+    <elastic-list name="Usuarios" [columns]="columns" (filterChange)="onFilterChange($event)">
+      <div class="actions" fxFlexAlign="center">
+        <button class="create" (click)="create()" type="button" mat-mini-fab color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button class="create" (click)="updateUsuarios()" type="button" mat-mini-fab color="warn">
+          <mat-icon>update</mat-icon>
+        </button>
       </div>
 
-      <div fxFlex class="mat-elevation-z2">
-        <table id="table" class="table" [class.table-hover]="true" [class.table-striped]="true" [class.table-condensed]="false" [class.table-bordered]="true">
-          <thead>
-          <tr>                                
-            <th>Registro de personal</th>
-            <th>Nombre</th>                
-            <th>Puesto</th>            
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngFor="let row of rows">            
-            <td>{{ row.idUsuario }}</td>                        
-            <td>{{ row.nombrepp }}</td>
-            <td>{{ row.puesto }}</td>            
-          </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+      <mat-table #table [dataSource]="dataSource" id="table" matSort>
+
+        <!-- Columns -->
+        <ng-container *ngFor="let column of columns">
+          <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ column.name }}</mat-header-cell>
+            <mat-cell *matCellDef="let row"> {{ row[column.property] }}</mat-cell>
+          </ng-container>
+        </ng-container>
+
+        <!-- actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell class="actions-cell" *matHeaderCellDef mat-sort-header></mat-header-cell>
+          <mat-cell class="actions-cell" *matCellDef="let row">
+            <button type="button" mat-icon-button [matMenuTriggerFor]="actionsMenu" (click)="$event.stopPropagation()">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+
+            <mat-menu #actionsMenu="matMenu" yPosition="below" xPosition="before">
+              <button (click)="modify(row)" mat-menu-item>
+                <span>Modificar</span>
+              </button>
+              <button (click)="delete(row)" mat-menu-item>
+                <span>Borrar</span>
+              </button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="visibleColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: visibleColumns;" (click)="modify(row)" class="clickable">
+        </mat-row>
+      </mat-table>
+
+      <mat-paginator class="paginator" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+    </elastic-list>
+
   </div>
 </div>

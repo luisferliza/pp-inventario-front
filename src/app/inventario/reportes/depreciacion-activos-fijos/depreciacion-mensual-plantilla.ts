@@ -5,7 +5,7 @@ import { CommonFunction } from "app/inventario/shared/common";
     providedIn: 'root'
 })
 
-export class PlantillaDepreciacionActivos {
+export class PlantillaDepreciacionMensual {
 
     constructor(private common: CommonFunction) { }
 
@@ -25,10 +25,12 @@ export class PlantillaDepreciacionActivos {
         return docDefinition;
     }
 
-    private getHeader(page, categoria, date) {
+    private getHeader(page, categoria, date: Date) {
         if (page === 1) {
+            let otherDate = new Date(date.getTime());
+            otherDate.setDate(1);
             return {
-                text: `Universidad de San Carlos de Guatemala \r\n Reporte de inventario de Activos Fijos con depreciación acumulada \r\n ${date.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`,
+                text: `Plan de Prestaciones, USAC \r\n Reporte de gastos por depreciación de activos fijos \r\n ${otherDate.toLocaleDateString(this.common.localDate, this.common.dateOptions)} al ${date.toLocaleDateString(this.common.localDate, this.common.dateOptions)}`, 
                 style: 'header',
                 alignment: "center",
                 fontSize: 10,
@@ -65,15 +67,13 @@ export class PlantillaDepreciacionActivos {
             alignment: "center",
             table: {
                 headerRows: 1,
-                widths: ['12%', '16%', '30%', '14%', '14%', '14%'],
+                widths: ['14%', '19%', '33%', '17%', '17%',],
                 body: [
-                    [{ text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'V/Adquisición', style: 'tableHeader' }, { text: 'Depre. Acum', style: 'tableHeader' }, { text: 'Valor', style: 'tableHeader' }],
-                    ...rows.map(p => ([p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, { text: p.depreciacion.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, { text: p.valor.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
+                    [{ text: 'Fecha Factura', style: 'tableHeader' }, { text: 'Número', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'Valor adquisición', style: 'tableHeader' }, { text: 'Depreciación', style: 'tableHeader' }],
+                    ...rows.map(p => ([p.fecha, p.numero, { text: p.descripcion, alignment: 'justify' }, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }, { text: p.depreciacion.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
                     [{}, {}, { text: 'Total:', colSpan: 1, bold: true },
                     { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' },
-                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.depreciacion), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' },
-                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.valor), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]]
-            },
+                    { text: 'Q ' + rows.reduce((sum, p) => sum + (p.depreciacion), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]]            },
             layout: 'headerLineOnly'
         }
     }

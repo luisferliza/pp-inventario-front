@@ -10,6 +10,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import { PlantillaDepreciacionActivos } from './depreciacion-activos-plantilla';
+import { PlantillaDepreciacionMensual } from './depreciacion-mensual-plantilla';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -22,6 +23,7 @@ export class DepreciacionActivosFijosComponent implements OnInit {
 
   pidu = '10';
   valor = 1;
+  acumulada;
   first_row: number = 0;
   last_row: number = 0;
   rows: DepreciacionActivosFijos[];
@@ -34,9 +36,11 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     private categoriaService: CategoriaService,
     public common: CommonFunction,
     private snackBar: MatSnackBar,
-    private plantilla: PlantillaDepreciacionActivos) { }
+    private plantilla: PlantillaDepreciacionActivos,
+    private plantillaMensual: PlantillaDepreciacionMensual) { }
 
   ngOnInit(): void {
+    this.acumulada = false;
     this.getCategorias();
     this.date.setHours(0);
 
@@ -46,12 +50,12 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     this.categoriaService.listar(this.pidu).subscribe(data => {
       this.categorias = data;
       this.id_categoria = data[0].id_categoria;
-      this.listar(this.id_categoria)
+      this.listar()
     })
   }
 
-  listar(categoria) {    
-    this.reportesService.depreciacionActivosFijos(this.pidu, this.date, categoria).subscribe(data => {
+  listar() {    
+    this.reportesService.depreciacionActivosFijos(this.pidu, this.date, this.id_categoria, this.acumulada).subscribe(data => {
       this.valor = 1;
       this.rows = data;
       this.last_row = data.length;
@@ -60,8 +64,8 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     });
   }
 
-  update() {
-    this.listar(this.id_categoria);
+  update() {    
+    this.listar();
   }
 
   getValor() {
@@ -72,8 +76,13 @@ export class DepreciacionActivosFijosComponent implements OnInit {
 
   downloadPDF() {    
     let categoria = this.getCategoryName(this.id_categoria)
-    if (this.rows.length > 0) {
-      let docDefinition = this.plantilla.getDocument(this.getDelimitedData(false), categoria, this.date)
+    if (this.rows.length > 0) {      
+      let docDefinition;
+      if(this.acumulada){
+        docDefinition =  this.plantilla.getDocument(this.getDelimitedData(false), categoria, this.date)
+      } else{
+        docDefinition =  this.plantillaMensual.getDocument(this.getDelimitedData(false), categoria, this.date)
+      }
       pdfMake.createPdf(docDefinition).open();
     }
     else {
@@ -95,7 +104,10 @@ export class DepreciacionActivosFijosComponent implements OnInit {
       ws.B1.v = 'Número';
       ws.C1.v = 'Descripción';
       ws.D1.v = 'Valor Adquisición';
-      ws.E1.v = 'Depre. Acum';
+      ws.E1.v = 'Depreciación';      
+    }
+    if(this.acumulada){
+      ws.E1.v = 'Depre. Acum';      
       ws.F1.v = 'Valor';
     }
     const wb: WorkBook = utils.book_new();
@@ -112,14 +124,17 @@ export class DepreciacionActivosFijosComponent implements OnInit {
     let cont = this.first_row - 1;
     let data = []
     while (cont < this.last_row && cont < this.rows.length) {
-      data.push({
+      let row = {
         fecha: this.common.getLocalDateString(this.rows[cont].fecha_compra),
         numero: this.rows[cont].numero,
         descripcion: this.rows[cont].descripcion,
         precio: fixed ? this.rows[cont].precio.toFixed(2) : this.rows[cont].precio,
-        depreciacion: fixed ? this.rows[cont].depreciacion.toFixed(2) : this.rows[cont].depreciacion,
-        valor: fixed ? this.rows[cont].valor.toFixed(2) : this.rows[cont].valor,
-      })
+        depreciacion: fixed ? this.rows[cont].depreciacion.toFixed(2) : this.rows[cont].depreciacion
+      }
+      if(this.acumulada){        
+        row['valor'] = fixed ? this.rows[cont].valor.toFixed(2) : this.rows[cont].valor;
+      }
+      data.push(row)
       cont++;
     }
     return data;

@@ -74,7 +74,7 @@ export class RouteHandlerComponent implements OnInit {
 
     // Top Level Item (The item to click on so the dropdown opens)
     const dashboard = new SidenavItem({
-      name: 'Dashboard',
+      name: 'Nóminas',
       icon: 'dashboard',
       subItems: [ ],
       position: 1
@@ -113,7 +113,7 @@ export class RouteHandlerComponent implements OnInit {
     dashboard.subItems.push(...dashboardSubItems);
 
     const inbox = new SidenavItem({
-      name: 'Inbox',
+      name: 'Préstamos',
       icon: 'mail',
       route: '/apps/inbox',
       subItems: [ ],
@@ -121,7 +121,7 @@ export class RouteHandlerComponent implements OnInit {
     });
 
     const chat = new SidenavItem({
-      name: 'Chat',
+      name: 'Cuentas',
       icon: 'message',
       route: '/apps/chat',
       subItems: [ ],
@@ -521,13 +521,6 @@ export class RouteHandlerComponent implements OnInit {
         position: 1
       }),
       new SidenavItem({
-        name: 'Control de asignaciones',
-        route: '/inventario/reportes/responsables',
-        parent: reportesInventario,
-        subItems: [ ],
-        position: 1
-      }),
-      new SidenavItem({
         name: 'Asignaciones por usuario',
         route: '/inventario/reportes/activosporusuario',
         parent: reportesInventario,
@@ -637,7 +630,7 @@ export class RouteHandlerComponent implements OnInit {
         }
       }),
       new SidenavItem({
-        name: 'Interes mensual',
+        name: 'Interés mensual',
         route: '/inversiones/reportes/interes-mensual',
         parent: reportesInversiones,
         subItems: [ ],

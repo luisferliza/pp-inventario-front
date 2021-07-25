@@ -10,11 +10,11 @@ import { CommonFunction } from 'app/inventario/shared/common';
 })
 export class DesinversionDialogComponent implements OnInit {
   
-  form: FormGroup;    
+  form: FormGroup;     
   
 
   constructor(private dialogRef: MatDialogRef<DesinversionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA)private title: string,    
+    @Inject(MAT_DIALOG_DATA) public title: string,    
     private fb: FormBuilder,    
     private common: CommonFunction) { }
 

@@ -75,11 +75,7 @@ const routes: Routes = [
       {
         path: 'inventario/reportes/donaciones',
         loadChildren: 'app/inventario/reportes/donaciones/donaciones.module#DonacionesModule'
-      },
-      {
-        path: 'inventario/reportes/responsables',
-        loadChildren: 'app/inventario/reportes/responsable-activos/responsable-activos.module#ResponsableActivosModule'
-      },
+      },      
       {
         path: 'inventario/reportes/activosporusuario',
         loadChildren: 'app/inventario/reportes/activos-por-usuario/activos-por-usuario.module#ActivosPorUsuarioModule'

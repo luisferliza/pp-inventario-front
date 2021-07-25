@@ -43,7 +43,7 @@ export class BancoEdicionComponent implements OnInit {
       anexo: this.defaults.anexo,      
       direccion: this.defaults.direccion || '',      
       telefono: this.defaults.telefono || '',
-      activa: this.defaults.activa,
+      activa: this.defaults.activa||false,
       nombre_gerente: this.defaults.nombre_gerente || '',      
       titulo_gerente: this.defaults.titulo_gerente || '',   
       tipo_entidad_id: this.defaults.tipo_Entidad? this.defaults.tipo_Entidad.id_tipo_entidad : null,         

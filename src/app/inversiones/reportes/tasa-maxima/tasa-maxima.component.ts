@@ -23,6 +23,7 @@ export class TasaMaximaComponent implements OnInit {
   rows = [];
   contador : Firmante;
   bancos: Banco[];
+  vigentes;
   anio = new Date().getFullYear();  
 
   constructor(private reportesService: ReportesInversionesService,
@@ -33,6 +34,7 @@ export class TasaMaximaComponent implements OnInit {
     private plantilla: PlantillaTasaMaxima) { }
 
   ngOnInit(): void {
+    this.vigentes = true;
     this.getBancos();
     this.getFirmante();
   }
@@ -60,7 +62,7 @@ export class TasaMaximaComponent implements OnInit {
 
   // Crea la matriz de datos con mes en el encabezado y banco en el eje lateral
   getTasasDTO() {
-    this.reportesService.tasaMaxima(this.pidu, this.anio).subscribe(data => {
+    this.reportesService.tasaMaxima(this.pidu, this.anio, this.vigentes).subscribe(data => {
       this.rows = [];
       this.bancos.forEach(banco => {
         let bancoTmp = []
@@ -104,7 +106,7 @@ export class TasaMaximaComponent implements OnInit {
 
   downloadPDF() {
     if (this.rows.length > 0) {      
-      let docDefinition = this.plantilla.getDocument(this.rows, this.anio, this.contador);      
+      let docDefinition = this.plantilla.getDocument(this.rows, this.anio, this.contador, this.getTitulo());      
       pdfMake.createPdf(docDefinition).open();
       this.getTasasDTO(); // En la generacion del PDF se modifican los datos
     }
@@ -113,6 +115,14 @@ export class TasaMaximaComponent implements OnInit {
         duration: 2000
       });
     }
+  }
+
+  getTitulo(){
+    if(this.vigentes){
+      return "Tasa máxima en inversiones vigentes por banco"
+    }
+
+    return "Tasa máxima de inversiones y reinversiones por banco"
   }
 
   downloadExcel() {

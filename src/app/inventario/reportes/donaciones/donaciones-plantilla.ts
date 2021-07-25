@@ -67,7 +67,7 @@ export class PlantillaDonaciones {
                 headerRows: 1,
                 widths: ['12%', '55%', '18%', '15%'],
                 body: [
-                    [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor residual', style: 'tableHeader' }],
+                    [{ text: 'No. Orden', style: 'tableHeader' }, { text: 'Descripción', style: 'tableHeader' }, { text: 'No. Inventario', style: 'tableHeader' }, { text: 'Valor residual (Q.)', style: 'tableHeader' }],
                     [{}, { text: `Cuenta: ${categoria}`, bold: true, alignment: 'left' }, {}, {}],
                     ...rows.map(p => ([p.contador, { text: p.descripcion, alignment: 'justify' }, p.inventario, { text: p.precio.toLocaleString(this.common.localNumber, this.common.numberOptions), alignment: 'right' }])),
                     [{}, {}, { text: 'Total:', colSpan: 1, bold: true }, { text: 'Q ' + rows.reduce((sum, p) => sum + (p.precio), 0).toLocaleString(this.common.localNumber, this.common.numberOptions), bold: true, alignment: 'right' }]

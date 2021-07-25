@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Asistente de generación de cartas - Desinversión Anticipada</h2>
 
-<form [formGroup]="form" (ngSubmit)="save()">
+<form [formGroup]="form">
   <mat-dialog-content>
 
     <div fxLayout="column" fxLayout.gt-sm="row" fxLayoutGap.gt-sm="36px">
@@ -10,7 +10,7 @@
       </mat-form-field>
 
       <mat-form-field fxFlex>
-        <input matInput [matDatepicker]="fecha" placeholder="Ingrese la fecha deseada"
+        <input matInput required [matDatepicker]="fecha" placeholder="Ingrese la fecha deseada"
           formControlName="fecha">
         <mat-datepicker-toggle matSuffix [for]="fecha"></mat-datepicker-toggle>
         <mat-datepicker #fecha></mat-datepicker>
@@ -45,7 +45,7 @@
       </mat-form-field>
 
       <mat-form-field fxFlex>
-        <input matInput [matDatepicker]="fecha_acta" placeholder="Ingrese la fecha del acta"
+        <input matInput required [matDatepicker]="fecha_acta" placeholder="Ingrese la fecha del acta"
           formControlName="fecha_acta">
         <mat-datepicker-toggle matSuffix [for]="fecha_acta"></mat-datepicker-toggle>
         <mat-datepicker #fecha_acta></mat-datepicker>
@@ -70,7 +70,7 @@
       </mat-form-field>
 
       <mat-form-field fxFlex>
-        <input matInput [matDatepicker]="vencimiento" placeholder="Ingrese la fecha de desinversión"
+        <input matInput required [matDatepicker]="vencimiento" placeholder="Ingrese la fecha de desinversión"
           formControlName="vencimiento" (dateChange)="calcularInteres()">
         <mat-datepicker-toggle matSuffix [for]="vencimiento"></mat-datepicker-toggle>
         <mat-datepicker #vencimiento></mat-datepicker>
@@ -87,7 +87,7 @@
         <input required type="text" formControlName="interes" matInput>
       </mat-form-field>
       <mat-form-field fxFlex>
-        <input matInput [matDatepicker]="entrega" placeholder="Recoger cheque el:" formControlName="entrega">
+        <input matInput required [matDatepicker]="entrega" placeholder="Recoger cheque el:" formControlName="entrega">
         <mat-datepicker-toggle matSuffix [for]="entrega"></mat-datepicker-toggle>
         <mat-datepicker #entrega></mat-datepicker>
       </mat-form-field>
